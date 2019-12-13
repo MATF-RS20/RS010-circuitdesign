@@ -1,6 +1,4 @@
-# RS010-circuitdesign
-
-CircuitDesign
+# CircuitDesign
 
 ### Kratak opis projekta:
 
