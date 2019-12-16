@@ -2,33 +2,43 @@
 #define GATE_H
 
 #include <vector>
+#include <map>
+#include <set>
 
 class Gate
 {
 public:
-    Gate() = default;
+    Gate();
 
     virtual void calculate() = 0;
+    virtual ~Gate(){
+
+    }
 
     bool getValue() const;
-
+    unsigned getId() const;
 protected:
+    unsigned _id;
     bool _value;
 };
+
+static unsigned idCounter = 0;
+static std::map<unsigned, Gate*> globalMap;
 
 class InputGate : public Gate
 {
 public:
     InputGate() : Gate()
     {}
+    ~InputGate() = default;
 
     void calculate();
 
-    void addOutGate(Gate* gate);
-    void deleteOutGate(Gate* gate);
+    void addOutGate(unsigned id);
+    void deleteOutGate(unsigned id);
 
 private:
-    std::vector<Gate*> _outGates;
+    std::set<unsigned> _outGates;
 };
 
 class OutputGate : public Gate
@@ -38,80 +48,81 @@ public:
     {}
 
     void calculate();
-    void setInGate(Gate* gate);
+    void setInGate(unsigned id);
     void deleteInGate();
 
 private:
-    Gate* _in;
+    unsigned _in;
 };
 
-class InerGate : public Gate
+class InnerGate : public Gate
 {
 public:
-    InerGate(unsigned numInputs = 4)
+    InnerGate(unsigned numInputs = 4)
         : Gate (), _numInputs(numInputs)
     {}
+    ~InnerGate() = default;
 
-    void addInGate(Gate* gate);
-    void addOutGate(Gate* gate);
-    void deleteInGate(Gate* gate);
-    void deleteOutGate(Gate* gate);
+    void addInGate(unsigned id);
+    void addOutGate(unsigned id);
+    void deleteInGate(unsigned id);
+    void deleteOutGate(unsigned id);
 
 protected:
     unsigned _numInputs;
-    std::vector<Gate*> _inGates;
-    std::vector<Gate*> _outGates;
+    std::set<unsigned> _inGates;
+    std::set<unsigned> _outGates;
 };
 
-class And : public InerGate
+class And : public InnerGate
 {
 public:
-    And() : InerGate()
+    And() : InnerGate()
     {}
 
     void calculate();
 };
 
-class Or : public InerGate
+class Or : public InnerGate
 {
 public:
-    Or() : InerGate()
+    Or() : InnerGate()
     {}
 
     void calculate();
 };
 
-class Xor : public InerGate
+class Xor : public InnerGate
 {
 public:
-    Xor() : InerGate()
+    Xor() : InnerGate()
     {}
 
     void calculate();
 };
 
-class NAnd : public InerGate
+class NAnd : public InnerGate
 {
 public:
-    NAnd() : InerGate()
+    NAnd() : InnerGate()
     {}
 
     void calculate();
 };
 
-class NOr : public InerGate
+class NOr : public InnerGate
 {
 public:
-    NOr() : InerGate()
+    NOr() : InnerGate()
     {}
 
     void calculate();
 };
 
-class Not : public InerGate
+class Not : public InnerGate
 {
 public:
-    Not() : InerGate(1u)
+    Not() : InnerGate(1u)
     {}
 
     void calculate();

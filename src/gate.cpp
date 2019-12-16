@@ -1,5 +1,16 @@
 #include "gate.h"
 
+Gate::Gate()
+{
+    _id = idCounter;
+    globalMap[idCounter++] = this;
+}
+
+unsigned Gate::getId() const
+{
+    return _id;
+}
+
 bool Gate::getValue() const
 {
     return _value;
@@ -9,128 +20,124 @@ void InputGate::calculate()
 {
     _value = !_value;
 
-    for (auto it = _outGates.cbegin(); it != _outGates.cend(); it++)
-        (*it)->calculate();
+    for(auto gate : _outGates)
+        globalMap[gate]->calculate();
 }
 
-void InputGate::addOutGate(Gate* gate)
+void InputGate::addOutGate(unsigned id)
 {
-    _outGates.push_back(gate);
-    for (auto it = _outGates.cbegin(); it != _outGates.cend(); it++)
-        (*it)->calculate();
+    _outGates.insert(id);
 }
 
-void InputGate::deleteOutGate(Gate* gate)
+void InputGate::deleteOutGate(unsigned id)
 {
-
+    _outGates.erase(id);
 }
 
 void OutputGate::calculate()
 {
-    _value = _in->getValue();
+    globalMap[_in]->getValue();
 }
 
-void OutputGate::setInGate(Gate *gate)
+void OutputGate::setInGate(unsigned id)
 {
-    _in = gate;
+    _in = id;
     calculate();
 }
 
 void OutputGate::deleteInGate()
 {
-    _in = nullptr;
+    //obrisan gejt koji je ulaz u Output
+    _value = false;
 }
 
-void InerGate::addInGate(Gate* gate)
+void InnerGate::addInGate(unsigned id)
 {
-    _inGates.push_back(gate);
+    _inGates.insert(id);
+    calculate();
 }
 
-void InerGate::addOutGate(Gate* gate)
+void InnerGate::addOutGate(unsigned id)
 {
-    _outGates.push_back(gate);
+    _outGates.insert(id);
+    //globalMap[id]->calculate();
 }
 
-void InerGate::deleteInGate(Gate* gate)
+void InnerGate::deleteInGate(unsigned id)
 {
-
+    _inGates.erase(id);
+    calculate();
 }
 
-void InerGate::deleteOutGate(Gate* gate)
+void InnerGate::deleteOutGate(unsigned id)
 {
-
+    _outGates.erase(id);
 }
 
 void And::calculate()
 {
     bool new_value = true;
-    for (auto it = _inGates.cbegin(); it != _inGates.cend(); it++)
-    {
-        new_value = new_value && (*it)->getValue();
-    }
-    _value = new_value;
+    for (unsigned gateId : _inGates)
+        new_value = new_value && globalMap[gateId]->getValue();
 
-    for (auto it = _outGates.cbegin(); it != _outGates.cend(); it++)
-        (*it)->calculate();
+    _value = new_value;
+    for(unsigned gateId : _outGates)
+       globalMap[gateId]->calculate();
 }
 
 void Or::calculate()
 {
-    bool new_value = false;
-    for (auto it = _inGates.cbegin(); it != _inGates.cend(); it++)
-    {
-        new_value = new_value || (*it)->getValue();
-    }
-    _value = new_value;
+    bool new_value = true;
+    for (unsigned gateId : _inGates)
+        new_value = new_value || globalMap[gateId]->getValue();
 
-    for (auto it = _outGates.cbegin(); it != _outGates.cend(); it++)
-        (*it)->calculate();
+    _value = new_value;
+    for(unsigned gateId : _outGates)
+       globalMap[gateId]->calculate();
 }
 
+// proveri kako radi XOR
 void Xor::calculate()
 {
     unsigned num_true = 0;
-    for (auto it = _inGates.cbegin(); it != _inGates.cend(); it++)
+    for (unsigned gateId : _inGates)
     {
-        if ((*it)->getValue() == true)
+        if (globalMap[gateId]->getValue() == true)
             num_true++;
     }
+
     _value = num_true == 1 ? true : false;
 
-    for (auto it = _outGates.cbegin(); it != _outGates.cend(); it++)
-        (*it)->calculate();
+    for(unsigned gateId : _outGates)
+       globalMap[gateId]->calculate();
 }
 
 void NAnd::calculate()
 {
     bool new_value = true;
-    for (auto it = _inGates.cbegin(); it != _inGates.cend(); it++)
-    {
-        new_value = new_value && (*it)->getValue();
-    }
-    _value = !new_value;
+    for (unsigned gateId : _inGates)
+        new_value = new_value && globalMap[gateId]->getValue();
 
-    for (auto it = _outGates.cbegin(); it != _outGates.cend(); it++)
-        (*it)->calculate();
+    _value = !new_value;
+    for(unsigned gateId : _outGates)
+       globalMap[gateId]->calculate();
 }
 
 void NOr::calculate()
 {
-    bool new_value = false;
-    for (auto it = _inGates.cbegin(); it != _inGates.cend(); it++)
-    {
-        new_value = new_value || (*it)->getValue();
-    }
-    _value = !new_value;
+    bool new_value = true;
+    for (unsigned gateId : _inGates)
+        new_value = new_value || globalMap[gateId]->getValue();
 
-    for (auto it = _outGates.cbegin(); it != _outGates.cend(); it++)
-        (*it)->calculate();
+    _value = !new_value;
+    for(unsigned gateId : _outGates)
+       globalMap[gateId]->calculate();
 }
 
 void Not::calculate()
 {
-    _value = !_inGates[0]->getValue();
+    _value = !globalMap[(*_inGates.begin())]->getValue();
 
-    for (auto it = _outGates.cbegin(); it != _outGates.cend(); it++)
-        (*it)->calculate();
+    for(unsigned gateId : _outGates)
+       globalMap[gateId]->calculate();
 }

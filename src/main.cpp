@@ -28,52 +28,52 @@ int main(int argc, char *argv[])
     input_g1->calculate();
     input_g3->calculate();
 
-    input_g1->addOutGate(and1);
-    input_g1->addOutGate(xor1);
+    input_g1->addOutGate(and1->getId());
+    input_g1->addOutGate(xor1->getId());
 
-    input_g2->addOutGate(or1);
+    input_g2->addOutGate(or1->getId());
 
-    input_g3->addOutGate(and1);
+    input_g3->addOutGate(and1->getId());
 
-    input_g4->addOutGate(or1);
-    input_g4->addOutGate(xor1);
+    input_g4->addOutGate(or1->getId());
+    input_g4->addOutGate(xor1->getId());
 
-    and1->addInGate(input_g1);
-    and1->addInGate(input_g3);
+    and1->addInGate(input_g1->getId());
+    and1->addInGate(input_g3->getId());
 
-    or1->addInGate(input_g2);
-    or1->addInGate(input_g4);
+    or1->addInGate(input_g2->getId());
+    or1->addInGate(input_g4->getId());
 
-    xor1->addInGate(input_g1);
-    xor1->addInGate(input_g4);
+    xor1->addInGate(input_g1->getId());
+    xor1->addInGate(input_g4->getId());
 
-    and1->addOutGate(nand);
-    and1->addOutGate(nor);
+    and1->addOutGate(nand->getId());
+    and1->addOutGate(nor->getId());
 
-    or1->addOutGate(nand);
+    or1->addOutGate(nand->getId());
 
-    xor1->addOutGate(nor);
+    xor1->addOutGate(nor->getId());
 
-    nand->addInGate(and1);
-    nand->addInGate(or1);
+    nand->addInGate(and1->getId());
+    nand->addInGate(or1->getId());
 
-    nor->addInGate(and1);
-    nor->addInGate(xor1);
+    nor->addInGate(and1->getId());
+    nor->addInGate(xor1->getId());
 
-    nand->addOutGate(or2);
+    nand->addOutGate(or2->getId());
 
-    nor->addOutGate(or2);
+    nor->addOutGate(or2->getId());
 
-    or2->addInGate(nand);
-    or2->addInGate(nor);
+    or2->addInGate(nand->getId());
+    or2->addInGate(nor->getId());
 
-    or2->addOutGate(not1);
+    or2->addOutGate(not1->getId());
 
-    not1->addInGate(or2);
+    not1->addInGate(or2->getId());
 
-    not1->addOutGate(output_g1);
+    not1->addOutGate(output_g1->getId());
 
-    output_g1->setInGate(not1);
+    output_g1->setInGate(not1->getId());
 
     std::cout << output_g1->getValue() << std::endl;
 
