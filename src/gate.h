@@ -10,10 +10,9 @@ class Gate
 {
 public:
     Gate();
-
-    virtual void calculate() = 0;
     virtual ~Gate();
 
+    virtual void calculate() = 0;
     bool getValue() const;
     unsigned getId() const;
 protected:

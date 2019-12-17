@@ -25,7 +25,9 @@ bool Gate::getValue() const
 
 InputGate::InputGate()
   : Gate()
-{}
+{
+  _value = false;
+}
 
 void InputGate::calculate()
 {
@@ -52,7 +54,7 @@ OutputGate::OutputGate()
 
 void OutputGate::calculate()
 {
-    globalMap[_in]->getValue();
+    _value = globalMap[_in]->getValue();
 }
 
 void OutputGate::setInGate(unsigned id)
@@ -66,8 +68,6 @@ void OutputGate::deleteInGate()
     //obrisan gejt koji je ulaz u Output
     _value = false;
 }
-
-
 
 InnerGate::InnerGate(unsigned numInputs)
     : Gate (), _numInputs(numInputs)
@@ -113,7 +113,7 @@ void And::calculate()
 
 void Or::calculate()
 {
-    bool new_value = true;
+    bool new_value = false;
     for (unsigned gateId : _inGates)
         new_value = new_value || globalMap[gateId]->getValue();
 
@@ -132,7 +132,7 @@ void Xor::calculate()
             num_true++;
     }
 
-    _value = num_true == 1 ? true : false;
+    _value = num_true % 2 == 0 ? false : true;
 
     for(unsigned gateId : _outGates)
        globalMap[gateId]->calculate();

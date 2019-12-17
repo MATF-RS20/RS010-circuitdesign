@@ -30,11 +30,8 @@ int main(int argc, char *argv[])
 
     input_g1->addOutGate(and1->getId());
     input_g1->addOutGate(xor1->getId());
-
     input_g2->addOutGate(or1->getId());
-
     input_g3->addOutGate(and1->getId());
-
     input_g4->addOutGate(or1->getId());
     input_g4->addOutGate(xor1->getId());
 
@@ -79,14 +76,21 @@ int main(int argc, char *argv[])
 
     input_g2->calculate();
 
-    std::cout << output_g1->getValue() << std::endl;
+    InputGate* input1 = new InputGate();
+    InputGate* input2 = new InputGate();
+    OutputGate* output = new OutputGate();
+    Or* orr = new Or();
+    And* andd = new And();
 
-    std::cout << input_g1->getValue() << std::endl;
+   // input1->calculate();
+    orr->addInGate(input1->getId());
+    orr->addInGate(input2->getId());
+    orr->addOutGate(output->getId());
+    output->setInGate(orr->getId());
 
-    std::cout << input_g2->getValue() << std::endl;
-
-    std::cout << input_g3->getValue() << std::endl;
-
+    std::cout <<input1->getValue()  <<std::endl;
+    std::cout <<input2->getValue() << std::endl;
+    std::cout << output->getValue() << std::endl;
 
     return a.exec();
 }
