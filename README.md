@@ -12,6 +12,6 @@ izlaz za zadati ulaz.
 
 ### Clanovi tima:
 
-- Velimir Bicanin (velimierbicanin@gmail.com)
+- Velimir Bicanin (velimirbicanin@gmail.com)
 - Nikoleta Vukajlovic (ninavukajlovic97@gmail.com)
 - Ana Jakoveljvic (ana.jakovljev98@gmail.com)
