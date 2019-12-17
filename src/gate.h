@@ -26,7 +26,6 @@ public:
     InputGate() ;
 
     void calculate();
-
     void addOutGate(unsigned id);
     void deleteOutGate(unsigned id);
 

@@ -1,4 +1,5 @@
 #include "gate.h"
+#include <iostream>
 
 static unsigned idCounter;
 static std::map<unsigned, Gate*> globalMap;
@@ -116,7 +117,6 @@ void Or::calculate()
     bool new_value = false;
     for (unsigned gateId : _inGates)
         new_value = new_value || globalMap[gateId]->getValue();
-
     _value = new_value;
     for(unsigned gateId : _outGates)
        globalMap[gateId]->calculate();
@@ -151,7 +151,7 @@ void NAnd::calculate()
 
 void NOr::calculate()
 {
-    bool new_value = true;
+    bool new_value = false;
     for (unsigned gateId : _inGates)
         new_value = new_value || globalMap[gateId]->getValue();
 
