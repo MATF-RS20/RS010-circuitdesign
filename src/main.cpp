@@ -81,5 +81,12 @@ int main(int argc, char *argv[])
 
     std::cout << output_g1->getValue() << std::endl;
 
+    std::cout << input_g1->getValue() << std::endl;
+
+    std::cout << input_g2->getValue() << std::endl;
+
+    std::cout << input_g3->getValue() << std::endl;
+
+
     return a.exec();
 }

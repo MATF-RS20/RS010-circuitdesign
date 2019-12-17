@@ -239,6 +239,7 @@ DIST          = ../../../Qt/5.12.5/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../Qt/5.12.5/gcc_64/mkspecs/features/qt_config.prf \
 		../../../Qt/5.12.5/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../../Qt/5.12.5/gcc_64/mkspecs/features/spec_post.prf \
+		../src/.qmake.stash \
 		../../../Qt/5.12.5/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../../Qt/5.12.5/gcc_64/mkspecs/features/toolchain.prf \
 		../../../Qt/5.12.5/gcc_64/mkspecs/features/default_pre.prf \
@@ -258,7 +259,8 @@ DIST          = ../../../Qt/5.12.5/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../Qt/5.12.5/gcc_64/mkspecs/features/exceptions.prf \
 		../../../Qt/5.12.5/gcc_64/mkspecs/features/yacc.prf \
 		../../../Qt/5.12.5/gcc_64/mkspecs/features/lex.prf \
-		../src/CircuitDesign.pro ../src/mainwindow.h \
+		../src/CircuitDesign.pro global.h \
+		../src/mainwindow.h \
 		../src/gate.h \
 		../src/plexer.h \
 		../src/arithmetic.h ../src/main.cpp \
@@ -453,6 +455,7 @@ Makefile: ../src/CircuitDesign.pro ../../../Qt/5.12.5/gcc_64/mkspecs/linux-g++/q
 		../../../Qt/5.12.5/gcc_64/mkspecs/features/qt_config.prf \
 		../../../Qt/5.12.5/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../../Qt/5.12.5/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../../Qt/5.12.5/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../../Qt/5.12.5/gcc_64/mkspecs/features/toolchain.prf \
 		../../../Qt/5.12.5/gcc_64/mkspecs/features/default_pre.prf \
@@ -650,6 +653,7 @@ Makefile: ../src/CircuitDesign.pro ../../../Qt/5.12.5/gcc_64/mkspecs/linux-g++/q
 ../../../Qt/5.12.5/gcc_64/mkspecs/features/qt_config.prf:
 ../../../Qt/5.12.5/gcc_64/mkspecs/linux-g++/qmake.conf:
 ../../../Qt/5.12.5/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../../../Qt/5.12.5/gcc_64/mkspecs/features/exclusive_builds.prf:
 ../../../Qt/5.12.5/gcc_64/mkspecs/features/toolchain.prf:
 ../../../Qt/5.12.5/gcc_64/mkspecs/features/default_pre.prf:
@@ -685,7 +689,7 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../Qt/5.12.5/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../src/mainwindow.h ../src/gate.h ../src/plexer.h ../src/arithmetic.h $(DISTDIR)/
+	$(COPY_FILE) --parents global.h ../src/mainwindow.h ../src/gate.h ../src/plexer.h ../src/arithmetic.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../src/main.cpp ../src/mainwindow.cpp ../src/gate.cpp ../src/plexer.cpp ../src/arithmetic.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../src/mainwindow.ui $(DISTDIR)/
 
@@ -1078,7 +1082,25 @@ mainwindow.o: ../src/mainwindow.cpp ../src/mainwindow.h \
 		../../../Qt/5.12.5/gcc_64/include/QtGui/qtouchdevice.h \
 		../../../Qt/5.12.5/gcc_64/include/QtWidgets/qtabwidget.h \
 		../../../Qt/5.12.5/gcc_64/include/QtGui/qicon.h \
-		ui_mainwindow.h
+		ui_mainwindow.h \
+		../../../Qt/5.12.5/gcc_64/include/QtCore/QVariant \
+		../../../Qt/5.12.5/gcc_64/include/QtWidgets/QApplication \
+		../../../Qt/5.12.5/gcc_64/include/QtWidgets/qapplication.h \
+		../../../Qt/5.12.5/gcc_64/include/QtCore/qcoreapplication.h \
+		../../../Qt/5.12.5/gcc_64/include/QtCore/qeventloop.h \
+		../../../Qt/5.12.5/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		../../../Qt/5.12.5/gcc_64/include/QtGui/qguiapplication.h \
+		../../../Qt/5.12.5/gcc_64/include/QtGui/qinputmethod.h \
+		../../../Qt/5.12.5/gcc_64/include/QtWidgets/QMenuBar \
+		../../../Qt/5.12.5/gcc_64/include/QtWidgets/qmenubar.h \
+		../../../Qt/5.12.5/gcc_64/include/QtWidgets/qmenu.h \
+		../../../Qt/5.12.5/gcc_64/include/QtWidgets/qaction.h \
+		../../../Qt/5.12.5/gcc_64/include/QtWidgets/qactiongroup.h \
+		../../../Qt/5.12.5/gcc_64/include/QtWidgets/QStatusBar \
+		../../../Qt/5.12.5/gcc_64/include/QtWidgets/qstatusbar.h \
+		../../../Qt/5.12.5/gcc_64/include/QtWidgets/QToolBar \
+		../../../Qt/5.12.5/gcc_64/include/QtWidgets/qtoolbar.h \
+		../../../Qt/5.12.5/gcc_64/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../src/mainwindow.cpp
 
 gate.o: ../src/gate.cpp ../src/gate.h

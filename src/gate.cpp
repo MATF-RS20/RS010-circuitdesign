@@ -1,9 +1,16 @@
 #include "gate.h"
 
+static unsigned idCounter;
+static std::map<unsigned, Gate*> globalMap;
+
 Gate::Gate()
 {
     _id = idCounter;
     globalMap[idCounter++] = this;
+}
+
+Gate::~Gate(){
+
 }
 
 unsigned Gate::getId() const
@@ -16,8 +23,13 @@ bool Gate::getValue() const
     return _value;
 }
 
+InputGate::InputGate()
+  : Gate()
+{}
+
 void InputGate::calculate()
 {
+     //changing state od
     _value = !_value;
 
     for(auto gate : _outGates)
@@ -34,6 +46,10 @@ void InputGate::deleteOutGate(unsigned id)
     _outGates.erase(id);
 }
 
+OutputGate::OutputGate()
+  : Gate()
+{}
+
 void OutputGate::calculate()
 {
     globalMap[_in]->getValue();
@@ -49,6 +65,16 @@ void OutputGate::deleteInGate()
 {
     //obrisan gejt koji je ulaz u Output
     _value = false;
+}
+
+
+
+InnerGate::InnerGate(unsigned numInputs)
+    : Gate (), _numInputs(numInputs)
+  {}
+
+InnerGate::~InnerGate(){
+
 }
 
 void InnerGate::addInGate(unsigned id)

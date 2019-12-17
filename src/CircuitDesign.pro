@@ -31,6 +31,7 @@ SOURCES += \
     arithmetic.cpp
 
 HEADERS += \
+    global.h \
         mainwindow.h \
     gate.h \
     plexer.h \

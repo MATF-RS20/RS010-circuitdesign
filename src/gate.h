@@ -5,15 +5,14 @@
 #include <map>
 #include <set>
 
+
 class Gate
 {
 public:
     Gate();
 
     virtual void calculate() = 0;
-    virtual ~Gate(){
-
-    }
+    virtual ~Gate();
 
     bool getValue() const;
     unsigned getId() const;
@@ -22,15 +21,10 @@ protected:
     bool _value;
 };
 
-static unsigned idCounter = 0;
-static std::map<unsigned, Gate*> globalMap;
-
 class InputGate : public Gate
 {
 public:
-    InputGate() : Gate()
-    {}
-    ~InputGate() = default;
+    InputGate() ;
 
     void calculate();
 
@@ -44,8 +38,7 @@ private:
 class OutputGate : public Gate
 {
 public:
-    OutputGate() : Gate()
-    {}
+    OutputGate();
 
     void calculate();
     void setInGate(unsigned id);
@@ -58,10 +51,8 @@ private:
 class InnerGate : public Gate
 {
 public:
-    InnerGate(unsigned numInputs = 4)
-        : Gate (), _numInputs(numInputs)
-    {}
-    ~InnerGate() = default;
+    InnerGate(unsigned numInputs = 4);
+    ~InnerGate();
 
     void addInGate(unsigned id);
     void addOutGate(unsigned id);
