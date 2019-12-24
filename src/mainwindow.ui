@@ -62,6 +62,9 @@
       <property name="lineWidth">
        <number>1</number>
       </property>
+      <property name="midLineWidth">
+       <number>0</number>
+      </property>
       <property name="currentIndex">
        <number>0</number>
       </property>
@@ -85,16 +88,16 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QLabel" name="lbl_and">
+         <widget class="QLabel" name="lbl_nor">
           <property name="text">
-           <string>And</string>
+           <string>NOr</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="lbl_or">
+         <widget class="QLabel" name="lbl_and">
           <property name="text">
-           <string>Or</string>
+           <string>And</string>
           </property>
          </widget>
         </item>
@@ -106,23 +109,23 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="lbl_nand">
-          <property name="text">
-           <string>NAnd</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="lbl_nor">
-          <property name="text">
-           <string>NOr</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QLabel" name="lbl_not">
           <property name="text">
            <string>Not</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lbl_or">
+          <property name="text">
+           <string>Or</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lbl_nand">
+          <property name="text">
+           <string>NAnd</string>
           </property>
          </widget>
         </item>
@@ -142,6 +145,14 @@
        </attribute>
       </widget>
       <widget class="QWidget" name="Arithmetic">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>180</width>
+         <height>169</height>
+        </rect>
+       </property>
        <attribute name="label">
         <string>Arithmetic</string>
        </attribute>
