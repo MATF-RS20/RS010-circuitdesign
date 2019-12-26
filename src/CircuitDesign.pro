@@ -24,12 +24,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+    gateitem.cpp \
         main.cpp \
         mainwindow.cpp \
     gate.cpp \
     scene.cpp
 
 HEADERS += \
+    gateitem.h \
     global.h \
         mainwindow.h \
     gate.h \

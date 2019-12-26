@@ -118,7 +118,7 @@
                 <string>...</string>
                </property>
                <property name="icon">
-                <iconset resource="../images.qrc">
+                <iconset>
                  <normaloff>:/images/and.png</normaloff>:/images/and.png</iconset>
                </property>
                <property name="iconSize">
@@ -127,6 +127,12 @@
                  <height>20</height>
                 </size>
                </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
               </widget>
              </item>
              <item>
@@ -146,7 +152,7 @@
                 <string>...</string>
                </property>
                <property name="icon">
-                <iconset resource="../images.qrc">
+                <iconset>
                  <normaloff>:/images/or.png</normaloff>:/images/or.png</iconset>
                </property>
                <property name="iconSize">
@@ -155,6 +161,12 @@
                  <height>20</height>
                 </size>
                </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
               </widget>
              </item>
              <item>
@@ -174,7 +186,7 @@
                 <string>...</string>
                </property>
                <property name="icon">
-                <iconset resource="../images.qrc">
+                <iconset>
                  <normaloff>:/images/xor.png</normaloff>:/images/xor.png</iconset>
                </property>
                <property name="iconSize">
@@ -183,6 +195,12 @@
                  <height>20</height>
                 </size>
                </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
               </widget>
              </item>
              <item>
@@ -208,7 +226,7 @@
                 <string>...</string>
                </property>
                <property name="icon">
-                <iconset resource="../images.qrc">
+                <iconset>
                  <normaloff>:/images/nand.png</normaloff>:/images/nand.png</iconset>
                </property>
                <property name="iconSize">
@@ -217,6 +235,12 @@
                  <height>20</height>
                 </size>
                </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
               </widget>
              </item>
              <item>
@@ -242,7 +266,7 @@
                 <string>...</string>
                </property>
                <property name="icon">
-                <iconset resource="../images.qrc">
+                <iconset>
                  <normaloff>:/images/nor.png</normaloff>:/images/nor.png</iconset>
                </property>
                <property name="iconSize">
@@ -251,6 +275,12 @@
                  <height>20</height>
                 </size>
                </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
               </widget>
              </item>
              <item>
@@ -276,7 +306,7 @@
                 <string>...</string>
                </property>
                <property name="icon">
-                <iconset resource="../images.qrc">
+                <iconset>
                  <normaloff>:/images/not.png</normaloff>:/images/not.png</iconset>
                </property>
                <property name="iconSize">
@@ -285,6 +315,12 @@
                  <height>20</height>
                 </size>
                </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
               </widget>
              </item>
              <item>
@@ -387,8 +423,9 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources>
-  <include location="../images.qrc"/>
- </resources>
+ <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="buttonGroup"/>
+ </buttongroups>
 </ui>
