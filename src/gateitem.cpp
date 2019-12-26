@@ -1,4 +1,5 @@
 #include "gateitem.h"
+#include <iostream>
 
 GateItem::GateItem(GateType type, QGraphicsItem* parent)
   : QGraphicsRectItem(parent), myGateType(type)
@@ -23,9 +24,13 @@ GateItem::GateItem(GateType type, QGraphicsItem* parent)
         pixmap.load("../images/not.png");
         break;
     }
+
+    std::cout << "Pozvan konstruktor za GateItem" << std::endl;
 }
 
 void GateItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *){
   painter->drawPixmap(0,0,50,50,pixmap);
   setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsFocusable | QGraphicsItem::ItemSendsGeometryChanges);
+  std::cout << "Pozvan paint za GateItem" << std::endl;
+
 }

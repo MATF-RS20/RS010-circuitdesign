@@ -118,7 +118,7 @@
                 <string>...</string>
                </property>
                <property name="icon">
-                <iconset>
+                <iconset resource="../images.qrc">
                  <normaloff>:/images/and.png</normaloff>:/images/and.png</iconset>
                </property>
                <property name="iconSize">
@@ -152,7 +152,7 @@
                 <string>...</string>
                </property>
                <property name="icon">
-                <iconset>
+                <iconset resource="../images.qrc">
                  <normaloff>:/images/or.png</normaloff>:/images/or.png</iconset>
                </property>
                <property name="iconSize">
@@ -186,7 +186,7 @@
                 <string>...</string>
                </property>
                <property name="icon">
-                <iconset>
+                <iconset resource="../images.qrc">
                  <normaloff>:/images/xor.png</normaloff>:/images/xor.png</iconset>
                </property>
                <property name="iconSize">
@@ -226,7 +226,7 @@
                 <string>...</string>
                </property>
                <property name="icon">
-                <iconset>
+                <iconset resource="../images.qrc">
                  <normaloff>:/images/nand.png</normaloff>:/images/nand.png</iconset>
                </property>
                <property name="iconSize">
@@ -266,7 +266,7 @@
                 <string>...</string>
                </property>
                <property name="icon">
-                <iconset>
+                <iconset resource="../images.qrc">
                  <normaloff>:/images/nor.png</normaloff>:/images/nor.png</iconset>
                </property>
                <property name="iconSize">
@@ -302,11 +302,14 @@
             <layout class="QHBoxLayout" name="notGate">
              <item>
               <widget class="QToolButton" name="notButton">
+               <property name="acceptDrops">
+                <bool>false</bool>
+               </property>
                <property name="text">
                 <string>...</string>
                </property>
                <property name="icon">
-                <iconset>
+                <iconset resource="../images.qrc">
                  <normaloff>:/images/not.png</normaloff>:/images/not.png</iconset>
                </property>
                <property name="iconSize">
@@ -423,9 +426,15 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="../images.qrc"/>
+ </resources>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
  </buttongroups>
 </ui>
