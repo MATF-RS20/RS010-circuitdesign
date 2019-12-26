@@ -12,13 +12,7 @@ class MainWindow;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-    /*
-    QLabel label;
-    QPixmap pixmap(":/images/not.png");
-    label.setPixmap(pixmap);
-    label.setMask(pixmap.mask());
-    label.show();
-    */
+
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();

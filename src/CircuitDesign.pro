@@ -27,15 +27,16 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     gate.cpp \
-    plexer.cpp \
-    arithmetic.cpp
+    scene.cpp
 
 HEADERS += \
     global.h \
         mainwindow.h \
     gate.h \
-    plexer.h \
-    arithmetic.h
+    scene.h
 
 FORMS += \
         mainwindow.ui
+
+RESOURCES += \
+    ../images.qrc
