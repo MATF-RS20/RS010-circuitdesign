@@ -11,15 +11,17 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    scene = new Scene(this);
     ui->setupUi(this);
 
+    scene = new Scene(this);
+    ui->graphicsView->setScene(scene);
+    scene->setSceneRect(QRectF(0, 0, 1000, 500));
+
     setUpButtonsIds();
-    connect(scene, &Scene::itemInserted,
-            this, &MainWindow::itemInserted);
-    connect(ui->buttonGroup, QOverload<int>::of(&QButtonGroup::buttonClicked),
-            this, &MainWindow::buttonGroupClicked);
-   // view = ui->graphicsView;
+    connect(scene, SIGNAL(itemInserted(GateItem*)),
+            this, SLOT(itemInserted(GateItem*)));
+    connect(ui->buttonGroup, SIGNAL(buttonClicked(int)),
+            this, SLOT(buttonGroupClicked(int)));
 }
 
 MainWindow::~MainWindow()
@@ -28,22 +30,26 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::setUpButtonsIds(){
- ui->buttonGroup->setId(ui->andButton, 1);
- ui->buttonGroup->setId(ui->orButton, 2);
- ui->buttonGroup->setId(ui->xorButton, 3);
- ui->buttonGroup->setId(ui->nandButton, 4);
- ui->buttonGroup->setId(ui->norButton, 5);
- ui->buttonGroup->setId(ui->notButton, 6);
+ ui->buttonGroup->setId(ui->andButton, 0);
+ ui->buttonGroup->setId(ui->orButton, 1);
+ ui->buttonGroup->setId(ui->xorButton, 2);
+ ui->buttonGroup->setId(ui->nandButton, 3);
+ ui->buttonGroup->setId(ui->norButton, 4);
+ ui->buttonGroup->setId(ui->notButton, 5);
 }
 
 void MainWindow::buttonGroupClicked(int id){
-  std::cout << "buttonGroupClicked on " << id << " " << GateItem::GateType(id)<< std::endl;
-  QButtonGroup* buttonGroup = ui->buttonGroup;
-  const QList<QAbstractButton*> buttons = buttonGroup->buttons();
-  for (QAbstractButton *button : buttons) {
-      if (buttonGroup->button(id) != button)
-          button->setChecked(false);
-  }
+  //  std::cout << "buttonGroupClicked on " << id << " " << GateItem::GateType(id)<< std::endl;
+
+  /*
+   Umesto ovoga sam stavila buttonGroup exclusive
+   QButtonGroup* buttonGroup = ui->buttonGroup;
+   const QList<QAbstractButton*> buttons = buttonGroup->buttons();
+      for (QAbstractButton *button : buttons) {
+         if (buttonGroup->button(id) != button)
+              button->setChecked(false);
+       }
+  */
 
   scene->setItemType(GateItem::GateType(id));
   scene->setMode(Scene::InsertItem);
@@ -66,11 +72,14 @@ void MainWindow::itemInserted(GateItem* item){
 
   //pointerTypeGroup->button(int(DiagramScene::MoveItem))->setChecked(true);
    //scene->setMode(Scene::Mode(pointerTypeGroup->checkedId()));
-   buttonGroup->button(int(item->gateType()))->setChecked(false);
+  buttonGroup->button(int(item->gateType()))->setChecked(false);
+  std::cout << "ItemInserted " << std::endl;
 }
 
+/*
 void MainWindow::paintEvent(QPaintEvent *event)
 {
-
+  std::cout << "paintEvent" << std::endl;
 }
+*/
 

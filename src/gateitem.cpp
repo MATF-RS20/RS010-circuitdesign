@@ -25,12 +25,14 @@ GateItem::GateItem(GateType type, QGraphicsItem* parent)
         break;
     }
 
+    setRect(0,0,70,50);
     std::cout << "Pozvan konstruktor za GateItem" << std::endl;
+    setFlag(QGraphicsItem::ItemIsSelectable,true);
+    setFlag(QGraphicsItem::ItemIsMovable,true);
+    setFlag(QGraphicsItem::ItemSendsGeometryChanges,true);
 }
 
 void GateItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *){
-  painter->drawPixmap(0,0,50,50,pixmap);
-  setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsFocusable | QGraphicsItem::ItemSendsGeometryChanges);
-  std::cout << "Pozvan paint za GateItem" << std::endl;
-
+  painter->drawPixmap(0,0,70,50,pixmap);
+//  std::cout << "Pozvan paint za GateItem" << std::endl;
 }

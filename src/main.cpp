@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include <QApplication>
 
-#include "gate.h"
 #include <iostream>
 
 int main(int argc, char *argv[])
@@ -10,7 +9,7 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
 
-
+    /*
     InputGate* input1 = new InputGate();
     InputGate* input2 = new InputGate();
     InputGate* input3 = new InputGate();
@@ -100,6 +99,7 @@ int main(int argc, char *argv[])
     std::cout << "Nor: " << outputNor->getValue() << std::endl;
     std::cout << "Nand: " << outputNand->getValue() << std::endl;
     std::cout << "Not: " << outputNot->getValue() << std::endl;
+    */
 
     return a.exec();
 }

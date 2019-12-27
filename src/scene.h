@@ -6,7 +6,6 @@
 #include <QGraphicsSceneMouseEvent>
 
 QT_BEGIN_NAMESPACE
-class QGraphicsSceneMouseEvent;
 class QMenu;
 class QPointF;
 class QGraphicsLineItem;
@@ -30,17 +29,17 @@ public slots:
 
 signals:
   void itemInserted(GateItem* item);
-  void itemsSelected(QGraphicsItem* item);
+  void buttonClicked(int id);
+ // void itemsSelected(QGraphicsItem* item);
 
 protected:
-  void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
   void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+  void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
   void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
   bool isItemChange(int type) const;
 
-  // sta nam zapravo na sceni znaci myItemType??
   GateItem::GateType myItemType;
   Mode myMode;
   QPointF startPoint;

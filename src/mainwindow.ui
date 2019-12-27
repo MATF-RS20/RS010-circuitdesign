@@ -55,6 +55,12 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="minimumSize">
+         <size>
+          <width>180</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
           <width>180</width>
@@ -130,6 +136,9 @@
                <property name="checkable">
                 <bool>true</bool>
                </property>
+               <property name="autoExclusive">
+                <bool>false</bool>
+               </property>
                <attribute name="buttonGroup">
                 <string notr="true">buttonGroup</string>
                </attribute>
@@ -164,6 +173,9 @@
                <property name="checkable">
                 <bool>true</bool>
                </property>
+               <property name="autoExclusive">
+                <bool>false</bool>
+               </property>
                <attribute name="buttonGroup">
                 <string notr="true">buttonGroup</string>
                </attribute>
@@ -197,6 +209,9 @@
                </property>
                <property name="checkable">
                 <bool>true</bool>
+               </property>
+               <property name="autoExclusive">
+                <bool>false</bool>
                </property>
                <attribute name="buttonGroup">
                 <string notr="true">buttonGroup</string>
@@ -238,6 +253,9 @@
                <property name="checkable">
                 <bool>true</bool>
                </property>
+               <property name="autoExclusive">
+                <bool>false</bool>
+               </property>
                <attribute name="buttonGroup">
                 <string notr="true">buttonGroup</string>
                </attribute>
@@ -277,6 +295,9 @@
                </property>
                <property name="checkable">
                 <bool>true</bool>
+               </property>
+               <property name="autoExclusive">
+                <bool>false</bool>
                </property>
                <attribute name="buttonGroup">
                 <string notr="true">buttonGroup</string>
@@ -375,17 +396,25 @@
       </item>
       <item>
        <widget class="QGraphicsView" name="graphicsView">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>16777215</height>
-         </size>
+        <property name="mouseTracking">
+         <bool>false</bool>
+        </property>
+        <property name="sceneRect">
+         <rectf>
+          <x>0.000000000000000</x>
+          <y>0.000000000000000</y>
+          <width>0.000000000000000</width>
+          <height>0.000000000000000</height>
+         </rectf>
         </property>
        </widget>
       </item>
@@ -433,7 +462,7 @@
  <buttongroups>
   <buttongroup name="buttonGroup">
    <property name="exclusive">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
   </buttongroup>
  </buttongroups>

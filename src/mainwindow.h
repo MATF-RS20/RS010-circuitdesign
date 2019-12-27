@@ -33,7 +33,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    virtual void paintEvent(QPaintEvent *event);
+   // virtual void paintEvent(QPaintEvent *event);
 
 private slots:
     void itemInserted(GateItem *item);
