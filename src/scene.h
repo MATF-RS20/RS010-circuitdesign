@@ -30,7 +30,6 @@ public slots:
 signals:
   void itemInserted(GateItem* item);
   void buttonClicked(int id);
- // void itemsSelected(QGraphicsItem* item);
 
 protected:
   void mousePressEvent(QGraphicsSceneMouseEvent *event) override;

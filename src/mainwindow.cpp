@@ -22,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(itemInserted(GateItem*)));
     connect(ui->buttonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(buttonGroupClicked(int)));
+    connect(ui->buttonGroupConnectMove, SIGNAL(buttonClicked(int)),
+            this, SLOT(buttonGroupConnectMoveClicked(int)));
 }
 
 MainWindow::~MainWindow()
@@ -36,50 +38,35 @@ void MainWindow::setUpButtonsIds(){
  ui->buttonGroup->setId(ui->nandButton, 3);
  ui->buttonGroup->setId(ui->norButton, 4);
  ui->buttonGroup->setId(ui->notButton, 5);
+
+ ui->buttonGroupConnectMove->setId(ui->connectButton,1);
+ ui->buttonGroupConnectMove->setId(ui->moveButton,2);
 }
 
 void MainWindow::buttonGroupClicked(int id){
-  //  std::cout << "buttonGroupClicked on " << id << " " << GateItem::GateType(id)<< std::endl;
-
-  /*
-   Umesto ovoga sam stavila buttonGroup exclusive
-   QButtonGroup* buttonGroup = ui->buttonGroup;
-   const QList<QAbstractButton*> buttons = buttonGroup->buttons();
-      for (QAbstractButton *button : buttons) {
-         if (buttonGroup->button(id) != button)
-              button->setChecked(false);
-       }
-  */
-
   scene->setItemType(GateItem::GateType(id));
   scene->setMode(Scene::InsertItem);
 }
 
+void MainWindow::buttonGroupConnectMoveClicked(int id){
+  scene->setMode(Scene::Mode(id));
+}
+
+
 void MainWindow::deleteItem(){
-  QList<QGraphicsItem *> selectedItems = scene->selectedItems();
-  selectedItems = scene->selectedItems();
+  /*  QList<QGraphicsItem *> selectedItems = scene->selectedItems();
   for (QGraphicsItem *item : qAsConst(selectedItems)) {
-       //if (item->type() == GateItem::Type)
-         //  qgraphicsitem_cast<GateItem *>(item)->removeArrows();
+      if(item->type() == Connection)
+      if (item->type() == GateItem::Type)
+          qgraphicsitem_cast<GateItem *>(item)->removeConnections();
        scene->removeItem(item);
        delete item;
-  }
+  }*/
 }
 
 void MainWindow::itemInserted(GateItem* item){
-   // ui->buttonGroup->button(int(GateItem::MoveItem))->setChecked(true);
-  QButtonGroup* buttonGroup = ui->buttonGroup;
-
-  //pointerTypeGroup->button(int(DiagramScene::MoveItem))->setChecked(true);
-   //scene->setMode(Scene::Mode(pointerTypeGroup->checkedId()));
-  buttonGroup->button(int(item->gateType()))->setChecked(false);
-  std::cout << "ItemInserted " << std::endl;
+  // zasto ne radi prva linija, zasto se button nakon iscrtavanja ne unchekira ?
+  ui->buttonGroup->button(item->gateType())->setChecked(false);
+  scene->setMode(Scene::MoveItem);
 }
-
-/*
-void MainWindow::paintEvent(QPaintEvent *event)
-{
-  std::cout << "paintEvent" << std::endl;
-}
-*/
 

@@ -33,12 +33,11 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-   // virtual void paintEvent(QPaintEvent *event);
-
 private slots:
     void itemInserted(GateItem *item);
     void deleteItem();
     void buttonGroupClicked(int id);
+    void buttonGroupConnectMoveClicked(int id);
 
 private:
     Ui::MainWindow *ui;

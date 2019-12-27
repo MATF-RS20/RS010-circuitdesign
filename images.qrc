@@ -6,5 +6,8 @@
         <file>images/nor.png</file>
         <file>images/nand.png</file>
         <file>images/and.png</file>
+        <file>images/connections.png</file>
+        <file>images/mouse.png</file>
+        <file>images/trash.png</file>
     </qresource>
 </RCC>

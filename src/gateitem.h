@@ -6,6 +6,7 @@
 #include <QPainter>
 
 QT_BEGIN_NAMESPACE
+class Connection;
 class QPixmap;
 class QGraphicsSceneContextMenuEvent;
 class QMenu;
@@ -15,20 +16,18 @@ QT_END_NAMESPACE
 class GateItem : public QGraphicsRectItem
 {
 public:
-  //Za sta nam sluzi ovaj enum ????
-  enum { Type = UserType + 15 };
   enum GateType { And, Or, Xor, Nand, Nor, Not};
 
   GateItem(GateType type, QGraphicsItem* parent = nullptr);
-/*
-  void removeArrow(Arrow* arrow);
-  void removeArrows();
-  void addArrow(Arrow* arrow);
-*/
+
+  void removeConnection(Connection* conn);
+  void removeConnections();
+  void addConnection(Connection* conn);
+
 
   GateType gateType() const { return myGateType; }
   QPixmap image() const { return pixmap; }
-  int type() const override { return Type; }
+  //int type() const override { return Type; }
 
 protected:
   //QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
@@ -37,7 +36,7 @@ protected:
 private:
   GateType myGateType;
   QPixmap pixmap;
-  //  QVector<Arrow*> arrows;
+  QVector<Connection*> connections;
 };
 
 

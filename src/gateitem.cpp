@@ -1,5 +1,9 @@
 #include "gateitem.h"
 #include <iostream>
+#include "connection.h"
+
+#include <QGraphicsScene>
+#include <QGraphicsSceneContextMenuEvent>
 
 GateItem::GateItem(GateType type, QGraphicsItem* parent)
   : QGraphicsRectItem(parent), myGateType(type)
@@ -26,7 +30,6 @@ GateItem::GateItem(GateType type, QGraphicsItem* parent)
     }
 
     setRect(0,0,70,50);
-    std::cout << "Pozvan konstruktor za GateItem" << std::endl;
     setFlag(QGraphicsItem::ItemIsSelectable,true);
     setFlag(QGraphicsItem::ItemIsMovable,true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges,true);
@@ -34,5 +37,23 @@ GateItem::GateItem(GateType type, QGraphicsItem* parent)
 
 void GateItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *){
   painter->drawPixmap(0,0,70,50,pixmap);
-//  std::cout << "Pozvan paint za GateItem" << std::endl;
 }
+
+void GateItem::removeConnection(Connection *conn){
+    connections.removeAll(conn);
+}
+
+void GateItem::removeConnections(){
+  // Zasto je ovde potrebna kopija?
+  for (Connection * conn : connections){
+      conn->startItem()->removeConnection(conn);
+      conn->endItem()->removeConnection(conn);
+      scene()->removeItem(conn);
+      delete conn;
+   }
+}
+
+void GateItem::addConnection(Connection *conn){
+  connections.append(conn);
+}
+

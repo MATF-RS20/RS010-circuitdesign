@@ -1,4 +1,5 @@
 #include "scene.h"
+#include "connection.h"
 #include <iostream>
 
 Scene::Scene(QObject* parent)
@@ -18,8 +19,6 @@ void Scene::setItemType(GateItem::GateType type){
 }
 
 void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event){
- // if (event->button() != Qt::LeftButton)
- //   return;
 
   GateItem* item;
   switch (myMode){
@@ -28,7 +27,6 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event){
       addItem(item);
       item->setPos(event->scenePos());
       emit itemInserted(item);
-      myMode = MoveItem;
       break;
     case InsertLine:
       line = new QGraphicsLineItem(QLineF(event->scenePos(),
@@ -51,7 +49,6 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
 }
 
 void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
-    /*
       if (line != nullptr && myMode == InsertLine){
             QList<QGraphicsItem *> startItems = items(line->line().p1());
         if (startItems.count() && startItems.first() == line)
@@ -69,18 +66,16 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
             startItems.first() != endItems.first()) {
             GateItem *startItem = qgraphicsitem_cast<GateItem *>(startItems.first());
             GateItem *endItem = qgraphicsitem_cast<GateItem *>(endItems.first());
-              Arrow *arrow = new Arrow(startItem, endItem);
-              arrow->setColor(myLineColor);
-              startItem->addArrow(arrow);
-              endItem->addArrow(arrow);
-              arrow->setZValue(-1000.0);
-              addItem(arrow);
-              arrow->updatePosition();
+              Connection *conn = new Connection(startItem, endItem);
+              startItem->addConnection(conn);
+              endItem->addConnection(conn);
+              addItem(conn);
+              conn->updatePosition();
         }
     }
 
   line = nullptr;
-  */
+
   QGraphicsScene::mouseReleaseEvent(event);
 }
 
