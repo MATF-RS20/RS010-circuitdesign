@@ -44,7 +44,6 @@ void GateItem::removeConnection(Connection *conn){
 }
 
 void GateItem::removeConnections(){
-  // Zasto je ovde potrebna kopija?
   for (Connection * conn : connections){
       conn->startItem()->removeConnection(conn);
       conn->endItem()->removeConnection(conn);

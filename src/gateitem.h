@@ -27,10 +27,8 @@ public:
 
   GateType gateType() const { return myGateType; }
   QPixmap image() const { return pixmap; }
-  //int type() const override { return Type; }
 
 protected:
-  //QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
 private:

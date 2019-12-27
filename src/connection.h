@@ -10,16 +10,14 @@ class Connection : public QGraphicsLineItem
 public:
   Connection(GateItem* startItem, GateItem* endItem,
              QGraphicsItem* parent = nullptr);
-
+  enum { Type = UserType + 10 } ;
 
   //mozda nece trebati jer povlacimo samo liniju.
   //QRectF boundingRect() const override;
   //QPainterPath shape() const override;
 
-  void setColor(const QColor& color) { myColor = color; }
   GateItem* startItem() const { return myStartItem; }
   GateItem* endItem() const { return myEndItem; }
-
   void updatePosition();
 
 protected:

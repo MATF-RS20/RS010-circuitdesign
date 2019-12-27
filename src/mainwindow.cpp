@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "gateitem.h"
 #include "scene.h"
+#include "connection.h"
 #include <QPixmap>
 #include <QPainter>
 
@@ -24,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(buttonGroupClicked(int)));
     connect(ui->buttonGroupConnectMove, SIGNAL(buttonClicked(int)),
             this, SLOT(buttonGroupConnectMoveClicked(int)));
+    connect(ui->trashButton, SIGNAL(clicked()), this, SLOT(deleteItem()));
 }
 
 MainWindow::~MainWindow()
@@ -54,14 +56,24 @@ void MainWindow::buttonGroupConnectMoveClicked(int id){
 
 
 void MainWindow::deleteItem(){
-  /*  QList<QGraphicsItem *> selectedItems = scene->selectedItems();
+  QList<QGraphicsItem *> selectedItems = scene->selectedItems();
   for (QGraphicsItem *item : qAsConst(selectedItems)) {
-      if(item->type() == Connection)
-      if (item->type() == GateItem::Type)
-          qgraphicsitem_cast<GateItem *>(item)->removeConnections();
+      if (item->type() == Connection::Type){
+          scene->removeItem(item);
+          Connection* conn = qgraphicsitem_cast<Connection*>(item);
+          conn->startItem()->removeConnection(conn);
+          conn->endItem()->removeConnection(conn);
+          delete item;
+       }
+   }
+
+  selectedItems = scene->selectedItems();
+  for (QGraphicsItem *item : qAsConst(selectedItems)) {
+       if (item->type() == GateItem::Type)
+           qgraphicsitem_cast<GateItem*>(item)->removeConnections();
        scene->removeItem(item);
        delete item;
-  }*/
+   }
 }
 
 void MainWindow::itemInserted(GateItem* item){

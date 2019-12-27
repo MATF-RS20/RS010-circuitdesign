@@ -17,7 +17,7 @@ void Connection::updatePosition(){
 }
 
 void Connection::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *){
-  // povezivanje cvora sa samim sobom
+  //  povezivanje cvora sa samim sobom
   if (myStartItem->collidesWithItem(myEndItem))
     return;
 
