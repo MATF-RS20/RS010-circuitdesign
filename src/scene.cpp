@@ -50,7 +50,7 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
 
 void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
       if (line != nullptr && myMode == InsertLine){
-            QList<QGraphicsItem *> startItems = items(line->line().p1());
+        QList<QGraphicsItem *> startItems = items(line->line().p1());
         if (startItems.count() && startItems.first() == line)
             startItems.removeFirst();
         QList<QGraphicsItem *> endItems = items(line->line().p2());

@@ -27,6 +27,12 @@ GateItem::GateItem(GateType type, QGraphicsItem* parent)
       case Not:
         pixmap.load("../images/not.png");
         break;
+      case In:
+        pixmap.load("../images/in_false.png");
+        break;
+      case Out:
+        pixmap.load("../images/out_false.png");
+        break;
     }
 
     setRect(0,0,70,50);

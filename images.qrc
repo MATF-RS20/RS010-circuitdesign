@@ -9,5 +9,9 @@
         <file>images/connections.png</file>
         <file>images/mouse.png</file>
         <file>images/trash.png</file>
+        <file>images/out_true.png</file>
+        <file>images/out_false.png</file>
+        <file>images/in_true.png</file>
+        <file>images/in_false.png</file>
     </qresource>
 </RCC>

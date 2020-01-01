@@ -19,10 +19,10 @@ MainWindow::MainWindow(QWidget *parent) :
     scene->setSceneRect(QRectF(0, 0, 1000, 500));
 
     setUpButtonsIds();
-    connect(scene, SIGNAL(itemInserted(GateItem*)),
-            this, SLOT(itemInserted(GateItem*)));
     connect(ui->buttonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(buttonGroupClicked(int)));
+    connect(scene, SIGNAL(itemInserted(GateItem*)),
+            this, SLOT(itemInserted(GateItem*)));
     connect(ui->buttonGroupConnectMove, SIGNAL(buttonClicked(int)),
             this, SLOT(buttonGroupConnectMoveClicked(int)));
     connect(ui->trashButton, SIGNAL(clicked()), this, SLOT(deleteItem()));
@@ -34,12 +34,15 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::setUpButtonsIds(){
- ui->buttonGroup->setId(ui->andButton, 0);
- ui->buttonGroup->setId(ui->orButton, 1);
- ui->buttonGroup->setId(ui->xorButton, 2);
- ui->buttonGroup->setId(ui->nandButton, 3);
- ui->buttonGroup->setId(ui->norButton, 4);
- ui->buttonGroup->setId(ui->notButton, 5);
+ ui->buttonGroup->setId(ui->andButton, GateItem::And);
+ ui->buttonGroup->setId(ui->orButton, GateItem::Or);
+ ui->buttonGroup->setId(ui->xorButton, GateItem::Xor);
+ ui->buttonGroup->setId(ui->nandButton, GateItem::Nand);
+ ui->buttonGroup->setId(ui->norButton, GateItem::Nor);
+ ui->buttonGroup->setId(ui->notButton, GateItem::Not);
+
+ ui->buttonGroup->setId(ui->inButton, GateItem::In);
+ ui->buttonGroup->setId(ui->outButton, GateItem::Out);
 
  ui->buttonGroupConnectMove->setId(ui->connectButton,1);
  ui->buttonGroupConnectMove->setId(ui->moveButton,2);
@@ -49,6 +52,13 @@ void MainWindow::buttonGroupClicked(int id){
   scene->setItemType(GateItem::GateType(id));
   scene->setMode(Scene::InsertItem);
 }
+
+/*
+void MainWindow::buttonGroupInOutClicked(int id) {
+  scene->setItemType(GateItem::GateType(id));
+  scene->setMode(Scene::InsertItem);
+}
+*/
 
 void MainWindow::buttonGroupConnectMoveClicked(int id){
   scene->setMode(Scene::Mode(id));

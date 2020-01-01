@@ -16,14 +16,13 @@ QT_END_NAMESPACE
 class GateItem : public QGraphicsRectItem
 {
 public:
-  enum GateType { And, Or, Xor, Nand, Nor, Not};
+  enum GateType { And, Or, Xor, Nand, Nor, Not, In, Out};
 
   GateItem(GateType type, QGraphicsItem* parent = nullptr);
 
   void removeConnection(Connection* conn);
   void removeConnections();
   void addConnection(Connection* conn);
-
 
   GateType gateType() const { return myGateType; }
   QPixmap image() const { return pixmap; }

@@ -11,13 +11,13 @@ Connection::Connection(GateItem* startItem, GateItem* endItem, QGraphicsItem* pa
 }
 
 void Connection::updatePosition(){
-    QLineF line(mapFromItem(myStartItem,0,0),
-                mapFromItem(myEndItem,0,0));
+  // Kako ovo radi ??
+    QLineF line(mapFromItem(myStartItem,70,25),
+                mapFromItem(myEndItem,10,25));
     setLine(line);
 }
 
 void Connection::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *){
-  //  povezivanje cvora sa samim sobom
   if (myStartItem->collidesWithItem(myEndItem))
     return;
 
@@ -31,5 +31,4 @@ void Connection::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWid
   setLine(line);
 
   painter->drawLine(line);
-
 }

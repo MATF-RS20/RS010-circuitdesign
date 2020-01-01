@@ -39,10 +39,13 @@ private slots:
     void buttonGroupClicked(int id);
     void buttonGroupConnectMoveClicked(int id);
 
+signals:
+    void buttonClicked(int id);
+
 private:
     Ui::MainWindow *ui;
     Scene* scene;
-    QGraphicsView* view;
+    //QGraphicsView* view;
     void setUpButtonsIds();
 };
 

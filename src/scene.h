@@ -29,7 +29,6 @@ public slots:
 
 signals:
   void itemInserted(GateItem* item);
-  void buttonClicked(int id);
 
 protected:
   void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
@@ -43,7 +42,6 @@ private:
   Mode myMode;
   QPointF startPoint;
   QGraphicsLineItem *line;
-
 };
 
 #endif // SCENE_H
