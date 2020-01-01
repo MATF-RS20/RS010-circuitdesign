@@ -40,12 +40,11 @@ void MainWindow::setUpButtonsIds(){
  ui->buttonGroup->setId(ui->nandButton, GateItem::Nand);
  ui->buttonGroup->setId(ui->norButton, GateItem::Nor);
  ui->buttonGroup->setId(ui->notButton, GateItem::Not);
-
  ui->buttonGroup->setId(ui->inButton, GateItem::In);
  ui->buttonGroup->setId(ui->outButton, GateItem::Out);
 
- ui->buttonGroupConnectMove->setId(ui->connectButton,1);
- ui->buttonGroupConnectMove->setId(ui->moveButton,2);
+ ui->buttonGroupConnectMove->setId(ui->connectButton,Scene::Mode::InsertLine);
+ ui->buttonGroupConnectMove->setId(ui->moveButton,Scene::Mode::MoveItem);
 }
 
 void MainWindow::buttonGroupClicked(int id){
@@ -53,12 +52,6 @@ void MainWindow::buttonGroupClicked(int id){
   scene->setMode(Scene::InsertItem);
 }
 
-/*
-void MainWindow::buttonGroupInOutClicked(int id) {
-  scene->setItemType(GateItem::GateType(id));
-  scene->setMode(Scene::InsertItem);
-}
-*/
 
 void MainWindow::buttonGroupConnectMoveClicked(int id){
   scene->setMode(Scene::Mode(id));

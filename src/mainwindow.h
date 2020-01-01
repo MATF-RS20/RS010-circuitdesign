@@ -43,10 +43,10 @@ signals:
     void buttonClicked(int id);
 
 private:
+    void setUpButtonsIds();
+
     Ui::MainWindow *ui;
     Scene* scene;
-    //QGraphicsView* view;
-    void setUpButtonsIds();
 };
 
 #endif // MAINWINDOW_H
