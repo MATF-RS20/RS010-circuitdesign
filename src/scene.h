@@ -37,6 +37,7 @@ protected:
 
 private:
   bool isItemChange(int type) const;
+  GateItem* getNewGateItem(GateItem::GateType type);
 
   GateItem::GateType myItemType;
   Mode myMode;

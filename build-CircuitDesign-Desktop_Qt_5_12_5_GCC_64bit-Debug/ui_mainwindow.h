@@ -79,7 +79,6 @@ public:
     QStatusBar *statusBar;
     QButtonGroup *buttonGroup;
     QButtonGroup *buttonGroupConnectMove;
-    QButtonGroup *buttonGroupInOut;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -187,13 +186,15 @@ public:
         horizontalLayout_2->setSpacing(6);
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
         inButton = new QToolButton(widget);
-        buttonGroupInOut = new QButtonGroup(MainWindow);
-        buttonGroupInOut->setObjectName(QString::fromUtf8("buttonGroupInOut"));
-        buttonGroupInOut->addButton(inButton);
+        buttonGroup = new QButtonGroup(MainWindow);
+        buttonGroup->setObjectName(QString::fromUtf8("buttonGroup"));
+        buttonGroup->setExclusive(true);
+        buttonGroup->addButton(inButton);
         inButton->setObjectName(QString::fromUtf8("inButton"));
         QIcon icon3;
         icon3.addFile(QString::fromUtf8(":/images/in_false.png"), QSize(), QIcon::Normal, QIcon::Off);
         inButton->setIcon(icon3);
+        inButton->setCheckable(true);
 
         horizontalLayout_2->addWidget(inButton);
 
@@ -209,11 +210,12 @@ public:
         horizontalLayout_3->setSpacing(6);
         horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
         outButton = new QToolButton(widget);
-        buttonGroupInOut->addButton(outButton);
+        buttonGroup->addButton(outButton);
         outButton->setObjectName(QString::fromUtf8("outButton"));
         QIcon icon4;
         icon4.addFile(QString::fromUtf8(":/images/out_false.png"), QSize(), QIcon::Normal, QIcon::Off);
         outButton->setIcon(icon4);
+        outButton->setCheckable(true);
 
         horizontalLayout_3->addWidget(outButton);
 
@@ -245,9 +247,6 @@ public:
         andGate->setSpacing(6);
         andGate->setObjectName(QString::fromUtf8("andGate"));
         andButton = new QToolButton(layoutWidget);
-        buttonGroup = new QButtonGroup(MainWindow);
-        buttonGroup->setObjectName(QString::fromUtf8("buttonGroup"));
-        buttonGroup->setExclusive(true);
         buttonGroup->addButton(andButton);
         andButton->setObjectName(QString::fromUtf8("andButton"));
         QIcon icon5;
@@ -437,9 +436,9 @@ public:
         moveButton->setText(QApplication::translate("MainWindow", "...", nullptr));
         connectButton->setText(QApplication::translate("MainWindow", "...", nullptr));
         inButton->setText(QApplication::translate("MainWindow", "...", nullptr));
-        inLabel->setText(QApplication::translate("MainWindow", "TextLabel", nullptr));
+        inLabel->setText(QApplication::translate("MainWindow", "In", nullptr));
         outButton->setText(QApplication::translate("MainWindow", "...", nullptr));
-        outLabel->setText(QApplication::translate("MainWindow", "TextLabel", nullptr));
+        outLabel->setText(QApplication::translate("MainWindow", "Out", nullptr));
         LogicBox->setItemText(LogicBox->indexOf(InOut), QApplication::translate("MainWindow", "InOut", nullptr));
         andButton->setText(QApplication::translate("MainWindow", "...", nullptr));
         andLabel->setText(QApplication::translate("MainWindow", "And", nullptr));

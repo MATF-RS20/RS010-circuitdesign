@@ -71,9 +71,10 @@ void MainWindow::deleteItem(){
    }
 
   selectedItems = scene->selectedItems();
-  for (QGraphicsItem *item : qAsConst(selectedItems)) {
-       if (item->type() == GateItem::Type)
-           qgraphicsitem_cast<GateItem*>(item)->removeConnections();
+  for (QGraphicsItem *item : qAsConst(selectedItems))
+  {
+      if (item->type() == GateItem::Type)
+            qgraphicsitem_cast<GateItem *>(item)->removeConnections();
        scene->removeItem(item);
        delete item;
    }

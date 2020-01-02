@@ -42,9 +42,6 @@ GateItem::GateItem(GateType type, QGraphicsItem* parent)
     setFlag(QGraphicsItem::ItemSendsGeometryChanges,true);
 }
 
-GateItem::~GateItem()
-{
-}
 
 bool GateItem::getValue() const
 {
@@ -59,11 +56,12 @@ InputGate::InputGate()
   : GateItem(GateItem::GateType::In)
 {}
 
-InputGate::~InputGate()
+void InputGate::removeConnections()
 {
   for (Connection *conn : connectionsFrom)
   {
     conn->endItem()->removeConnection(conn);
+    conn->startItem()->removeConnection(conn);
     scene()->removeItem(conn);
     delete conn;
   }
@@ -79,40 +77,53 @@ void InputGate::addConnection(Connection *conn)
   connectionsFrom.append(conn);
 }
 
+
+
 OutputGate::OutputGate()
  : GateItem(GateItem::GateType::Out)
 {}
 
-OutputGate::~OutputGate()
+void OutputGate::removeConnections()
 {
-  connection->startItem()->removeConnection(connection);
-  scene()->removeItem(connection);
-  delete connection;
+  if(!connection.empty())
+  {
+    connection.first()->startItem()->removeConnection(connection.first());
+    connection.first()->endItem()->removeConnection(connection.first());
+    scene()->removeItem(connection.first());
+    delete connection.first();
+  }
 }
 
-void OutputGate::removeConnection(Connection*)
+void OutputGate::removeConnection(Connection* conn)
 {
-   return;
+   connection.removeAll(conn);
 }
 
 void OutputGate::addConnection(Connection* conn)
 {
-  connection = conn;
+  connection.append(conn);
 }
+
+
+
 
 InnerGate::InnerGate(GateType type)
   : GateItem(type)
 {}
 
-InnerGate::~InnerGate()
+void InnerGate::removeConnections()
 {
-  for(Connection* conn: connectionTo){
+  for(Connection* conn: connectionTo)
+  {
     conn->startItem()->removeConnection(conn);
+    conn->endItem()->removeConnection(conn);
     scene()->removeItem(conn);
     delete conn;
   }
 
-  for(Connection* conn: connectionFrom){
+  for(Connection* conn: connectionFrom)
+  {
+      conn->startItem()->removeConnection(conn);
       conn->endItem()->removeConnection(conn);
       scene()->removeItem(conn);
       delete conn;
@@ -120,22 +131,126 @@ InnerGate::~InnerGate()
 }
 
 
-
-/*
-void GateItem::removeConnection(Connection *conn){
-    connections.removeAll(conn);
+void InnerGate::addConnection(Connection *conn)
+{
+  if(conn->startItem() == this)
+  {
+    connectionFrom.append(conn);
+  }
+  else
+  {
+    connectionTo.append(conn);
+    calculate();
+  }
 }
 
-void GateItem::removeConnections(){
-  for (Connection * conn : connections){
-      conn->startItem()->removeConnection(conn);
-      conn->endItem()->removeConnection(conn);
-      scene()->removeItem(conn);
-      delete conn;
-   }
+void InnerGate::removeConnection(Connection *conn)
+{
+  if(conn->startItem() == this){
+      connectionFrom.removeAll(conn);
+  }
+  else
+  {
+    connectionTo.removeAll(conn);
+    calculate();
+  }
 }
 
-void GateItem::addConnection(Connection *conn){
-  connections.append(conn);
+
+And::And()
+  : InnerGate(GateItem::GateType::And)
+{}
+
+Or::Or()
+  : InnerGate(GateItem::GateType::Or)
+{}
+
+Xor::Xor()
+  : InnerGate(GateItem::GateType::Xor)
+{}
+
+Nand::Nand()
+  : InnerGate(GateItem::GateType::Nand)
+{}
+
+Nor::Nor()
+  : InnerGate(GateItem::GateType::Nor)
+{}
+
+Not::Not()
+  : InnerGate(GateItem::GateType::Not)
+{}
+
+
+/* Calculate functions **************************/
+
+void InputGate::calculate()
+{
+  myValue = !myValue;
+  myValue ? pixmap.load("../images/in_true.png") : pixmap.load("../images/in_false.png");
 }
-*/
+
+void OutputGate::calculate()
+{
+  myValue = connection.back()->startItem()->getValue();
+  myValue ? pixmap.load("../images/out_true.png") : pixmap.load("../images/out_false.png");
+}
+
+void And::calculate()
+{
+  bool newValue = true;
+  for(Connection* conn: connectionTo )
+     newValue = newValue && conn->startItem()->getValue();
+  myValue = newValue;
+  for(Connection* conn: connectionFrom)
+      conn->endItem()->calculate();
+}
+
+void Or::calculate()
+{
+  bool newValue = false;
+  for(Connection* conn: connectionTo)
+     newValue = newValue || conn->startItem()->getValue();
+  myValue = newValue;
+  for(Connection* conn: connectionFrom)
+      conn->endItem()->calculate();
+}
+
+void Xor::calculate()
+{
+  unsigned numTrue = 0;
+  for(Connection* conn: connectionTo)
+    if (conn->startItem()->getValue() == true)
+      numTrue++;
+  myValue = numTrue % 2 == 0 ? false : true;
+
+  for(Connection* conn: connectionFrom)
+      conn->endItem()->calculate();
+}
+
+void Nand::calculate()
+{
+  bool newValue = true;
+  for(Connection* conn: connectionTo )
+     newValue = newValue && conn->startItem()->getValue();
+  myValue = !newValue;
+  for(Connection* conn: connectionFrom)
+      conn->endItem()->calculate();
+}
+
+void Nor::calculate()
+{
+  bool newValue = false;
+  for(Connection* conn: connectionTo)
+     newValue = newValue || conn->startItem()->getValue();
+  myValue = !newValue;
+  for(Connection* conn: connectionFrom)
+      conn->endItem()->calculate();
+}
+
+void Not::calculate()
+{
+   myValue = !(connectionTo.front()->startItem()->getValue());
+   for(Connection* conn: connectionFrom)
+       conn->endItem()->calculate();
+}

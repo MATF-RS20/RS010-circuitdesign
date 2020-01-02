@@ -23,7 +23,7 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event){
   GateItem* item;
   switch (myMode){
     case InsertItem:
-      item = new GateItem(myItemType);
+      item = getNewGateItem(myItemType);
       addItem(item);
       item->setPos(event->scenePos());
       emit itemInserted(item);
@@ -38,6 +38,28 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event){
   }
   QGraphicsScene::mousePressEvent(event);
 }
+
+GateItem* Scene::getNewGateItem(GateItem::GateType type){
+  switch (type) {
+    case GateItem::GateType::In:
+      return new InputGate();
+    case GateItem::GateType::Out:
+      return new OutputGate();
+    case GateItem::GateType::And:
+      return new And();
+    case GateItem::GateType::Or:
+      return new Or();
+    case GateItem::GateType::Xor:
+      return new Xor();
+    case GateItem::GateType::Nand:
+      return new Nand();
+    case GateItem::GateType::Nor:
+      return new Nor();
+    case GateItem::GateType::Not:
+      return new Not();
+   }
+}
+
 
 void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     if(myMode == InsertLine && line != nullptr){
@@ -60,10 +82,10 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
         removeItem(line);
         delete line;
 
-        if (startItems.count() > 0 && endItems.count() > 0 &&
-            startItems.first()->type() == GateItem::Type &&
-            endItems.first()->type() == GateItem::Type &&
-            startItems.first() != endItems.first()) {
+        if (startItems.count() > 0 && endItems.count() > 0
+        && (startItems.first()->type() == InputGate::Type || startItems.first()->type() == InnerGate::Type)
+        && (endItems.first()->type() == OutputGate::Type || endItems.first()->type() == InnerGate::Type)
+        && startItems.first() != endItems.first()) {
             GateItem *startItem = qgraphicsitem_cast<GateItem *>(startItems.first());
             GateItem *endItem = qgraphicsitem_cast<GateItem *>(endItems.first());
               Connection *conn = new Connection(startItem, endItem);

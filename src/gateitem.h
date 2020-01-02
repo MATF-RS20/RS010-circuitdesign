@@ -23,12 +23,12 @@ public:
   enum GateType { And, Or, Xor, Nand, Nor, Not, In, Out};
 
   GateItem(GateType type,  QGraphicsItem* parent = nullptr);
-  virtual ~GateItem();
 
   virtual void calculate() = 0;
   bool getValue() const;
   unsigned getId() const;
 
+  virtual void removeConnections() = 0;
   virtual void removeConnection(Connection* conn) = 0;
   virtual void addConnection(Connection* conn) = 0;
 
@@ -37,8 +37,6 @@ public:
 
 protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
-
-private:
   GateType myGateType;
   QPixmap pixmap;
   bool myValue;
@@ -48,10 +46,10 @@ class InputGate : public GateItem
 {
 public:
   InputGate();
-  ~InputGate();
 
   void calculate() override;
 
+  void removeConnections() override;
   void removeConnection(Connection *conn) override;
   void addConnection(Connection *conn) override;
 
@@ -63,23 +61,23 @@ class OutputGate : public GateItem
 {
 public:
   OutputGate( );
-  ~OutputGate();
 
   void calculate() override;
 
+  void removeConnections() override;
   void removeConnection(Connection *conn) override;
   void addConnection(Connection *conn) override;
 
 private:
-  Connection* connection;
+  QVector<Connection*> connection;
 };
 
 class InnerGate : public GateItem
 {
 public:
   InnerGate(GateType type);
-  ~InnerGate();
 
+  void removeConnections() override;
   void removeConnection(Connection *conn) override;
   void addConnection(Connection *conn) override;
 
@@ -91,49 +89,43 @@ protected:
 class And : public InnerGate
 {
 public:
-  And( );
-
-  void calculate();
+  And();
+  void calculate() override;
 };
 
 class Or : public InnerGate
 {
 public:
-  Or( );
-
-  void calculate();
+  Or();
+  void calculate() override;
 };
 
 class Not : public InnerGate
 {
 public:
-  Not( );
-
-  void calculate();
+  Not();
+  void calculate() override;
 };
 
 class Xor : public InnerGate
 {
 public:
-  Xor( );
-
-  void calculate();
+  Xor();
+  void calculate() override;
 };
 
 class Nor : public InnerGate
 {
 public:
-  Nor( );
-
-  void calculate();
+  Nor();
+  void calculate() override;
 };
 
 class Nand : public InnerGate
 {
 public:
-  Nand( );
-
-  void calculate();
+  Nand();
+  void calculate() override;
 };
 
 #endif // GATEITEM_H
