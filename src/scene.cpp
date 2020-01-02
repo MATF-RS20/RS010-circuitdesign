@@ -33,8 +33,20 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event){
                                   event->scenePos()));
       addItem(line);
       break;
-    default:
-      ;
+    case MoveItem:
+      QList<QGraphicsItem *> selectedItems = items(event->scenePos());
+      for(QGraphicsItem* selected: selectedItems)
+      {
+        if(selected->type() == GateItem::Type)
+        {
+           GateItem* item = qgraphicsitem_cast<GateItem*>(selected);
+           if(item->gateType() == GateItem::GateType::In)
+           {
+              item->calculate();
+              item->update();
+           }
+        }
+      }
   }
   QGraphicsScene::mousePressEvent(event);
 }
@@ -83,16 +95,19 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
         delete line;
 
         if (startItems.count() > 0 && endItems.count() > 0
-        && (startItems.first()->type() == InputGate::Type || startItems.first()->type() == InnerGate::Type)
-        && (endItems.first()->type() == OutputGate::Type || endItems.first()->type() == InnerGate::Type)
+        && (startItems.first()->type() == GateItem::Type)
+        && (endItems.first()->type() == GateItem::Type)
         && startItems.first() != endItems.first()) {
             GateItem *startItem = qgraphicsitem_cast<GateItem *>(startItems.first());
             GateItem *endItem = qgraphicsitem_cast<GateItem *>(endItems.first());
+            if(startItem->gateType() != GateItem::GateType::Out && endItem->gateType() != GateItem::GateType::In)
+            {
               Connection *conn = new Connection(startItem, endItem);
               startItem->addConnection(conn);
               endItem->addConnection(conn);
               addItem(conn);
               conn->updatePosition();
+            }
         }
     }
 

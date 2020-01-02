@@ -102,9 +102,8 @@ void OutputGate::removeConnection(Connection* conn)
 void OutputGate::addConnection(Connection* conn)
 {
   connection.append(conn);
+  calculate();
 }
-
-
 
 
 InnerGate::InnerGate(GateType type)
@@ -129,7 +128,6 @@ void InnerGate::removeConnections()
       delete conn;
   }
 }
-
 
 void InnerGate::addConnection(Connection *conn)
 {
@@ -188,12 +186,17 @@ void InputGate::calculate()
 {
   myValue = !myValue;
   myValue ? pixmap.load("../images/in_true.png") : pixmap.load("../images/in_false.png");
+
+  for(Connection* conn : connectionsFrom)
+    conn->endItem()->calculate();
 }
 
 void OutputGate::calculate()
 {
-  myValue = connection.back()->startItem()->getValue();
+  myValue = connection.front()->startItem()->getValue();
+  std::cout << myValue << std::endl;
   myValue ? pixmap.load("../images/out_true.png") : pixmap.load("../images/out_false.png");
+  this->update();
 }
 
 void And::calculate()
