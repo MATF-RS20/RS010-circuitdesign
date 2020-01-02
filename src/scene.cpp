@@ -103,10 +103,23 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
             if(startItem->gateType() != GateItem::GateType::Out && endItem->gateType() != GateItem::GateType::In)
             {
               Connection *conn = new Connection(startItem, endItem);
-              startItem->addConnection(conn);
-              endItem->addConnection(conn);
-              addItem(conn);
-              conn->updatePosition();
+              if(startItem->addConnection(conn))
+              {
+                if(endItem->addConnection(conn))
+                {
+                  addItem(conn);
+                  conn->updatePosition();
+                }
+                else
+                {
+                  startItem->removeConnection(conn);
+                  delete conn;
+                }
+              }
+              else
+              {
+                 delete conn;
+              }
             }
         }
     }

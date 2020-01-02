@@ -30,7 +30,7 @@ public:
 
   virtual void removeConnections() = 0;
   virtual void removeConnection(Connection* conn) = 0;
-  virtual void addConnection(Connection* conn) = 0;
+  virtual bool addConnection(Connection* conn) = 0;
 
   GateType gateType() const { return myGateType; }
   QPixmap image() const { return pixmap; }
@@ -51,7 +51,7 @@ public:
 
   void removeConnections() override;
   void removeConnection(Connection *conn) override;
-  void addConnection(Connection *conn) override;
+  bool addConnection(Connection *conn) override;
 
 private:
   QVector<Connection*> connectionsFrom;
@@ -66,7 +66,7 @@ public:
 
   void removeConnections() override;
   void removeConnection(Connection *conn) override;
-  void addConnection(Connection *conn) override;
+  bool addConnection(Connection *conn) override;
 
 private:
   QVector<Connection*> connection;
@@ -79,7 +79,7 @@ public:
 
   void removeConnections() override;
   void removeConnection(Connection *conn) override;
-  void addConnection(Connection *conn) override;
+  bool addConnection(Connection *conn) override;
 
 protected:
   QVector<Connection*> connectionTo;

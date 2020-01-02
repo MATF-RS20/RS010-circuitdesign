@@ -72,9 +72,12 @@ void InputGate::removeConnection(Connection *conn)
   connectionsFrom.removeAll(conn);
 }
 
-void InputGate::addConnection(Connection *conn)
+bool InputGate::addConnection(Connection *conn)
 {
+  if(conn->endItem() == this)
+    return false;
   connectionsFrom.append(conn);
+  return  true;
 }
 
 
@@ -99,10 +102,14 @@ void OutputGate::removeConnection(Connection* conn)
    connection.removeAll(conn);
 }
 
-void OutputGate::addConnection(Connection* conn)
+bool OutputGate::addConnection(Connection* conn)
 {
+  if(connection.size() != 0)
+    return false;
+
   connection.append(conn);
   calculate();
+  return  true;
 }
 
 
@@ -129,7 +136,7 @@ void InnerGate::removeConnections()
   }
 }
 
-void InnerGate::addConnection(Connection *conn)
+bool InnerGate::addConnection(Connection *conn)
 {
   if(conn->startItem() == this)
   {
@@ -137,9 +144,13 @@ void InnerGate::addConnection(Connection *conn)
   }
   else
   {
+    if(gateType() == GateItem::GateType::Not && connectionTo.size() != 0)
+      return false;
+
     connectionTo.append(conn);
     calculate();
   }
+  return true;
 }
 
 void InnerGate::removeConnection(Connection *conn)
@@ -194,7 +205,6 @@ void InputGate::calculate()
 void OutputGate::calculate()
 {
   myValue = connection.front()->startItem()->getValue();
-  std::cout << myValue << std::endl;
   myValue ? pixmap.load("../images/out_true.png") : pixmap.load("../images/out_false.png");
   this->update();
 }
