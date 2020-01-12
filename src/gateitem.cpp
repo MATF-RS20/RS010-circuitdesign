@@ -33,10 +33,13 @@ GateItem::GateItem(GateType type, QGraphicsItem* parent)
       case Out:
         pixmap.load("../images/out_false.png");
         break;
+      case Multiplexer:
+        pixmap.load("../images/multiplexer.png");
+        break;
     }
 
     myValue = false;
-    setRect(0,0,70,50);
+    setRect(0,0,100,100);
     setFlag(QGraphicsItem::ItemIsSelectable,true);
     setFlag(QGraphicsItem::ItemIsMovable,true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges,true);
@@ -58,10 +61,13 @@ InputGate::InputGate()
 
 void InputGate::removeConnections()
 {
-  for (Connection *conn : connectionsFrom)
+  // need a copy here since removeArrow() will
+  // modify the arrows container
+  const auto connectionsFromCopy = connectionsFrom;
+  for (Connection *conn : connectionsFromCopy)
   {
     conn->endItem()->removeConnection(conn);
-    conn->startItem()->removeConnection(conn);
+    this->removeConnection(conn);
     scene()->removeItem(conn);
     delete conn;
   }
@@ -77,7 +83,7 @@ bool InputGate::addConnection(Connection *conn)
   if(conn->endItem() == this)
     return false;
   connectionsFrom.append(conn);
-  return  true;
+  return true;
 }
 
 
@@ -91,7 +97,7 @@ void OutputGate::removeConnections()
   if(!connection.empty())
   {
     connection.first()->startItem()->removeConnection(connection.first());
-    connection.first()->endItem()->removeConnection(connection.first());
+    this->removeConnection(connection.first());
     scene()->removeItem(connection.first());
     delete connection.first();
   }
@@ -119,17 +125,21 @@ InnerGate::InnerGate(GateType type)
 
 void InnerGate::removeConnections()
 {
-  for(Connection* conn: connectionTo)
+  const auto connectionsToCopy = connectionTo;
+  for(Connection* conn: connectionsToCopy)
   {
     conn->startItem()->removeConnection(conn);
-    conn->endItem()->removeConnection(conn);
+    //conn->endItem()->removeConnection(conn);
+    this->removeConnection(conn);
     scene()->removeItem(conn);
     delete conn;
   }
 
-  for(Connection* conn: connectionFrom)
+  const auto connectionsFromCopy = connectionFrom;
+  for(Connection* conn: connectionsFromCopy)
   {
-      conn->startItem()->removeConnection(conn);
+      //conn->startItem()->removeConnection(conn);
+      this->removeConnection(conn);
       conn->endItem()->removeConnection(conn);
       scene()->removeItem(conn);
       delete conn;
@@ -140,6 +150,7 @@ bool InnerGate::addConnection(Connection *conn)
 {
   if(conn->startItem() == this)
   {
+    //Ako je u pitanju povezivanje od ovog elementa.
     connectionFrom.append(conn);
   }
   else
@@ -164,7 +175,6 @@ void InnerGate::removeConnection(Connection *conn)
     calculate();
   }
 }
-
 
 And::And()
   : InnerGate(GateItem::GateType::And)
@@ -266,4 +276,57 @@ void Not::calculate()
    myValue = !(connectionTo.front()->startItem()->getValue());
    for(Connection* conn: connectionFrom)
        conn->endItem()->calculate();
+}
+
+
+Multiplexer::Multiplexer()
+  :GateItem(GateItem::Multiplexer)
+{
+
+  NotGates.append(new class Not());
+  NotGates.append(new class Not());
+  AndGates.append(new class And());
+  AndGates.append(new class And());
+  AndGates.append(new class And());
+  AndGates.append(new class And());
+  OrGate = new class Or();
+
+  for(class And* andG: AndGates){
+      connect(andG, OrGate);
+      for(class Not* notG : NotGates)
+        connect(notG,andG);
+  }
+}
+
+
+void Multiplexer::removeConnections(){
+
+}
+
+void Multiplexer::removeConnection(Connection *conn){
+  connectionsTo.removeAll(conn);
+  connectionsFrom.removeAll(conn);
+}
+
+bool Multiplexer::addConnection(Connection *conn){
+   return true;
+}
+
+void Multiplexer::calculate(){
+  OrGate->calculate();
+  myValue = OrGate->getValue();
+}
+
+void Multiplexer::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
+   setRect(0,0,280,200);
+   painter->drawPixmap(0,0,280,200,pixmap);
+}
+
+Connection* Multiplexer::connect(GateItem *g1, GateItem *g2)
+{
+  Connection* conn = new Connection(g1,g2);
+  g1->addConnection(conn);
+  g2->addConnection(conn);
+
+  return conn;
 }

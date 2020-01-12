@@ -10,17 +10,7 @@ Connection::Connection(GateItem* startItem, GateItem* endItem, QGraphicsItem* pa
   setPen(QPen(myColor, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 }
 
-void Connection::updatePosition(){
-  // Kako ovo radi ??
-    QLineF line(mapFromItem(myStartItem,70,25),
-                mapFromItem(myEndItem,10,25));
-    setLine(line);
-}
-
 void Connection::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *){
-  if (myStartItem->collidesWithItem(myEndItem))
-    return;
-
   QPen myPen = pen();
   myPen.setColor(myColor);
   painter->setPen(myPen);

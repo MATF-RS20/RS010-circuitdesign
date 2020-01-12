@@ -34,10 +34,10 @@ protected:
   void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
   void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
   void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
-
 private:
-  bool isItemChange(int type) const;
   GateItem* getNewGateItem(GateItem::GateType type);
+  void mouseReleaseMultiplexerEnd(GateItem* startItem,GateItem* endItem, QPointF endPoint);
+  void mouseReleaseMultiplexerStart(GateItem* startItem,GateItem* endItem);
 
   GateItem::GateType myItemType;
   Mode myMode;

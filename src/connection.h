@@ -11,13 +11,8 @@ public:
   Connection(GateItem* startItem, GateItem* endItem,
              QGraphicsItem* parent = nullptr);
 
-  //mozda nece trebati jer povlacimo samo liniju.
-  //QRectF boundingRect() const override;
-  //QPainterPath shape() const override;
-
   GateItem* startItem() const { return myStartItem; }
   GateItem* endItem() const { return myEndItem; }
-  void updatePosition();
 
 protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;

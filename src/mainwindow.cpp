@@ -42,6 +42,7 @@ void MainWindow::setUpButtonsIds(){
  ui->buttonGroup->setId(ui->notButton, GateItem::Not);
  ui->buttonGroup->setId(ui->inButton, GateItem::In);
  ui->buttonGroup->setId(ui->outButton, GateItem::Out);
+ ui->buttonGroup->setId(ui->multiplexerButton, GateItem::Multiplexer);
 
  ui->buttonGroupConnectMove->setId(ui->connectButton,Scene::Mode::InsertLine);
  ui->buttonGroupConnectMove->setId(ui->moveButton,Scene::Mode::MoveItem);
@@ -77,7 +78,7 @@ void MainWindow::deleteItem(){
             qgraphicsitem_cast<GateItem *>(item)->removeConnections();
        scene->removeItem(item);
        delete item;
-   }
+    }
 }
 
 void MainWindow::itemInserted(GateItem* item){

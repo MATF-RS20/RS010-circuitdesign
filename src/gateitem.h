@@ -4,6 +4,7 @@
 #include <QGraphicsPixmapItem>
 #include <QVector>
 #include <QPainter>
+#include <QGraphicsItemGroup>
 
 #include <vector>
 #include <map>
@@ -20,13 +21,12 @@ QT_END_NAMESPACE
 class GateItem : public QGraphicsRectItem
 {
 public:
-  enum GateType { And, Or, Xor, Nand, Nor, Not, In, Out};
+  enum GateType { And, Or, Xor, Nand, Nor, Not, In, Out, Multiplexer};
 
   GateItem(GateType type,  QGraphicsItem* parent = nullptr);
 
   virtual void calculate() = 0;
   bool getValue() const;
-  unsigned getId() const;
 
   virtual void removeConnections() = 0;
   virtual void removeConnection(Connection* conn) = 0;
@@ -86,6 +86,7 @@ protected:
   QVector<Connection*> connectionFrom;
 };
 
+
 class And : public InnerGate
 {
 public:
@@ -127,5 +128,32 @@ public:
   Nand();
   void calculate() override;
 };
+
+
+class Multiplexer : public GateItem
+{
+public:
+  Multiplexer();
+
+  bool addConnection(Connection *conn) override;
+  void removeConnection(Connection *conn) override;
+  void removeConnections() override;
+
+  void calculate() override;
+
+  void virtual paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+
+public:
+  QVector<class And*> AndGates;
+  QVector<class Not*> NotGates;
+  QVector<Connection*> connectionsFrom;
+  QVector<Connection*> connectionsTo;
+
+  class Or *OrGate;
+
+  static Connection* connect(GateItem* g1, GateItem* g2);
+
+};
+
 
 #endif // GATEITEM_H
