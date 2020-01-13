@@ -61,14 +61,17 @@ InputGate::InputGate()
 
 void InputGate::removeConnections()
 {
-  // need a copy here since removeArrow() will
-  // modify the arrows container
   const auto connectionsFromCopy = connectionsFrom;
   for (Connection *conn : connectionsFromCopy)
   {
     conn->endItem()->removeConnection(conn);
     this->removeConnection(conn);
-    scene()->removeItem(conn);
+
+    // OVDE PUCA!!!
+    if(conn->scene() != nullptr){
+        std::cout << "Uslo u if" << std::endl;
+        conn->scene()->removeItem(conn);  
+    }
     delete conn;
   }
 }
@@ -86,7 +89,11 @@ bool InputGate::addConnection(Connection *conn)
   return true;
 }
 
-
+/*
+void InputGate::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *){
+  setRect(0,0,45,45);
+  painter->drawPixmap(0,0,45,45,pixmap);
+}*/
 
 OutputGate::OutputGate()
  : GateItem(GateItem::GateType::Out)
@@ -118,6 +125,11 @@ bool OutputGate::addConnection(Connection* conn)
   return  true;
 }
 
+/*
+void OutputGate::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *){
+  setRect(0,0,45,45);
+  painter->drawPixmap(0,0,50,30,pixmap);
+}*/
 
 InnerGate::InnerGate(GateType type)
   : GateItem(type)
@@ -125,20 +137,18 @@ InnerGate::InnerGate(GateType type)
 
 void InnerGate::removeConnections()
 {
-  const auto connectionsToCopy = connectionTo;
+  const auto connectionsToCopy = connectionsTo;
   for(Connection* conn: connectionsToCopy)
   {
     conn->startItem()->removeConnection(conn);
-    //conn->endItem()->removeConnection(conn);
     this->removeConnection(conn);
     scene()->removeItem(conn);
     delete conn;
   }
 
-  const auto connectionsFromCopy = connectionFrom;
+  const auto connectionsFromCopy = connectionsFrom;
   for(Connection* conn: connectionsFromCopy)
   {
-      //conn->startItem()->removeConnection(conn);
       this->removeConnection(conn);
       conn->endItem()->removeConnection(conn);
       scene()->removeItem(conn);
@@ -151,14 +161,14 @@ bool InnerGate::addConnection(Connection *conn)
   if(conn->startItem() == this)
   {
     //Ako je u pitanju povezivanje od ovog elementa.
-    connectionFrom.append(conn);
+    connectionsFrom.append(conn);
   }
   else
   {
-    if(gateType() == GateItem::GateType::Not && connectionTo.size() != 0)
+    if(gateType() == GateItem::GateType::Not && connectionsTo.size() != 0)
       return false;
 
-    connectionTo.append(conn);
+    connectionsTo.append(conn);
     calculate();
   }
   return true;
@@ -167,11 +177,11 @@ bool InnerGate::addConnection(Connection *conn)
 void InnerGate::removeConnection(Connection *conn)
 {
   if(conn->startItem() == this){
-      connectionFrom.removeAll(conn);
+      connectionsFrom.removeAll(conn);
   }
   else
   {
-    connectionTo.removeAll(conn);
+    connectionsTo.removeAll(conn);
     calculate();
   }
 }
@@ -222,65 +232,65 @@ void OutputGate::calculate()
 void And::calculate()
 {
   bool newValue = true;
-  for(Connection* conn: connectionTo )
+  for(Connection* conn: connectionsTo )
      newValue = newValue && conn->startItem()->getValue();
   myValue = newValue;
-  for(Connection* conn: connectionFrom)
+  for(Connection* conn: connectionsFrom)
       conn->endItem()->calculate();
 }
 
 void Or::calculate()
 {
   bool newValue = false;
-  for(Connection* conn: connectionTo)
+  for(Connection* conn: connectionsTo)
      newValue = newValue || conn->startItem()->getValue();
   myValue = newValue;
-  for(Connection* conn: connectionFrom)
+  for(Connection* conn: connectionsFrom)
       conn->endItem()->calculate();
 }
 
 void Xor::calculate()
 {
   unsigned numTrue = 0;
-  for(Connection* conn: connectionTo)
+  for(Connection* conn: connectionsTo)
     if (conn->startItem()->getValue() == true)
       numTrue++;
   myValue = numTrue % 2 == 0 ? false : true;
 
-  for(Connection* conn: connectionFrom)
+  for(Connection* conn: connectionsFrom)
       conn->endItem()->calculate();
 }
 
 void Nand::calculate()
 {
   bool newValue = true;
-  for(Connection* conn: connectionTo )
+  for(Connection* conn: connectionsTo )
      newValue = newValue && conn->startItem()->getValue();
   myValue = !newValue;
-  for(Connection* conn: connectionFrom)
+  for(Connection* conn: connectionsFrom)
       conn->endItem()->calculate();
 }
 
 void Nor::calculate()
 {
   bool newValue = false;
-  for(Connection* conn: connectionTo)
+  for(Connection* conn: connectionsTo)
      newValue = newValue || conn->startItem()->getValue();
   myValue = !newValue;
-  for(Connection* conn: connectionFrom)
+  for(Connection* conn: connectionsFrom)
       conn->endItem()->calculate();
 }
 
 void Not::calculate()
 {
-   myValue = !(connectionTo.front()->startItem()->getValue());
-   for(Connection* conn: connectionFrom)
+   myValue = !(connectionsTo.front()->startItem()->getValue());
+   for(Connection* conn: connectionsFrom)
        conn->endItem()->calculate();
 }
 
 
 Multiplexer::Multiplexer()
-  :GateItem(GateItem::Multiplexer)
+  :InnerGate(GateItem::Multiplexer)
 {
 
   NotGates.append(new class Not());
@@ -298,35 +308,22 @@ Multiplexer::Multiplexer()
   }
 }
 
-
-void Multiplexer::removeConnections(){
-
-}
-
-void Multiplexer::removeConnection(Connection *conn){
-  connectionsTo.removeAll(conn);
-  connectionsFrom.removeAll(conn);
-}
-
-bool Multiplexer::addConnection(Connection *conn){
-   return true;
-}
-
 void Multiplexer::calculate(){
   OrGate->calculate();
   myValue = OrGate->getValue();
 }
 
-void Multiplexer::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
-   setRect(0,0,280,200);
-   painter->drawPixmap(0,0,280,200,pixmap);
+
+void Multiplexer::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *){
+   setRect(0,0,250,180);
+   painter->drawPixmap(0,0,250,180,pixmap);
 }
 
-Connection* Multiplexer::connect(GateItem *g1, GateItem *g2)
-{
-  Connection* conn = new Connection(g1,g2);
-  g1->addConnection(conn);
-  g2->addConnection(conn);
+Connection* Multiplexer::connect(GateItem* g1, GateItem* g2){
+    Connection* conn = new Connection(g1,g2);
+    g1->addConnection(conn);
+    g2->addConnection(conn);
 
-  return conn;
+    return conn;
 }
+

@@ -28,6 +28,9 @@ public:
   virtual void calculate() = 0;
   bool getValue() const;
 
+  //QRectF boundingRect() const override;
+  //QPainterPath shape() const override;
+
   virtual void removeConnections() = 0;
   virtual void removeConnection(Connection* conn) = 0;
   virtual bool addConnection(Connection* conn) = 0;
@@ -53,6 +56,7 @@ public:
   void removeConnection(Connection *conn) override;
   bool addConnection(Connection *conn) override;
 
+ // void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
 private:
   QVector<Connection*> connectionsFrom;
 };
@@ -68,6 +72,7 @@ public:
   void removeConnection(Connection *conn) override;
   bool addConnection(Connection *conn) override;
 
+  //void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
 private:
   QVector<Connection*> connection;
 };
@@ -82,8 +87,8 @@ public:
   bool addConnection(Connection *conn) override;
 
 protected:
-  QVector<Connection*> connectionTo;
-  QVector<Connection*> connectionFrom;
+  QVector<Connection*> connectionsTo;
+  QVector<Connection*> connectionsFrom;
 };
 
 
@@ -130,25 +135,17 @@ public:
 };
 
 
-class Multiplexer : public GateItem
+class Multiplexer : public InnerGate
 {
 public:
   Multiplexer();
 
-  bool addConnection(Connection *conn) override;
-  void removeConnection(Connection *conn) override;
-  void removeConnections() override;
-
   void calculate() override;
-
   void virtual paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
 public:
   QVector<class And*> AndGates;
   QVector<class Not*> NotGates;
-  QVector<Connection*> connectionsFrom;
-  QVector<Connection*> connectionsTo;
-
   class Or *OrGate;
 
   static Connection* connect(GateItem* g1, GateItem* g2);
