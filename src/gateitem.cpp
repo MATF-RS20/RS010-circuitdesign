@@ -1,5 +1,6 @@
 #include "gateitem.h"
 #include <iostream>
+#include <cmath>
 #include "connection.h"
 
 #include <QGraphicsScene>
@@ -103,10 +104,12 @@ void OutputGate::removeConnections()
 {
   if(!connection.empty())
   {
-    connection.first()->startItem()->removeConnection(connection.first());
-    this->removeConnection(connection.first());
-    scene()->removeItem(connection.first());
-    delete connection.first();
+    Connection* conn = connection.first();
+    conn->startItem()->removeConnection(conn);
+    this->removeConnection(conn);
+    if(conn->scene() != nullptr)
+      scene()->removeItem(conn);
+    delete conn;
   }
 }
 
@@ -142,7 +145,8 @@ void InnerGate::removeConnections()
   {
     conn->startItem()->removeConnection(conn);
     this->removeConnection(conn);
-    scene()->removeItem(conn);
+    if(conn->scene() != nullptr)
+       conn->scene()->removeItem(conn);
     delete conn;
   }
 
@@ -151,7 +155,8 @@ void InnerGate::removeConnections()
   {
       this->removeConnection(conn);
       conn->endItem()->removeConnection(conn);
-      scene()->removeItem(conn);
+      if(conn->scene() != nullptr)
+        conn->scene()->removeItem(conn);
       delete conn;
   }
 }
@@ -293,24 +298,39 @@ Multiplexer::Multiplexer()
   :InnerGate(GateItem::Multiplexer)
 {
 
-  NotGates.append(new class Not());
-  NotGates.append(new class Not());
-  AndGates.append(new class And());
-  AndGates.append(new class And());
-  AndGates.append(new class And());
-  AndGates.append(new class And());
+  for(int i=0;i < numOfNot; i++){
+    NotGates.append(new class Not());
+  }
+
+  for(int i=0;i < numOfAnd; i++){
+    AndGates.append(new class And());
+  }
+
   OrGate = new class Or();
 
-  for(class And* andG: AndGates){
-      connect(andG, OrGate);
-      for(class Not* notG : NotGates)
-        connect(notG,andG);
+// konektovanje svih elemenata medjusobno
+for(int i = 0; i < AndGates.size(); i++){
+    for(int j = 0; j <NotGates.size(); j++){
+        if(!getBit(i,j))
+          connect(NotGates[j], AndGates[i]);
+     }
+    connect(AndGates[i], OrGate);
   }
+}
+
+int Multiplexer::getBit(int n,int k){
+  int mask =  1 << k;
+  int masked_n = n & mask;
+  int thebit = masked_n >> k;
+  return thebit;
 }
 
 void Multiplexer::calculate(){
   OrGate->calculate();
   myValue = OrGate->getValue();
+  for(Connection* conn: connectionsFrom){
+      conn->endItem()->calculate();
+  }
 }
 
 

@@ -147,9 +147,11 @@ public:
   QVector<class And*> AndGates;
   QVector<class Not*> NotGates;
   class Or *OrGate;
+  int numOfNot = 2;
+  int numOfAnd = 4;
 
   static Connection* connect(GateItem* g1, GateItem* g2);
-
+  int getBit(int n, int k);
 };
 
 
