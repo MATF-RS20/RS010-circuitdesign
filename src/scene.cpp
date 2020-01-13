@@ -126,14 +126,17 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
                 {
                    delete conn;
                 }
+            }
           }
       }
 
-  }
+
   line = nullptr;
 
   QGraphicsScene::mouseReleaseEvent(event);
 }
+
+
 
 void Scene::mouseReleaseMultiplexerEnd(GateItem* startItem, GateItem* endItem,QPointF endPoint)
 {
@@ -144,39 +147,44 @@ void Scene::mouseReleaseMultiplexerEnd(GateItem* startItem, GateItem* endItem,QP
   qreal endY = endPoint.ry();
 
   Multiplexer* item = qgraphicsitem_cast<Multiplexer*>(endItem);
-  if(endX < posX + qreal(50)){
-    // na neki od And dodajemo konekciju
-    if(endY < posY + qreal(80)){
+  if(endX < posX + qreal(60)){
+    if(endY < posY + qreal(50)){
         std::cout << "added and0" << std::endl;
        Multiplexer::connect(startItem, item->AndGates[0]);
-    } else if( endY < posY + qreal(120)){
+    } else if( endY < posY + qreal(100)){
         std::cout << "added and1" << std::endl;
         Multiplexer::connect(startItem, item->AndGates[1]);
-    } else if(endY < posY + qreal(160)){
+    } else if(endY < posY + qreal(150)){
         std::cout << "added and2" << std::endl;
         Multiplexer::connect(startItem, item->AndGates[2]);
     } else if(endY < posY + qreal(200)) {
         std::cout << "added and3" << std::endl;
         Multiplexer::connect(startItem, item->AndGates[3]);
     }
-  } else if(endX < posX + qreal(130)){
-      std::cout << "added not0" << std::endl;
-        Multiplexer::connect(startItem, item->NotGates[0]);
-    } else{
-      std::cout << "added not1" << std::endl;
+  } else if(endX < posX + qreal(120)){
+      std::cout << "added s1" << std::endl;
         Multiplexer::connect(startItem, item->NotGates[1]);
+        Multiplexer::connect(startItem, item->AndGates[2]);
+        Multiplexer::connect(startItem, item->AndGates[3]);
+    } else{
+      std::cout << "added s0" << std::endl;
+        Multiplexer::connect(startItem, item->NotGates[0]);
+        Multiplexer::connect(startItem, item->AndGates[1]);
+        Multiplexer::connect(startItem, item->AndGates[3]);
     }
 
     Connection* conn = new Connection(startItem,item);
     item->addConnection(conn);
+    startItem->addConnection(conn);
     addItem(conn);
 }
 
 void Scene::mouseReleaseMultiplexerStart(GateItem *startItem, GateItem *endItem){
   Multiplexer* item = qgraphicsitem_cast<Multiplexer*>(startItem);
-  Multiplexer::connect(item->OrGate,endItem);
 
   Connection* conn = new Connection(item,endItem);
   item->addConnection(conn);
+  endItem->addConnection(conn);
   addItem(conn);
 }
+
