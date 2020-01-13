@@ -28,12 +28,12 @@ public:
   virtual void calculate() = 0;
   bool getValue() const;
 
-  //QRectF boundingRect() const override;
-  //QPainterPath shape() const override;
-
   virtual void removeConnections() = 0;
   virtual void removeConnection(Connection* conn) = 0;
   virtual bool addConnection(Connection* conn) = 0;
+
+ virtual QPointF getConnPosIn(Connection* conn= nullptr);
+  virtual QPointF getConnPosOut(Connection* conn = nullptr);
 
   GateType gateType() const { return myGateType; }
   QPixmap image() const { return pixmap; }
@@ -44,6 +44,8 @@ protected:
   QPixmap pixmap;
   bool myValue;
 };
+
+/***********************************************************************************************************************/
 
 class InputGate : public GateItem
 {
@@ -61,6 +63,9 @@ private:
   QVector<Connection*> connectionsFrom;
 };
 
+/***********************************************************************************************************************/
+
+
 class OutputGate : public GateItem
 {
 public:
@@ -77,72 +82,52 @@ private:
   QVector<Connection*> connection;
 };
 
-class InnerGate : public GateItem
+/***********************************************************************************************************************/
+
+class BaseGate : public GateItem
 {
 public:
-  InnerGate(GateType type);
+  BaseGate(GateType type);
 
   void removeConnections() override;
   void removeConnection(Connection *conn) override;
   bool addConnection(Connection *conn) override;
+
+  QPointF getConnPosIn(Connection* conn) override;
 
 protected:
   QVector<Connection*> connectionsTo;
   QVector<Connection*> connectionsFrom;
 };
 
-
-class And : public InnerGate
+class Plexer : public GateItem
 {
 public:
-  And();
-  void calculate() override;
-};
+  Plexer(GateType type);
 
-class Or : public InnerGate
-{
-public:
-  Or();
-  void calculate() override;
-};
+  void removeConnections() override;
+  void removeConnection(Connection *conn) override;
+  bool addConnection(Connection *conn) override;
+  void addSelector(Connection* conn);
 
-class Not : public InnerGate
-{
-public:
-  Not();
-  void calculate() override;
-};
+  QPointF getConnPosIn(Connection* conn) override;
+protected:
+  QVector<Connection*> selectorConn;
 
-class Xor : public InnerGate
-{
-public:
-  Xor();
-  void calculate() override;
-};
-
-class Nor : public InnerGate
-{
-public:
-  Nor();
-  void calculate() override;
-};
-
-class Nand : public InnerGate
-{
-public:
-  Nand();
-  void calculate() override;
+  QVector<Connection*> connectionsTo;
+  QVector<Connection*> connectionsFrom;
+  //QPointF getConPosOut(Connection* conn) override;
 };
 
 
-class Multiplexer : public InnerGate
+class Multiplexer : public Plexer
 {
 public:
   Multiplexer();
 
   void calculate() override;
   void virtual paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
-
+  QPointF getConnPosIn(Connection* conn) override;
 public:
   QVector<class And*> AndGates;
   QVector<class Not*> NotGates;
@@ -153,6 +138,53 @@ public:
   static Connection* connect(GateItem* g1, GateItem* g2);
   int getBit(int n, int k);
 };
+
+
+/***********************************************************************************************************************/
+
+class And : public BaseGate
+{
+public:
+  And();
+  void calculate() override;
+};
+
+class Or : public BaseGate
+{
+public:
+  Or();
+  void calculate() override;
+};
+
+class Not : public BaseGate
+{
+public:
+  Not();
+  void calculate() override;
+};
+
+class Xor : public BaseGate
+{
+public:
+  Xor();
+  void calculate() override;
+};
+
+class Nor : public BaseGate
+{
+public:
+  Nor();
+  void calculate() override;
+};
+
+class Nand : public BaseGate
+{
+public:
+  Nand();
+  void calculate() override;
+};
+
+/***********************************************************************************************************************/
 
 
 #endif // GATEITEM_H

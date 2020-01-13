@@ -6,6 +6,11 @@
 #include <QGraphicsScene>
 #include <QGraphicsSceneContextMenuEvent>
 
+#define GATESIZE_X 70.0
+#define GATESIZE_Y 50.0
+#define PLEXERSIZE_X 250.0
+#define PLEXERSIZE_Y 180.0
+
 GateItem::GateItem(GateType type, QGraphicsItem* parent)
   : QGraphicsRectItem(parent), myGateType(type)
 {
@@ -40,7 +45,7 @@ GateItem::GateItem(GateType type, QGraphicsItem* parent)
     }
 
     myValue = false;
-    setRect(0,0,100,100);
+    setRect(0,0,GATESIZE_X,GATESIZE_Y);
     setFlag(QGraphicsItem::ItemIsSelectable,true);
     setFlag(QGraphicsItem::ItemIsMovable,true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges,true);
@@ -54,6 +59,15 @@ bool GateItem::getValue() const
 
 void GateItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *){
   painter->drawPixmap(0,0,70,50,pixmap);
+}
+
+
+QPointF GateItem::getConnPosIn(Connection*){
+   return QPointF(0,GATESIZE_Y/2);
+}
+
+QPointF GateItem::getConnPosOut(Connection*){
+  return QPointF(GATESIZE_X, GATESIZE_Y/2);
 }
 
 InputGate::InputGate()
@@ -134,11 +148,11 @@ void OutputGate::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWid
   painter->drawPixmap(0,0,50,30,pixmap);
 }*/
 
-InnerGate::InnerGate(GateType type)
+BaseGate::BaseGate(GateType type)
   : GateItem(type)
 {}
 
-void InnerGate::removeConnections()
+void BaseGate::removeConnections()
 {
   const auto connectionsToCopy = connectionsTo;
   for(Connection* conn: connectionsToCopy)
@@ -161,7 +175,7 @@ void InnerGate::removeConnections()
   }
 }
 
-bool InnerGate::addConnection(Connection *conn)
+bool BaseGate::addConnection(Connection *conn)
 {
   if(conn->startItem() == this)
   {
@@ -179,7 +193,7 @@ bool InnerGate::addConnection(Connection *conn)
   return true;
 }
 
-void InnerGate::removeConnection(Connection *conn)
+void BaseGate::removeConnection(Connection *conn)
 {
   if(conn->startItem() == this){
       connectionsFrom.removeAll(conn);
@@ -191,28 +205,110 @@ void InnerGate::removeConnection(Connection *conn)
   }
 }
 
+
+QPointF BaseGate::getConnPosIn(Connection* conn){
+  int size = connectionsTo.size();
+  int idx = connectionsTo.indexOf(conn);
+  return QPointF(0,GATESIZE_Y / (size+1)*(idx+1));
+}
+
+/*************************************************************************/
+
+
+
+Plexer::Plexer(GateItem::GateType type)
+  :GateItem(type)
+{}
+
+void Plexer::removeConnections(){
+  for(Connection* conn: selectorConn){
+     selectorConn.removeAll(conn);
+  }
+
+  const auto connectionsToCopy = connectionsTo;
+  for(Connection* conn: connectionsToCopy)
+  {
+    conn->startItem()->removeConnection(conn);
+    this->removeConnection(conn);
+    if(conn->scene() != nullptr)
+       conn->scene()->removeItem(conn);
+    delete conn;
+  }
+
+  const auto connectionsFromCopy = connectionsFrom;
+  for(Connection* conn: connectionsFromCopy)
+  {
+      this->removeConnection(conn);
+      conn->endItem()->removeConnection(conn);
+      if(conn->scene() != nullptr)
+        conn->scene()->removeItem(conn);
+      delete conn;
+  }
+}
+
+void Plexer::removeConnection(Connection *conn){
+  if(conn->startItem() == this){
+      connectionsFrom.removeAll(conn);
+  }
+  else
+  {
+    connectionsTo.removeAll(conn);
+    selectorConn.removeAll(conn);
+    calculate();
+  }
+}
+
+bool Plexer::addConnection(Connection *conn){
+  if(conn->startItem() == this)
+  {
+    connectionsFrom.append(conn);
+  }
+  else
+  {
+    connectionsTo.append(conn);
+    calculate();
+  }
+  return true;
+}
+
+void Plexer::addSelector(Connection* conn){
+  selectorConn.append(conn);
+}
+
+
+QPointF Multiplexer::getConnPosIn(Connection *conn){
+  if(selectorConn.indexOf(conn) > 0) {
+      //selecotr je u pitanju
+      int idx = selectorConn.indexOf(conn);
+      return QPointF(PLEXERSIZE_X/(numOfNot+1)*(idx+1),PLEXERSIZE_Y);
+  } else {
+
+     return QPointF(0,0);
+  }
+}
+
 And::And()
-  : InnerGate(GateItem::GateType::And)
+  : BaseGate(GateItem::GateType::And)
 {}
 
 Or::Or()
-  : InnerGate(GateItem::GateType::Or)
+  : BaseGate(GateItem::GateType::Or)
 {}
 
 Xor::Xor()
-  : InnerGate(GateItem::GateType::Xor)
+  : BaseGate(GateItem::GateType::Xor)
 {}
 
 Nand::Nand()
-  : InnerGate(GateItem::GateType::Nand)
+  : BaseGate(GateItem::GateType::Nand)
 {}
 
 Nor::Nor()
-  : InnerGate(GateItem::GateType::Nor)
+  : BaseGate(GateItem::GateType::Nor)
 {}
 
 Not::Not()
-  : InnerGate(GateItem::GateType::Not)
+  : BaseGate(GateItem::GateType::Not)
 {}
 
 
@@ -295,7 +391,7 @@ void Not::calculate()
 
 
 Multiplexer::Multiplexer()
-  :InnerGate(GateItem::Multiplexer)
+  :Plexer(GateItem::Multiplexer)
 {
 
   for(int i=0;i < numOfNot; i++){
@@ -310,7 +406,7 @@ Multiplexer::Multiplexer()
 
 // konektovanje svih elemenata medjusobno
 for(int i = 0; i < AndGates.size(); i++){
-    for(int j = 0; j <NotGates.size(); j++){
+    for(int j = 0; j < NotGates.size(); j++){
         if(!getBit(i,j))
           connect(NotGates[j], AndGates[i]);
      }
@@ -333,10 +429,9 @@ void Multiplexer::calculate(){
   }
 }
 
-
 void Multiplexer::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *){
-   setRect(0,0,250,180);
-   painter->drawPixmap(0,0,250,180,pixmap);
+   setRect(0,0,PLEXERSIZE_X,PLEXERSIZE_Y);
+   painter->drawPixmap(0,0,PLEXERSIZE_X,PLEXERSIZE_Y,pixmap);
 }
 
 Connection* Multiplexer::connect(GateItem* g1, GateItem* g2){
