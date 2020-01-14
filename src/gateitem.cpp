@@ -244,6 +244,20 @@ void And::calculate()
       conn->endItem()->calculate();
 }
 
+void And::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+{
+    painter->drawLine(10,10,50,10);
+    painter->drawLine(10,10,10,60);
+    painter->drawLine(10,60,50,60);
+    painter->drawArc(QRect(35,10,30,50), -90*16, 180*16);
+
+    painter->drawLine(0, 20, 10, 20);
+    painter->drawLine(0, 50, 10, 50);
+    painter->drawLine(65, 35, 75, 35);
+
+    setRect(0, 0, 77, 62);
+}
+
 void Or::calculate()
 {
   bool newValue = false;
@@ -252,6 +266,22 @@ void Or::calculate()
   myValue = newValue;
   for(Connection* conn: connectionsFrom)
       conn->endItem()->calculate();
+}
+
+void Or::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+{
+    painter->drawArc(QRect(0,10,20,50), -90*16, 180*16);
+    painter->drawLine(10, 10, 30, 10);
+    painter->drawLine(10, 60, 30, 60);
+
+    painter->drawArc(QRect(-20,10,100,50), 0, 90*16);
+    painter->drawArc(QRect(-20,10,100,50), -90*16, 90*16);
+
+    painter->drawLine(0, 20, 17, 20);
+    painter->drawLine(0, 50, 17, 50);
+    painter->drawLine(79, 35, 89, 35);
+
+    setRect(0, 0, 91, 62);
 }
 
 void Xor::calculate()
@@ -266,6 +296,23 @@ void Xor::calculate()
       conn->endItem()->calculate();
 }
 
+void Xor::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+{
+    painter->drawArc(QRect(0,10,20,50), -90*16, 180*16);
+    painter->drawArc(QRect(-5,10,20,50), -90*16, 180*16);
+    painter->drawLine(10, 10, 30, 10);
+    painter->drawLine(10, 60, 30, 60);
+
+    painter->drawArc(QRect(-20,10,100,50), 0, 90*16);
+    painter->drawArc(QRect(-20,10,100,50), -90*16, 90*16);
+
+    painter->drawLine(0, 20, 12, 20);
+    painter->drawLine(0, 50, 12, 50);
+    painter->drawLine(79, 35, 89, 35);
+
+    setRect(0, 0, 91, 62);
+}
+
 void Nand::calculate()
 {
   bool newValue = true;
@@ -274,6 +321,23 @@ void Nand::calculate()
   myValue = !newValue;
   for(Connection* conn: connectionsFrom)
       conn->endItem()->calculate();
+}
+
+void Nand::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+{
+    painter->drawLine(10,10,50,10);
+    painter->drawLine(10,10,10,60);
+    painter->drawLine(10,60,50,60);
+    painter->drawArc(QRect(35,10,30,50), -90*16, 180*16);
+
+    QPointF center(69, 35);
+    painter->drawEllipse(center, 4, 4);
+
+    painter->drawLine(0, 20, 10, 20);
+    painter->drawLine(0, 50, 10, 50);
+    painter->drawLine(73, 35, 83, 35);
+
+    setRect(0, 0, 85, 62);
 }
 
 void Nor::calculate()
@@ -286,11 +350,44 @@ void Nor::calculate()
       conn->endItem()->calculate();
 }
 
+void Nor::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+{
+    painter->drawArc(QRect(0,10,20,50), -90*16, 180*16);
+    painter->drawLine(10, 10, 30, 10);
+    painter->drawLine(10, 60, 30, 60);
+
+    painter->drawArc(QRect(-20,10,100,50), 0, 90*16);
+    painter->drawArc(QRect(-20,10,100,50), -90*16, 90*16);
+
+    QPointF center(84, 35);
+    painter->drawEllipse(center, 4, 4);
+
+    painter->drawLine(0, 20, 17, 20);
+    painter->drawLine(0, 50, 17, 50);
+    painter->drawLine(88, 35, 98, 35);
+
+    setRect(0, 0, 100, 62);
+}
+
 void Not::calculate()
 {
    myValue = !(connectionsTo.front()->startItem()->getValue());
    for(Connection* conn: connectionsFrom)
        conn->endItem()->calculate();
+}
+
+void Not::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+{
+    painter->drawLine(10, 10, 40, 25);
+    painter->drawLine(10, 10, 10, 40);
+    painter->drawLine(10, 40, 40, 25);
+
+    painter->drawLine(0, 25, 10, 25);
+    QPointF center(44, 25);
+    painter->drawEllipse(center, 4, 4);
+    painter->drawLine(48, 25, 58, 25);
+
+    setRect(0, 0, 60, 42);
 }
 
 
@@ -335,8 +432,19 @@ void Multiplexer::calculate(){
 
 
 void Multiplexer::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *){
-   setRect(0,0,250,180);
-   painter->drawPixmap(0,0,250,180,pixmap);
+   painter->drawRect(10, 10, 80, 100);
+
+   painter->drawLine(0, 30, 10, 30);
+   painter->drawLine(0, 50, 10, 50);
+   painter->drawLine(0, 70, 10, 70);
+   painter->drawLine(0, 90, 10, 90);
+
+   painter->drawLine(90, 60, 100, 60);
+
+   painter->drawLine(40, 110, 40, 120);
+   painter->drawLine(60, 110, 60, 120);
+
+   setRect(0, 0, 102, 122);
 }
 
 Connection* Multiplexer::connect(GateItem* g1, GateItem* g2){

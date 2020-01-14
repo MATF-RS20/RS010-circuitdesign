@@ -97,6 +97,7 @@ class And : public InnerGate
 public:
   And();
   void calculate() override;
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
 };
 
 class Or : public InnerGate
@@ -104,6 +105,7 @@ class Or : public InnerGate
 public:
   Or();
   void calculate() override;
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
 };
 
 class Not : public InnerGate
@@ -111,6 +113,7 @@ class Not : public InnerGate
 public:
   Not();
   void calculate() override;
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
 };
 
 class Xor : public InnerGate
@@ -118,6 +121,7 @@ class Xor : public InnerGate
 public:
   Xor();
   void calculate() override;
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
 };
 
 class Nor : public InnerGate
@@ -125,6 +129,7 @@ class Nor : public InnerGate
 public:
   Nor();
   void calculate() override;
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
 };
 
 class Nand : public InnerGate
@@ -132,6 +137,7 @@ class Nand : public InnerGate
 public:
   Nand();
   void calculate() override;
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
 };
 
 
