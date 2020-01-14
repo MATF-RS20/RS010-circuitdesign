@@ -5,87 +5,95 @@
 Scene::Scene(QObject* parent)
   : QGraphicsScene(parent)
 {
-  myItemType = GateItem::And;
+  myItemType = LogicElement::And;
   myMode = MoveItem;
   line = nullptr;
 }
 
-void Scene::setMode(Mode mode) {
+void Scene::setMode(Mode mode)
+{
   myMode = mode;
 }
 
-void Scene::setItemType(GateItem::GateType type){
+void Scene::setElementType(LogicElement::ElementType type)
+{
   myItemType = type;
 }
 
 void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event){
 
-  GateItem* item;
-  switch (myMode){
+  LogicElement* item;
+  switch (myMode)
+  {
     case InsertItem:
-      item = getNewGateItem(myItemType);
-      addItem(item);
-      item->setPos(event->scenePos());
-      emit itemInserted(item);
-      break;
+        item = getNewElement(myItemType);
+        addItem(item);
+        item->setPos(event->scenePos());
+        emit itemInserted(item);
+        break;
     case InsertLine:
-      line = new QGraphicsLineItem(QLineF(event->scenePos(),
+        line = new QGraphicsLineItem(QLineF(event->scenePos(),
                                   event->scenePos()));
-      addItem(line);
-      break;
+        addItem(line);
+        break;
     case MoveItem:
-      QList<QGraphicsItem *> selectedItems = items(event->scenePos());
-      for(QGraphicsItem* selected: selectedItems)
-      {
-        if(selected->type() == GateItem::Type)
+        QList<QGraphicsItem *> selectedItems = items(event->scenePos());
+        for(QGraphicsItem* selected: selectedItems)
         {
-           GateItem* item = qgraphicsitem_cast<GateItem*>(selected);
-           if(item->gateType() == GateItem::GateType::In)
-           {
-              item->calculate();
-              item->update();
-           }
+            if(selected->type() == LogicElement::Type)
+            {
+                LogicElement* item = qgraphicsitem_cast<LogicElement*>(selected);
+                if(item->elementType() == LogicElement::ElementType::In)
+                {
+                    item->calculate();
+                    item->update();
+                }
+            }
         }
-      }
   }
+
   QGraphicsScene::mousePressEvent(event);
 }
 
-GateItem* Scene::getNewGateItem(GateItem::GateType type){
+LogicElement* Scene::getNewElement(LogicElement::ElementType type){
   switch (type) {
-    case GateItem::GateType::In:
+    case LogicElement::ElementType::In:
       return new InputGate();
-    case GateItem::GateType::Out:
+    case LogicElement::ElementType::Out:
       return new OutputGate();
-    case GateItem::GateType::And:
+    case LogicElement::ElementType::And:
       return new And();
-    case GateItem::GateType::Or:
+    case LogicElement::ElementType::Or:
       return new Or();
-    case GateItem::GateType::Xor:
+    case LogicElement::ElementType::Xor:
       return new Xor();
-    case GateItem::GateType::Nand:
+    case LogicElement::ElementType::Nand:
       return new Nand();
-    case GateItem::GateType::Nor:
+    case LogicElement::ElementType::Nor:
       return new Nor();
-    case GateItem::GateType::Not:
+    case LogicElement::ElementType::Not:
       return new Not();
-    case GateItem::GateType::Multiplexer:
+    case LogicElement::ElementType::Multiplexer:
       return new Multiplexer();
    }
 }
 
 
 void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
-    if(myMode == InsertLine && line != nullptr){
+    if(myMode == InsertLine && line != nullptr)
+    {
         QLineF newLine(line->line().p1(), event->scenePos());
         line->setLine(newLine);
-    } else if (myMode == MoveItem){
+    } else if (myMode == MoveItem)
+    {
         QGraphicsScene::mouseMoveEvent(event);
     }
 }
 
-void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
-      if (line != nullptr && myMode == InsertLine){
+void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+      if (line != nullptr && myMode == InsertLine)
+      {
         QList<QGraphicsItem *> startItems = items(line->line().p1());
         if (startItems.count() && startItems.first() == line)
             startItems.removeFirst();
@@ -97,16 +105,45 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
         delete line;
 
         if (startItems.count() > 0 && endItems.count() > 0
-        && (startItems.first()->type() == GateItem::Type)
-        && (endItems.first()->type() == GateItem::Type)
+        && (startItems.first()->type() == LogicElement::Type)
+        && (endItems.first()->type() == LogicElement::Type)
         && startItems.first() != endItems.first())
         {
-            GateItem *startItem = qgraphicsitem_cast<GateItem *>(startItems.first());
-            GateItem *endItem = qgraphicsitem_cast<GateItem *>(endItems.first());
+            LogicElement *startItem = qgraphicsitem_cast<LogicElement *>(startItems.first());
+            LogicElement *endItem = qgraphicsitem_cast<LogicElement *>(endItems.first());
 
-            if(endItem->gateType() == GateItem::Multiplexer)
+            /*
+            Connection *conn = new Connection(startItem,endItem);
+            if(!startItem->addConnection(conn))
+                delete conn;
+            else if(!endItem->addConnection(conn)){
+                delete conn;
+            }
+            */
+
+
+           /* if (startItem->elementType() == LogicElement::Multiplexer)
+            {
+                mouseReleaseMultiplexerStart(startItem, endItem, line->line().p2());
+            }
+            else if (startItem->elementType() == LogicElement::In)
+
+            if (endItem->elementType() == LogicElement::Multiplexer)
+            {
+                mouseReleaseMultiplexerEnd(startItem, endItem);
+            }
+
+            if(startItem->type() == InputGate::Type){
+                Connection* conn
+            }
+            else if(endItem->type() == OutputGate::Type){
+
+            }*/
+
+
+            /*if (endItem->elementType() == LogicElement::Multiplexer)
                 mouseReleaseMultiplexerEnd(startItem, endItem,line->line().p2());
-            else if(startItem->gateType() == GateItem::Multiplexer)
+            else if(startItem->elementType() == LogicElement::Multiplexer)
                 mouseReleaseMultiplexerStart(startItem,endItem);
             else{
                 Connection *conn = new Connection(startItem, endItem);
@@ -126,7 +163,7 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
                 {
                    delete conn;
                 }
-            }
+            }*/
           }
       }
 

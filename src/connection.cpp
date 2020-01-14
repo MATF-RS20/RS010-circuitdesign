@@ -3,7 +3,7 @@
 #include <QPainter>
 #include <QPen>
 
-Connection::Connection(GateItem* startItem, GateItem* endItem, QGraphicsItem* parent)
+Connection::Connection(LogicElement* startItem, LogicElement* endItem, QGraphicsItem* parent)
   : QGraphicsLineItem(parent), myStartItem(startItem), myEndItem(endItem)
 {
   setFlag(QGraphicsItem::ItemIsSelectable, true);
@@ -17,8 +17,8 @@ void Connection::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWid
   painter->setBrush(myColor);
 
 
-  QPointF pointStart = startItem()->getConnPosOut(this);
-  QPointF pointEnd = endItem()->getConnPosIn(this);
+  QPointF pointStart = myStartItem->getConnPosOut(this);
+  QPointF pointEnd = myEndItem->getConnPosIn(this);
 
  /*
   if(myStartItem->type() != GateItem::In && myStartItem->type() != GateItem::Out){

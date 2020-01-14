@@ -10,11 +10,13 @@
 #define GATESIZE_Y 50.0
 #define PLEXERSIZE_X 250.0
 #define PLEXERSIZE_Y 180.0
+#define INOUTSIZE_X 35.0
+#define INOUTSIZE_Y 25.0
 
-GateItem::GateItem(GateType type, QGraphicsItem* parent)
-  : QGraphicsRectItem(parent), myGateType(type)
+LogicElement::LogicElement(ElementType type, QGraphicsItem* parent)
+  : QGraphicsRectItem(parent), myElementType(type)
 {
-    switch (myGateType) {
+    switch (myElementType) {
       case And:
         pixmap.load("../images/and.png");
         break;
@@ -45,34 +47,44 @@ GateItem::GateItem(GateType type, QGraphicsItem* parent)
     }
 
     myValue = false;
-    setRect(0,0,GATESIZE_X,GATESIZE_Y);
     setFlag(QGraphicsItem::ItemIsSelectable,true);
     setFlag(QGraphicsItem::ItemIsMovable,true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges,true);
 }
 
-
-bool GateItem::getValue() const
+bool LogicElement::getValue() const
 {
   return myValue;
 }
 
-void GateItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *){
-  painter->drawPixmap(0,0,70,50,pixmap);
-}
-
-
-QPointF GateItem::getConnPosIn(Connection*){
+QPointF LogicElement::getConnPosIn(Connection*){
    return QPointF(0,GATESIZE_Y/2);
 }
 
-QPointF GateItem::getConnPosOut(Connection*){
+QPointF LogicElement::getConnPosOut(Connection*){
   return QPointF(GATESIZE_X, GATESIZE_Y/2);
 }
 
+/******************************************************************************************/
+
 InputGate::InputGate()
-  : GateItem(GateItem::GateType::In)
+  : LogicElement(LogicElement::ElementType::In)
 {}
+
+
+bool InputGate::addConnection(Connection *conn)
+{
+  // pokusati implementirati proveru mogucnosti povezivanja ovde
+  if(conn->endItem() == this)
+     return false;
+  connectionsFrom.append(conn);
+  return true;
+}
+
+void InputGate::removeConnection(Connection *conn)
+{
+  connectionsFrom.removeAll(conn);
+}
 
 void InputGate::removeConnections()
 {
@@ -82,37 +94,38 @@ void InputGate::removeConnections()
     conn->endItem()->removeConnection(conn);
     this->removeConnection(conn);
 
-    // OVDE PUCA!!!
     if(conn->scene() != nullptr){
-        std::cout << "Uslo u if" << std::endl;
         conn->scene()->removeItem(conn);  
     }
     delete conn;
   }
 }
 
-void InputGate::removeConnection(Connection *conn)
-{
-  connectionsFrom.removeAll(conn);
+void InputGate::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *){
+  setRect(0, 0, INOUTSIZE_X, INOUTSIZE_Y);
+  painter->drawPixmap(0, 0, INOUTSIZE_X, INOUTSIZE_Y, pixmap);
 }
 
-bool InputGate::addConnection(Connection *conn)
+/******************************************************************************************/
+
+OutputGate::OutputGate()
+ : LogicElement(LogicElement::ElementType::Out)
+{}
+
+bool OutputGate::addConnection(Connection* conn)
 {
-  if(conn->endItem() == this)
+  if(connection.size() != 0)
     return false;
-  connectionsFrom.append(conn);
+
+  connection.append(conn);
+  calculate();
   return true;
 }
 
-/*
-void InputGate::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *){
-  setRect(0,0,45,45);
-  painter->drawPixmap(0,0,45,45,pixmap);
-}*/
-
-OutputGate::OutputGate()
- : GateItem(GateItem::GateType::Out)
-{}
+void OutputGate::removeConnection(Connection* conn)
+{
+   connection.removeAll(conn);
+}
 
 void OutputGate::removeConnections()
 {
@@ -127,32 +140,47 @@ void OutputGate::removeConnections()
   }
 }
 
-void OutputGate::removeConnection(Connection* conn)
-{
-   connection.removeAll(conn);
-}
-
-bool OutputGate::addConnection(Connection* conn)
-{
-  if(connection.size() != 0)
-    return false;
-
-  connection.append(conn);
-  calculate();
-  return  true;
-}
-
-/*
 void OutputGate::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *){
-  setRect(0,0,45,45);
-  painter->drawPixmap(0,0,50,30,pixmap);
-}*/
+  setRect(0, 0, INOUTSIZE_X, INOUTSIZE_Y);
+  painter->drawPixmap(0, 0, INOUTSIZE_X, INOUTSIZE_Y, pixmap);
+}
 
-BaseGate::BaseGate(GateType type)
-  : GateItem(type)
+/***************************************************************************************/
+
+InnerGate::InnerGate(ElementType type)
+  : LogicElement(type)
 {}
 
-void BaseGate::removeConnections()
+
+bool InnerGate::addConnectionTo(Connection *conn)
+{
+    if(elementType() == LogicElement::ElementType::Not && connectionsTo.size() != 0)
+        return false;
+
+    connectionsTo.append(conn);
+    calculate();
+}
+
+bool InnerGate::addConnectionFrom(Connection *conn)
+{
+    connectionsFrom.append(conn);
+}
+
+
+void InnerGate::removeConnection(Connection *conn)
+{
+  if(conn->startItem() == this)
+  {
+      connectionsFrom.removeAll(conn);
+  }
+  else
+  {
+      connectionsTo.removeAll(conn);
+      calculate();
+  }
+}
+
+void InnerGate::removeConnections()
 {
   const auto connectionsToCopy = connectionsTo;
   for(Connection* conn: connectionsToCopy)
@@ -160,7 +188,7 @@ void BaseGate::removeConnections()
     conn->startItem()->removeConnection(conn);
     this->removeConnection(conn);
     if(conn->scene() != nullptr)
-       conn->scene()->removeItem(conn);
+         conn->scene()->removeItem(conn);
     delete conn;
   }
 
@@ -170,146 +198,194 @@ void BaseGate::removeConnections()
       this->removeConnection(conn);
       conn->endItem()->removeConnection(conn);
       if(conn->scene() != nullptr)
-        conn->scene()->removeItem(conn);
+            conn->scene()->removeItem(conn);
       delete conn;
   }
 }
 
-bool BaseGate::addConnection(Connection *conn)
-{
-  if(conn->startItem() == this)
-  {
-    //Ako je u pitanju povezivanje od ovog elementa.
-    connectionsFrom.append(conn);
-  }
-  else
-  {
-    if(gateType() == GateItem::GateType::Not && connectionsTo.size() != 0)
-      return false;
-
-    connectionsTo.append(conn);
-    calculate();
-  }
-  return true;
+void InnerGate::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *){
+    setRect(0, 0, GATESIZE_X, GATESIZE_Y);
+    painter->drawPixmap(0, 0, GATESIZE_X, GATESIZE_Y, pixmap);
 }
 
-void BaseGate::removeConnection(Connection *conn)
-{
-  if(conn->startItem() == this){
-      connectionsFrom.removeAll(conn);
-  }
-  else
-  {
-    connectionsTo.removeAll(conn);
-    calculate();
-  }
-}
-
-
-QPointF BaseGate::getConnPosIn(Connection* conn){
+QPointF InnerGate::getConnPosIn(Connection* conn){
   int size = connectionsTo.size();
   int idx = connectionsTo.indexOf(conn);
   return QPointF(0,GATESIZE_Y / (size+1)*(idx+1));
 }
 
-/*************************************************************************/
+/**********************************************************************************************/
 
-
-
-Plexer::Plexer(GateItem::GateType type)
-  :GateItem(type)
+And::And()
+  : InnerGate(LogicElement::ElementType::And)
 {}
 
-void Plexer::removeConnections(){
-  for(Connection* conn: selectorConn){
-     selectorConn.removeAll(conn);
-  }
+Or::Or()
+  : InnerGate(LogicElement::ElementType::Or)
+{}
 
-  const auto connectionsToCopy = connectionsTo;
-  for(Connection* conn: connectionsToCopy)
-  {
-    conn->startItem()->removeConnection(conn);
-    this->removeConnection(conn);
-    if(conn->scene() != nullptr)
-       conn->scene()->removeItem(conn);
-    delete conn;
-  }
+Xor::Xor()
+  : InnerGate(LogicElement::ElementType::Xor)
+{}
 
-  const auto connectionsFromCopy = connectionsFrom;
-  for(Connection* conn: connectionsFromCopy)
-  {
-      this->removeConnection(conn);
-      conn->endItem()->removeConnection(conn);
-      if(conn->scene() != nullptr)
-        conn->scene()->removeItem(conn);
-      delete conn;
-  }
+Nand::Nand()
+  : InnerGate(LogicElement::ElementType::Nand)
+{}
+
+Nor::Nor()
+  : InnerGate(LogicElement::ElementType::Nor)
+{}
+
+Not::Not()
+  : InnerGate(LogicElement::ElementType::Not)
+{}
+
+/*********************************************************************************************/
+
+Plexer::Plexer(LogicElement::ElementType type)
+  :LogicElement(type)
+{}
+
+
+bool Plexer::addConnectionTo(Connection *conn)
+{
+    connectionsTo.append(conn);
+    calculate();
+    return true;
 }
 
-void Plexer::removeConnection(Connection *conn){
-  if(conn->startItem() == this){
+bool Plexer::addConnectionFrom(Connection* conn)
+{
+  connectionsFrom.append(conn);
+}
+
+bool Plexer::addConnectionSelector(Connection* conn)
+{
+  connectionsSelector.append(conn);
+  calculate();
+  return true;
+}
+
+void Plexer::removeConnection(Connection *conn)
+{
+  if(conn->startItem() == this)
+  {
       connectionsFrom.removeAll(conn);
   }
   else
   {
-    connectionsTo.removeAll(conn);
-    selectorConn.removeAll(conn);
-    calculate();
+      connectionsTo.removeAll(conn);
+      connectionsSelector.removeAll(conn);
+      calculate();
   }
 }
 
-bool Plexer::addConnection(Connection *conn){
-  if(conn->startItem() == this)
+void Plexer::removeConnections()
+{
+    const auto connectionsSelectorCopy = connectionsSelector;
+    for(Connection* conn: connectionsSelectorCopy)
+    {
+        conn->startItem()->removeConnection(conn);
+        connectionsSelector.removeAll(conn);
+
+        if(conn->scene() != nullptr)
+           conn->scene()->removeItem(conn);
+        delete conn;
+    }
+
+    const auto connectionsToCopy = connectionsTo;
+    for(Connection* conn: connectionsToCopy)
+    {
+        conn->startItem()->removeConnection(conn);
+
+        connectionsTo.removeAll(conn);
+        calculate();
+
+        if(conn->scene() != nullptr)
+             conn->scene()->removeItem(conn);
+        delete conn;
+    }
+
+    const auto connectionsFromCopy = connectionsFrom;
+    for(Connection* conn: connectionsFromCopy)
+    {
+        conn->endItem()->removeConnection(conn);
+        connectionsFrom.removeAll(conn);
+        if(conn->scene() != nullptr)
+            conn->scene()->removeItem(conn);
+        delete conn;
+    }
+}
+
+void Plexer::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+{
+   setRect(0,0,PLEXERSIZE_X,PLEXERSIZE_Y);
+   painter->drawPixmap(0,0,PLEXERSIZE_X,PLEXERSIZE_Y,pixmap);
+}
+
+/******************************************************************************/
+
+QPointF Multiplexer::getConnPosIn(Connection *conn)
+{
+  if(connectionsSelector.indexOf(conn) > 0)
   {
-    connectionsFrom.append(conn);
+ //     int idx = selectorConn.indexOf(conn);
+ //     return QPointF(PLEXERSIZE_X/(numOfNot+1)*(idx+1),PLEXERSIZE_Y);
+      return QPointF(90,0);
   }
   else
   {
-    connectionsTo.append(conn);
-    calculate();
-  }
-  return true;
-}
-
-void Plexer::addSelector(Connection* conn){
-  selectorConn.append(conn);
-}
-
-
-QPointF Multiplexer::getConnPosIn(Connection *conn){
-  if(selectorConn.indexOf(conn) > 0) {
-      //selecotr je u pitanju
-      int idx = selectorConn.indexOf(conn);
-      return QPointF(PLEXERSIZE_X/(numOfNot+1)*(idx+1),PLEXERSIZE_Y);
-  } else {
-
-     return QPointF(0,0);
+      return QPointF(0,0);
   }
 }
 
-And::And()
-  : BaseGate(GateItem::GateType::And)
-{}
 
-Or::Or()
-  : BaseGate(GateItem::GateType::Or)
-{}
+Multiplexer::Multiplexer(int ands, int nots)
+  : Plexer(LogicElement::Multiplexer),
+    numOfAnd(ands), numOfNot(nots)
+{
+  for(int i=0;i < numOfNot; i++)
+  {
+    NotGates.append(new class Not());
+  }
 
-Xor::Xor()
-  : BaseGate(GateItem::GateType::Xor)
-{}
+  for(int i=0;i < numOfAnd; i++)
+  {
+    AndGates.append(new class And());
+  }
 
-Nand::Nand()
-  : BaseGate(GateItem::GateType::Nand)
-{}
+  OrGate = new class Or();
 
-Nor::Nor()
-  : BaseGate(GateItem::GateType::Nor)
-{}
+// konektovanje svih elemenata medjusobno
+for(int i = 0; i < AndGates.size(); i++){
+    for(int j = 0; j < NotGates.size(); j++){
+        if(!getBit(i,j))
+          connect(NotGates[j], AndGates[i]);
+     }
+    connect(AndGates[i], OrGate);
+  }
+}
 
-Not::Not()
-  : BaseGate(GateItem::GateType::Not)
-{}
+
+
+
+int Multiplexer::getBit(int n,int k)
+{
+  int mask =  1 << k;
+  int masked_n = n & mask;
+  int thebit = masked_n >> k;
+  return thebit;
+}
+
+
+Connection* Multiplexer::connect(LogicElement* g1, LogicElement* g2)
+{
+    Connection* conn = new Connection(g1,g2);
+//    g1->addConnection(conn);
+//    g2->addConnection(conn);
+
+    return conn;
+}
 
 
 /* Calculate functions **************************/
@@ -389,38 +465,6 @@ void Not::calculate()
        conn->endItem()->calculate();
 }
 
-
-Multiplexer::Multiplexer()
-  :Plexer(GateItem::Multiplexer)
-{
-
-  for(int i=0;i < numOfNot; i++){
-    NotGates.append(new class Not());
-  }
-
-  for(int i=0;i < numOfAnd; i++){
-    AndGates.append(new class And());
-  }
-
-  OrGate = new class Or();
-
-// konektovanje svih elemenata medjusobno
-for(int i = 0; i < AndGates.size(); i++){
-    for(int j = 0; j < NotGates.size(); j++){
-        if(!getBit(i,j))
-          connect(NotGates[j], AndGates[i]);
-     }
-    connect(AndGates[i], OrGate);
-  }
-}
-
-int Multiplexer::getBit(int n,int k){
-  int mask =  1 << k;
-  int masked_n = n & mask;
-  int thebit = masked_n >> k;
-  return thebit;
-}
-
 void Multiplexer::calculate(){
   OrGate->calculate();
   myValue = OrGate->getValue();
@@ -428,17 +472,3 @@ void Multiplexer::calculate(){
       conn->endItem()->calculate();
   }
 }
-
-void Multiplexer::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *){
-   setRect(0,0,PLEXERSIZE_X,PLEXERSIZE_Y);
-   painter->drawPixmap(0,0,PLEXERSIZE_X,PLEXERSIZE_Y,pixmap);
-}
-
-Connection* Multiplexer::connect(GateItem* g1, GateItem* g2){
-    Connection* conn = new Connection(g1,g2);
-    g1->addConnection(conn);
-    g2->addConnection(conn);
-
-    return conn;
-}
-

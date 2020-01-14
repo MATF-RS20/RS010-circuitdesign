@@ -25,21 +25,21 @@ public:
 
 public slots:
   void setMode(Mode mode);
-  void setItemType(GateItem::GateType type);
+  void setElementType(LogicElement::ElementType type);
 
 signals:
-  void itemInserted(GateItem* item);
+  void itemInserted(LogicElement* item);
 
 protected:
   void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
   void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
   void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 private:
-  GateItem* getNewGateItem(GateItem::GateType type);
-  void mouseReleaseMultiplexerEnd(GateItem* startItem,GateItem* endItem, QPointF endPoint);
-  void mouseReleaseMultiplexerStart(GateItem* startItem,GateItem* endItem);
+  LogicElement* getNewElement(LogicElement::ElementType type);
+  void mouseReleaseMultiplexerEnd(LogicElement* startItem,LogicElement* endItem, QPointF endPoint);
+  void mouseReleaseMultiplexerStart(LogicElement* startItem,LogicElement* endItem);
 
-  GateItem::GateType myItemType;
+  LogicElement::ElementType myItemType;
   Mode myMode;
   QPointF startPoint;
   QGraphicsLineItem *line;

@@ -5,8 +5,11 @@
 #include "connection.h"
 #include <QPixmap>
 #include <QPainter>
-
 #include <iostream>
+
+
+#define SCENESIZE_W 1000
+#define SCENESIZE_H 500
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -16,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     scene = new Scene(this);
     ui->graphicsView->setScene(scene);
-    scene->setSceneRect(QRectF(0, 0, 1000, 500));
+    scene->setSceneRect(QRectF(0, 0, SCENESIZE_W, SCENESIZE_H));
 
     setUpButtonsIds();
     connect(ui->buttonGroup, SIGNAL(buttonClicked(int)),
@@ -74,16 +77,16 @@ void MainWindow::deleteItem(){
   selectedItems = scene->selectedItems();
   for (QGraphicsItem *item : qAsConst(selectedItems))
   {
-      if (item->type() == GateItem::Type)
-            qgraphicsitem_cast<GateItem *>(item)->removeConnections();
+      if (item->type() == LogicElement::Type)
+            qgraphicsitem_cast<LogicElement *>(item)->removeConnections();
        scene->removeItem(item);
        delete item;
     }
 }
 
-void MainWindow::itemInserted(GateItem* item){
+void MainWindow::itemInserted(LogicElement* item){
   // zasto ne radi prva linija, zasto se button nakon iscrtavanja ne unchekira ?
-  ui->buttonGroup->button(item->gateType())->setChecked(false);
+  ui->buttonGroup->button(item->elementType())->setChecked(false);
   scene->setMode(Scene::MoveItem);
 }
 
