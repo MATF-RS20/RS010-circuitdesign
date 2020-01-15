@@ -69,12 +69,27 @@ public:
     QHBoxLayout *norGate;
     QToolButton *norButton;
     QLabel *norLabel;
+    QHBoxLayout *idGate;
+    QToolButton *idButton;
+    QLabel *idLabel;
     QHBoxLayout *notGate;
     QToolButton *notButton;
     QLabel *notLabel;
     QWidget *Plexers;
+    QWidget *layoutWidget2;
     QVBoxLayout *verticalLayout_3;
+    QHBoxLayout *horizontalLayout_5;
     QToolButton *multiplexerButton;
+    QLabel *labelMultiplexer;
+    QHBoxLayout *horizontalLayout_4;
+    QToolButton *demultiplexerButton;
+    QLabel *labelDemultiplexer;
+    QHBoxLayout *horizontalLayout_6;
+    QToolButton *decoderButton;
+    QLabel *labelDecoder;
+    QHBoxLayout *horizontalLayout_7;
+    QToolButton *encoderButton;
+    QLabel *labelEncoder;
     QWidget *Arithmetic;
     QMenuBar *menuBar;
     QStatusBar *statusBar;
@@ -237,7 +252,7 @@ public:
         Gates->setSizePolicy(sizePolicy);
         layoutWidget1 = new QWidget(Gates);
         layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
-        layoutWidget1->setGeometry(QRect(10, 0, 121, 211));
+        layoutWidget1->setGeometry(QRect(10, 0, 171, 238));
         sizePolicy1.setHeightForWidth(layoutWidget1->sizePolicy().hasHeightForWidth());
         layoutWidget1->setSizePolicy(sizePolicy1);
         verticalLayout = new QVBoxLayout(layoutWidget1);
@@ -366,6 +381,26 @@ public:
 
         verticalLayout->addLayout(norGate);
 
+        idGate = new QHBoxLayout();
+        idGate->setSpacing(6);
+        idGate->setObjectName(QStringLiteral("idGate"));
+        idButton = new QToolButton(layoutWidget1);
+        buttonGroup->addButton(idButton);
+        idButton->setObjectName(QStringLiteral("idButton"));
+        QIcon icon10;
+        icon10.addFile(QStringLiteral(":/images/id.png"), QSize(), QIcon::Normal, QIcon::Off);
+        idButton->setIcon(icon10);
+
+        idGate->addWidget(idButton);
+
+        idLabel = new QLabel(layoutWidget1);
+        idLabel->setObjectName(QStringLiteral("idLabel"));
+
+        idGate->addWidget(idLabel);
+
+
+        verticalLayout->addLayout(idGate);
+
         notGate = new QHBoxLayout();
         notGate->setSpacing(6);
         notGate->setObjectName(QStringLiteral("notGate"));
@@ -373,9 +408,9 @@ public:
         buttonGroup->addButton(notButton);
         notButton->setObjectName(QStringLiteral("notButton"));
         notButton->setAcceptDrops(false);
-        QIcon icon10;
-        icon10.addFile(QStringLiteral(":/images/not.png"), QSize(), QIcon::Normal, QIcon::Off);
-        notButton->setIcon(icon10);
+        QIcon icon11;
+        icon11.addFile(QStringLiteral(":/images/not.png"), QSize(), QIcon::Normal, QIcon::Off);
+        notButton->setIcon(icon11);
         notButton->setIconSize(QSize(20, 20));
         notButton->setCheckable(true);
 
@@ -395,19 +430,95 @@ public:
         Plexers = new QWidget();
         Plexers->setObjectName(QStringLiteral("Plexers"));
         Plexers->setGeometry(QRect(0, 0, 180, 245));
-        verticalLayout_3 = new QVBoxLayout(Plexers);
+        layoutWidget2 = new QWidget(Plexers);
+        layoutWidget2->setObjectName(QStringLiteral("layoutWidget2"));
+        layoutWidget2->setGeometry(QRect(10, 11, 136, 128));
+        verticalLayout_3 = new QVBoxLayout(layoutWidget2);
         verticalLayout_3->setSpacing(6);
         verticalLayout_3->setContentsMargins(11, 11, 11, 11);
         verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
-        multiplexerButton = new QToolButton(Plexers);
+        verticalLayout_3->setContentsMargins(0, 0, 0, 0);
+        horizontalLayout_5 = new QHBoxLayout();
+        horizontalLayout_5->setSpacing(6);
+        horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
+        multiplexerButton = new QToolButton(layoutWidget2);
         buttonGroup->addButton(multiplexerButton);
         multiplexerButton->setObjectName(QStringLiteral("multiplexerButton"));
-        QIcon icon11;
-        icon11.addFile(QStringLiteral(":/images/multiplexer.png"), QSize(), QIcon::Normal, QIcon::Off);
-        multiplexerButton->setIcon(icon11);
+        QIcon icon12;
+        icon12.addFile(QStringLiteral(":/images/multiplexer.png"), QSize(), QIcon::Normal, QIcon::Off);
+        multiplexerButton->setIcon(icon12);
         multiplexerButton->setIconSize(QSize(20, 20));
 
-        verticalLayout_3->addWidget(multiplexerButton);
+        horizontalLayout_5->addWidget(multiplexerButton);
+
+        labelMultiplexer = new QLabel(layoutWidget2);
+        labelMultiplexer->setObjectName(QStringLiteral("labelMultiplexer"));
+
+        horizontalLayout_5->addWidget(labelMultiplexer);
+
+
+        verticalLayout_3->addLayout(horizontalLayout_5);
+
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setSpacing(6);
+        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
+        demultiplexerButton = new QToolButton(layoutWidget2);
+        buttonGroup->addButton(demultiplexerButton);
+        demultiplexerButton->setObjectName(QStringLiteral("demultiplexerButton"));
+        QIcon icon13;
+        icon13.addFile(QStringLiteral(":/images/demultiplexer.png"), QSize(), QIcon::Normal, QIcon::Off);
+        demultiplexerButton->setIcon(icon13);
+        demultiplexerButton->setIconSize(QSize(20, 20));
+
+        horizontalLayout_4->addWidget(demultiplexerButton);
+
+        labelDemultiplexer = new QLabel(layoutWidget2);
+        labelDemultiplexer->setObjectName(QStringLiteral("labelDemultiplexer"));
+
+        horizontalLayout_4->addWidget(labelDemultiplexer);
+
+
+        verticalLayout_3->addLayout(horizontalLayout_4);
+
+        horizontalLayout_6 = new QHBoxLayout();
+        horizontalLayout_6->setSpacing(6);
+        horizontalLayout_6->setObjectName(QStringLiteral("horizontalLayout_6"));
+        decoderButton = new QToolButton(layoutWidget2);
+        buttonGroup->addButton(decoderButton);
+        decoderButton->setObjectName(QStringLiteral("decoderButton"));
+        QIcon icon14;
+        icon14.addFile(QStringLiteral(":/images/decoder.jpg"), QSize(), QIcon::Normal, QIcon::Off);
+        decoderButton->setIcon(icon14);
+
+        horizontalLayout_6->addWidget(decoderButton);
+
+        labelDecoder = new QLabel(layoutWidget2);
+        labelDecoder->setObjectName(QStringLiteral("labelDecoder"));
+
+        horizontalLayout_6->addWidget(labelDecoder);
+
+
+        verticalLayout_3->addLayout(horizontalLayout_6);
+
+        horizontalLayout_7 = new QHBoxLayout();
+        horizontalLayout_7->setSpacing(6);
+        horizontalLayout_7->setObjectName(QStringLiteral("horizontalLayout_7"));
+        encoderButton = new QToolButton(layoutWidget2);
+        buttonGroup->addButton(encoderButton);
+        encoderButton->setObjectName(QStringLiteral("encoderButton"));
+        QIcon icon15;
+        icon15.addFile(QStringLiteral(":/images/encoder.jpg"), QSize(), QIcon::Normal, QIcon::Off);
+        encoderButton->setIcon(icon15);
+
+        horizontalLayout_7->addWidget(encoderButton);
+
+        labelEncoder = new QLabel(layoutWidget2);
+        labelEncoder->setObjectName(QStringLiteral("labelEncoder"));
+
+        horizontalLayout_7->addWidget(labelEncoder);
+
+
+        verticalLayout_3->addLayout(horizontalLayout_7);
 
         LogicBox->addItem(Plexers, QStringLiteral("Plexers"));
         Arithmetic = new QWidget();
@@ -433,7 +544,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        LogicBox->setCurrentIndex(2);
+        LogicBox->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -462,10 +573,19 @@ public:
         nandLabel->setText(QApplication::translate("MainWindow", "Nand", Q_NULLPTR));
         norButton->setText(QApplication::translate("MainWindow", "...", Q_NULLPTR));
         norLabel->setText(QApplication::translate("MainWindow", "Nor", Q_NULLPTR));
+        idButton->setText(QApplication::translate("MainWindow", "...", Q_NULLPTR));
+        idLabel->setText(QApplication::translate("MainWindow", "Id", Q_NULLPTR));
         notButton->setText(QApplication::translate("MainWindow", "...", Q_NULLPTR));
         notLabel->setText(QApplication::translate("MainWindow", "Not", Q_NULLPTR));
         LogicBox->setItemText(LogicBox->indexOf(Gates), QApplication::translate("MainWindow", "Gates", Q_NULLPTR));
         multiplexerButton->setText(QString());
+        labelMultiplexer->setText(QApplication::translate("MainWindow", "Multiplexer", Q_NULLPTR));
+        demultiplexerButton->setText(QApplication::translate("MainWindow", "...", Q_NULLPTR));
+        labelDemultiplexer->setText(QApplication::translate("MainWindow", "Demultiplexer", Q_NULLPTR));
+        decoderButton->setText(QApplication::translate("MainWindow", "...", Q_NULLPTR));
+        labelDecoder->setText(QApplication::translate("MainWindow", "Decoder", Q_NULLPTR));
+        encoderButton->setText(QApplication::translate("MainWindow", "...", Q_NULLPTR));
+        labelEncoder->setText(QApplication::translate("MainWindow", "Encoder", Q_NULLPTR));
         LogicBox->setItemText(LogicBox->indexOf(Plexers), QApplication::translate("MainWindow", "Plexers", Q_NULLPTR));
         LogicBox->setItemText(LogicBox->indexOf(Arithmetic), QApplication::translate("MainWindow", "Arithmetic", Q_NULLPTR));
     } // retranslateUi

@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
     QByteArrayData data[10];
-    char stringdata0[117];
+    char stringdata0[121];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -36,16 +36,16 @@ QT_MOC_LITERAL(1, 11, 13), // "buttonClicked"
 QT_MOC_LITERAL(2, 25, 0), // ""
 QT_MOC_LITERAL(3, 26, 2), // "id"
 QT_MOC_LITERAL(4, 29, 12), // "itemInserted"
-QT_MOC_LITERAL(5, 42, 9), // "GateItem*"
-QT_MOC_LITERAL(6, 52, 4), // "item"
-QT_MOC_LITERAL(7, 57, 10), // "deleteItem"
-QT_MOC_LITERAL(8, 68, 18), // "buttonGroupClicked"
-QT_MOC_LITERAL(9, 87, 29) // "buttonGroupConnectMoveClicked"
+QT_MOC_LITERAL(5, 42, 13), // "LogicElement*"
+QT_MOC_LITERAL(6, 56, 4), // "item"
+QT_MOC_LITERAL(7, 61, 10), // "deleteItem"
+QT_MOC_LITERAL(8, 72, 18), // "buttonGroupClicked"
+QT_MOC_LITERAL(9, 91, 29) // "buttonGroupConnectMoveClicked"
 
     },
     "MainWindow\0buttonClicked\0\0id\0itemInserted\0"
-    "GateItem*\0item\0deleteItem\0buttonGroupClicked\0"
-    "buttonGroupConnectMoveClicked"
+    "LogicElement*\0item\0deleteItem\0"
+    "buttonGroupClicked\0buttonGroupConnectMoveClicked"
 };
 #undef QT_MOC_LITERAL
 
@@ -90,7 +90,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->buttonClicked((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 1: _t->itemInserted((*reinterpret_cast< GateItem*(*)>(_a[1]))); break;
+        case 1: _t->itemInserted((*reinterpret_cast< LogicElement*(*)>(_a[1]))); break;
         case 2: _t->deleteItem(); break;
         case 3: _t->buttonGroupClicked((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 4: _t->buttonGroupConnectMoveClicked((*reinterpret_cast< int(*)>(_a[1]))); break;

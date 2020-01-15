@@ -14,6 +14,9 @@
         <file>images/in_true.png</file>
         <file>images/in_false.png</file>
         <file>images/multiplexer.png</file>
-        <file>images/Black_from_a_camera.jpg</file>
+        <file>images/demultiplexer.png</file>
+        <file>images/decoder.jpg</file>
+        <file>images/encoder.jpg</file>
+        <file>images/id.png</file>
     </qresource>
 </RCC>

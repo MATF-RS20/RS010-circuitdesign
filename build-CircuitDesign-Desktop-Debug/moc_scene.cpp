@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Scene_t {
     QByteArrayData data[11];
-    char stringdata0[89];
+    char stringdata0[103];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -34,19 +34,19 @@ static const qt_meta_stringdata_Scene_t qt_meta_stringdata_Scene = {
 QT_MOC_LITERAL(0, 0, 5), // "Scene"
 QT_MOC_LITERAL(1, 6, 12), // "itemInserted"
 QT_MOC_LITERAL(2, 19, 0), // ""
-QT_MOC_LITERAL(3, 20, 9), // "GateItem*"
-QT_MOC_LITERAL(4, 30, 4), // "item"
-QT_MOC_LITERAL(5, 35, 7), // "setMode"
-QT_MOC_LITERAL(6, 43, 4), // "Mode"
-QT_MOC_LITERAL(7, 48, 4), // "mode"
-QT_MOC_LITERAL(8, 53, 11), // "setItemType"
-QT_MOC_LITERAL(9, 65, 18), // "GateItem::GateType"
-QT_MOC_LITERAL(10, 84, 4) // "type"
+QT_MOC_LITERAL(3, 20, 13), // "LogicElement*"
+QT_MOC_LITERAL(4, 34, 4), // "item"
+QT_MOC_LITERAL(5, 39, 7), // "setMode"
+QT_MOC_LITERAL(6, 47, 4), // "Mode"
+QT_MOC_LITERAL(7, 52, 4), // "mode"
+QT_MOC_LITERAL(8, 57, 14), // "setElementType"
+QT_MOC_LITERAL(9, 72, 25), // "LogicElement::ElementType"
+QT_MOC_LITERAL(10, 98, 4) // "type"
 
     },
-    "Scene\0itemInserted\0\0GateItem*\0item\0"
-    "setMode\0Mode\0mode\0setItemType\0"
-    "GateItem::GateType\0type"
+    "Scene\0itemInserted\0\0LogicElement*\0"
+    "item\0setMode\0Mode\0mode\0setElementType\0"
+    "LogicElement::ElementType\0type"
 };
 #undef QT_MOC_LITERAL
 
@@ -86,15 +86,15 @@ void Scene::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void 
         Scene *_t = static_cast<Scene *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->itemInserted((*reinterpret_cast< GateItem*(*)>(_a[1]))); break;
+        case 0: _t->itemInserted((*reinterpret_cast< LogicElement*(*)>(_a[1]))); break;
         case 1: _t->setMode((*reinterpret_cast< Mode(*)>(_a[1]))); break;
-        case 2: _t->setItemType((*reinterpret_cast< GateItem::GateType(*)>(_a[1]))); break;
+        case 2: _t->setElementType((*reinterpret_cast< LogicElement::ElementType(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            typedef void (Scene::*_t)(GateItem * );
+            typedef void (Scene::*_t)(LogicElement * );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Scene::itemInserted)) {
                 *result = 0;
                 return;
@@ -140,7 +140,7 @@ int Scene::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void Scene::itemInserted(GateItem * _t1)
+void Scene::itemInserted(LogicElement * _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);

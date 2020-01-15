@@ -20,20 +20,8 @@ void Connection::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWid
   QPointF pointStart = myStartItem->getConnPosOut(this);
   QPointF pointEnd = myEndItem->getConnPosIn(this);
 
- /*
-  if(myStartItem->type() != GateItem::In && myStartItem->type() != GateItem::Out){
-      pointStart = qgraphicsitem_cast<InnerGate*>(myStartItem)->getConnPosOut(this);
-  } else{
-    pointStart = QPointF(20,20);
-  }
-  if(myEndItem->type() != GateItem::In && myEndItem->type() != GateItem::Out){
-      pointEnd = qgraphicsitem_cast<InnerGate*>(myEndItem)->getConnPosIn(this);
-  } else{
-    pointEnd = QPointF(0,20);
-  }
-*/
-  QLineF line(mapFromItem(myStartItem,pointStart),
-              mapFromItem(myEndItem,pointEnd));
+  QLineF line(mapFromItem(myStartItem, pointStart),
+              mapFromItem(myEndItem, pointEnd));
   setLine(line);
 
   painter->drawLine(line);

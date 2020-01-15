@@ -36,8 +36,6 @@ protected:
   void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 private:
   LogicElement* getNewElement(LogicElement::ElementType type);
-  void mouseReleaseMultiplexerEnd(LogicElement* startItem,LogicElement* endItem, QPointF endPoint);
-  void mouseReleaseMultiplexerStart(LogicElement* startItem,LogicElement* endItem);
 
   LogicElement::ElementType myItemType;
   Mode myMode;

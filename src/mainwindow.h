@@ -34,7 +34,7 @@ public:
     ~MainWindow();
 
 private slots:
-    void itemInserted(GateItem *item);
+    void itemInserted(LogicElement *item);
     void deleteItem();
     void buttonGroupClicked(int id);
     void buttonGroupConnectMoveClicked(int id);

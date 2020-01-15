@@ -24,8 +24,8 @@ MainWindow::MainWindow(QWidget *parent) :
     setUpButtonsIds();
     connect(ui->buttonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(buttonGroupClicked(int)));
-    connect(scene, SIGNAL(itemInserted(GateItem*)),
-            this, SLOT(itemInserted(GateItem*)));
+    connect(scene, SIGNAL(itemInserted(LogicElement*)),
+            this, SLOT(itemInserted(LogicElement*)));
     connect(ui->buttonGroupConnectMove, SIGNAL(buttonClicked(int)),
             this, SLOT(buttonGroupConnectMoveClicked(int)));
     connect(ui->trashButton, SIGNAL(clicked()), this, SLOT(deleteItem()));
@@ -37,22 +37,26 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::setUpButtonsIds(){
- ui->buttonGroup->setId(ui->andButton, GateItem::And);
- ui->buttonGroup->setId(ui->orButton, GateItem::Or);
- ui->buttonGroup->setId(ui->xorButton, GateItem::Xor);
- ui->buttonGroup->setId(ui->nandButton, GateItem::Nand);
- ui->buttonGroup->setId(ui->norButton, GateItem::Nor);
- ui->buttonGroup->setId(ui->notButton, GateItem::Not);
- ui->buttonGroup->setId(ui->inButton, GateItem::In);
- ui->buttonGroup->setId(ui->outButton, GateItem::Out);
- ui->buttonGroup->setId(ui->multiplexerButton, GateItem::Multiplexer);
+ ui->buttonGroup->setId(ui->andButton, LogicElement::And);
+ ui->buttonGroup->setId(ui->orButton, LogicElement::Or);
+ ui->buttonGroup->setId(ui->xorButton, LogicElement::Xor);
+ ui->buttonGroup->setId(ui->nandButton, LogicElement::Nand);
+ ui->buttonGroup->setId(ui->norButton, LogicElement::Nor);
+ ui->buttonGroup->setId(ui->idButton, LogicElement::Id);
+ ui->buttonGroup->setId(ui->notButton, LogicElement::Not);
+ ui->buttonGroup->setId(ui->inButton, LogicElement::In);
+ ui->buttonGroup->setId(ui->outButton, LogicElement::Out);
+ ui->buttonGroup->setId(ui->multiplexerButton, LogicElement::Multiplexer);
+ ui->buttonGroup->setId(ui->demultiplexerButton, LogicElement::Demultiplexer);
+ ui->buttonGroup->setId(ui->decoderButton, LogicElement::Decoder);
+ ui->buttonGroup->setId(ui->encoderButton, LogicElement::Encoder);
 
  ui->buttonGroupConnectMove->setId(ui->connectButton,Scene::Mode::InsertLine);
  ui->buttonGroupConnectMove->setId(ui->moveButton,Scene::Mode::MoveItem);
 }
 
 void MainWindow::buttonGroupClicked(int id){
-  scene->setItemType(GateItem::GateType(id));
+  scene->setElementType(LogicElement::ElementType(id));
   scene->setMode(Scene::InsertItem);
 }
 
@@ -77,8 +81,10 @@ void MainWindow::deleteItem(){
   selectedItems = scene->selectedItems();
   for (QGraphicsItem *item : qAsConst(selectedItems))
   {
-      if (item->type() == LogicElement::Type)
+       if (item->type() == LogicElement::Type)
+       {
             qgraphicsitem_cast<LogicElement *>(item)->removeConnections();
+       }
        scene->removeItem(item);
        delete item;
     }
