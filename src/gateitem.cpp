@@ -6,12 +6,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsSceneContextMenuEvent>
 
-#define GATESIZE_X 70.0
-#define GATESIZE_Y 50.0
-#define PLEXERSIZE_X 100.0
-#define PLEXERSIZE_Y 120.0
-#define INOUTSIZE_X 35.0
-#define INOUTSIZE_Y 25.0
+#define INOUTSIZE 25.0
 
 LogicElement::LogicElement(ElementType type, QGraphicsItem* parent)
   : QGraphicsRectItem(parent), myElementType(type)
@@ -72,13 +67,15 @@ bool LogicElement::getValue(Connection*)
 
 QPointF LogicElement::getConnPosIn(Connection *)
 {
-    return QPointF(0,INOUTSIZE_Y/2);
+    return QPointF(0,INOUTSIZE/2);
 }
 
 QPointF LogicElement::getConnPosOut(Connection *)
 {
-    return QPointF(INOUTSIZE_X, INOUTSIZE_Y/2);
+    return QPointF(INOUTSIZE, INOUTSIZE/2);
 }
+
+
 
 /***************************************************************************************************/
 
@@ -125,9 +122,14 @@ void InputGate::calculate()
     conn->endItem()->calculate();
 }
 
-void InputGate::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *){
-  setRect(0, 0, INOUTSIZE_X, INOUTSIZE_Y);
-  painter->drawPixmap(0, 0, INOUTSIZE_X, INOUTSIZE_Y, pixmap);
+void InputGate::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+{
+    if (myValue)
+        painter->setBrush(Qt::green);
+    else
+        painter->setBrush(Qt::red);
+    painter->drawRect(0, 0, INOUTSIZE, INOUTSIZE);
+    setRect(0, 0, INOUTSIZE, INOUTSIZE);
 }
 
 /***************************************************************************************************/
@@ -172,8 +174,12 @@ void OutputGate::calculate()
 }
 
 void OutputGate::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *){
-  setRect(0, 0, INOUTSIZE_X, INOUTSIZE_Y);
-  painter->drawPixmap(0, 0, INOUTSIZE_X, INOUTSIZE_Y, pixmap);
+    if (myValue)
+        painter->setBrush(Qt::green);
+    else
+        painter->setBrush(Qt::red);
+    painter->drawEllipse(0, 0, INOUTSIZE, INOUTSIZE);
+    setRect(0, 0, INOUTSIZE, INOUTSIZE);
 }
 
 /***************************************************************************************************/
@@ -235,15 +241,15 @@ void InnerGate::removeConnections()
   }
 }
 
-QPointF InnerGate::getConnPosIn(Connection* conn){
-  int size = connectionsTo.size();
+QPointF InnerGate::getConnPosIn(Connection* conn)
+{
   int idx = connectionsTo.indexOf(conn);
-  return QPointF(0,GATESIZE_Y / (size+1)*(idx+1));
+  return QPointF(0,50.0 / (numOfInput+1) * (idx+1) + 10);
 }
 
 QPointF InnerGate::getConnPosOut(Connection*)
 {
-  return QPointF(GATESIZE_X, GATESIZE_Y/2);
+  return QPointF(75, 35);
 }
 
 /**********************************************************************************************/
@@ -269,11 +275,14 @@ void And::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
     painter->drawLine(10,60,50,60);
     painter->drawArc(QRect(35,10,30,50), -90*16, 180*16);
 
-    painter->drawLine(0, 20, 10, 20);
-    painter->drawLine(0, 50, 10, 50);
+    for (int i = 1; i <= numOfInput; i++)
+    {
+        painter->drawLine(0, 50.0 / (numOfInput+1) * i + 10, 10, 50.0 / (numOfInput+1) * i + 10);
+    }
+
     painter->drawLine(65, 35, 75, 35);
 
-    setRect(0, 0, 77, 62);
+    setRect(0, 0, 75, 60);
 }
 
 Or::Or(int numOfInput)
@@ -299,8 +308,11 @@ void Or::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
     painter->drawArc(QRect(-20,10,100,50), 0, 90*16);
     painter->drawArc(QRect(-20,10,100,50), -90*16, 90*16);
 
-    painter->drawLine(0, 20, 17, 20);
-    painter->drawLine(0, 50, 17, 50);
+    for (int i = 1; i <= numOfInput; i++)
+    {
+        painter->drawLine(0, 50.0 / (numOfInput+1) * i + 10, 18, 50.0 / (numOfInput+1) * i + 10);
+    }
+
     painter->drawLine(79, 35, 89, 35);
 
     setRect(0, 0, 91, 62);
@@ -332,8 +344,11 @@ void Xor::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
     painter->drawArc(QRect(-20,10,100,50), 0, 90*16);
     painter->drawArc(QRect(-20,10,100,50), -90*16, 90*16);
 
-    painter->drawLine(0, 20, 12, 20);
-    painter->drawLine(0, 50, 12, 50);
+    for (int i = 1; i <= numOfInput; i++)
+    {
+        painter->drawLine(0, 50.0 / (numOfInput+1) * i + 10, 13, 50.0 / (numOfInput+1) * i + 10);
+    }
+
     painter->drawLine(79, 35, 89, 35);
 
     setRect(0, 0, 91, 62);
@@ -363,8 +378,11 @@ void Nand::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
     QPointF center(69, 35);
     painter->drawEllipse(center, 4, 4);
 
-    painter->drawLine(0, 20, 10, 20);
-    painter->drawLine(0, 50, 10, 50);
+    for (int i = 1; i <= numOfInput; i++)
+    {
+        painter->drawLine(0, 50.0 / (numOfInput+1) * i + 10, 10, 50.0 / (numOfInput+1) * i + 10);
+    }
+
     painter->drawLine(73, 35, 83, 35);
 
     setRect(0, 0, 85, 62);
@@ -396,8 +414,11 @@ void Nor::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
     QPointF center(84, 35);
     painter->drawEllipse(center, 4, 4);
 
-    painter->drawLine(0, 20, 17, 20);
-    painter->drawLine(0, 50, 17, 50);
+    for (int i = 1; i <= numOfInput; i++)
+    {
+        painter->drawLine(0, 50.0 / (numOfInput+1) * i + 10, 17, 50.0 / (numOfInput+1) * i + 10);
+    }
+
     painter->drawLine(88, 35, 98, 35);
 
     setRect(0, 0, 100, 62);
@@ -409,9 +430,13 @@ Not::Not()
 
 void Not::calculate()
 {
-   myValue = !(connectionsTo.front()->startItem()->getValue(connectionsTo.front()));
-   for(Connection* conn: connectionsFrom)
-       conn->endItem()->calculate();
+    if (connectionsTo.size() > 0)
+        myValue = !(connectionsTo.front()->startItem()->getValue(connectionsTo.front()));
+    else
+        myValue = false;
+
+    for(Connection* conn: connectionsFrom)
+        conn->endItem()->calculate();
 }
 
 void Not::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
@@ -423,9 +448,19 @@ void Not::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
     painter->drawLine(0, 25, 10, 25);
     QPointF center(44, 25);
     painter->drawEllipse(center, 4, 4);
-    painter->drawLine(48, 25, 58, 25);
+    painter->drawLine(48, 25, 60, 25);
 
-    setRect(0, 0, 60, 42);
+    setRect(0, 0, 60, 40);
+}
+
+QPointF Not::getConnPosIn(Connection*)
+{
+    return QPointF(0, 25);
+}
+
+QPointF Not::getConnPosOut(Connection*)
+{
+    return QPointF(60, 25);
 }
 
 Id::Id()
@@ -434,9 +469,13 @@ Id::Id()
 
 void Id::calculate()
 {
-  myValue = connectionsTo.front()->startItem()->getValue(connectionsTo.front());
-  for(Connection* conn: connectionsFrom)
-      conn->endItem()->calculate();
+    if (connectionsTo.size() > 0)
+        myValue = connectionsTo.front()->startItem()->getValue(connectionsTo.front());
+    else
+        myValue = false;
+
+    for(Connection* conn: connectionsFrom)
+        conn->endItem()->calculate();
 }
 
 void Id::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
@@ -448,7 +487,17 @@ void Id::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
     painter->drawLine(0, 25, 10, 25);
     painter->drawLine(40, 25, 50, 25);
 
-    setRect(0, 0, 60, 42);
+    setRect(0, 0, 50, 40);
+}
+
+QPointF Id::getConnPosIn(Connection*)
+{
+    return QPointF(0, 25);
+}
+
+QPointF Id::getConnPosOut(Connection*)
+{
+    return QPointF(50, 25);
 }
 
 /*********************************************************************************************/
@@ -458,12 +507,6 @@ Plexer::Plexer(ElementType type, int numOfInput, int numOfOutput, int numOfSelec
 {
     connectionsTo.fill(nullptr, numOfInput);
     connectionsSelector.fill(nullptr, numOfSelector);
-}
-
-void Plexer::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
-{
-   setRect(0,0,PLEXERSIZE_X,PLEXERSIZE_Y);
-   painter->drawPixmap(0,0,PLEXERSIZE_X,PLEXERSIZE_Y,pixmap);
 }
 
 void Plexer::removeConnections()
@@ -513,20 +556,23 @@ QPointF Plexer::getConnPosIn(Connection *conn)
   int idx;
   if((idx = connectionsSelector.indexOf(conn)) >= 0)
   {
-      return QPointF(PLEXERSIZE_X/(numOfSelector + 1)*(idx + 1), PLEXERSIZE_Y);
+      return QPointF(80.0/(numOfSelector + 1)*(idx + 1) + 10, 110);
   }
   else
   {
       idx = connectionsTo.indexOf(conn);
-      return QPointF(0, PLEXERSIZE_Y/(numOfInput + 1) * (idx + 1));
+      return QPointF(0, 100.0/(numOfInput + 1) * (idx + 1) + 10);
   }
 }
 
-QPointF Plexer::getConnPosOut(Connection *)
+QPointF Plexer::getConnPosOut(Connection * conn)
 {
-  return QPointF(PLEXERSIZE_X, PLEXERSIZE_Y/2);
+  int idx;
+  if((idx = connectionsFrom.indexOf(conn)) >= 0)
+  {
+     return QPointF(90, 100.0/(numOfOutput+1) * (idx+1) + 10);
+  }
 }
-
 
 /******************************************************************************/
 
@@ -545,11 +591,11 @@ bool Multiplexer::addConnection(Connection *conn, ConnectionType type, QPointF p
         qreal relX = point.rx();
         qreal relY = point.ry();
 
-        if(relX < posX + qreal(60))
+        if(relX < posX + qreal(10))
         {
             for(int i=0; i < numOfInput; i++)
             {
-                if(relY < posY + qreal(PLEXERSIZE_Y/numOfInput) * (i+1))
+                if(relY < posY + 100.0/(numOfInput+1)*(i+1) + 20)
                 {
                     if (connectionsTo[i] != nullptr)
                         return false;
@@ -558,11 +604,11 @@ bool Multiplexer::addConnection(Connection *conn, ConnectionType type, QPointF p
                 }
             }
         }
-        else
+        else if(relY > posY + 90)
         {
             for(int i = 0; i < numOfSelector; i++)
             {
-                if(relX < posX + qreal(PLEXERSIZE_X/numOfSelector) * (i+2))
+                if(relX < posX + 80.0/(numOfSelector+1) * (i+1) + 15)
                 {
                     if (connectionsSelector[i] != nullptr)
                         return false;
@@ -571,6 +617,11 @@ bool Multiplexer::addConnection(Connection *conn, ConnectionType type, QPointF p
                 }
             }
         }
+        else
+        {
+            return false;
+        }
+
         calculate();
     }
     else
@@ -647,7 +698,7 @@ void Multiplexer::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWi
     painter->drawText(rectangle, Qt::AlignCenter, "MUX");
 
 
-    setRect(0, 0, PLEXERSIZE_X, PLEXERSIZE_Y);
+    setRect(0, 0, 100, 120);
 }
 
 /*********************************************************************************/
@@ -668,17 +719,17 @@ bool Demultiplexer::addConnection(Connection *conn, ConnectionType type, QPointF
 
     if (type == ConnectionType::EndItem)
     {
-        if (relX < posX + qreal(60))
+        if (relX < posX + qreal(10) && relY > posY + 40 && relY < posY + 80)
         {
             if(connectionsTo[0] != nullptr)
-              return false;
+                return false;
             connectionsTo[0] = conn;
         }
-        else
+        else if(relY > posY + 90)
         {
             for(int i = 0; i < numOfSelector; i++)
             {
-                if(relX < posX + qreal(60) * (i+2))
+                if(relX < posX + 80.0/(numOfSelector+1) * (i+1) + 15)
                 {
                     if(connectionsSelector[i] != nullptr)
                         return false;
@@ -688,13 +739,17 @@ bool Demultiplexer::addConnection(Connection *conn, ConnectionType type, QPointF
                 }
             }
         }
+        else
+        {
+            return false;
+        }
         calculate();
     }
     else
     {
         for(int i=0;i < numOfOutput; i++)
         {
-            if(relY < posY + qreal(50) * (i+1))
+            if(relY < posY + 100.0/(numOfOutput+1)*(i+1) + 20)
             {
                 connectionsFrom.append(conn);
                 indexConnectionFrom.append(i);
@@ -787,7 +842,7 @@ void Demultiplexer::paint(QPainter *painter, const QStyleOptionGraphicsItem *, Q
     painter->drawText(rectangle, Qt::AlignCenter, "DEMUX");
 
 
-    setRect(0, 0, PLEXERSIZE_X, PLEXERSIZE_Y);
+    setRect(0, 0, 100, 120);
 }
 
 /*********************************************************************************/
@@ -808,11 +863,11 @@ bool Decoder::addConnection(Connection *conn, ConnectionType type, QPointF point
 
     if (type == ConnectionType::EndItem)
     {
-        if (relX < posX + qreal(60))
+        if(relX < posX + qreal(10))
         {
             for(int i=0; i < numOfInput; i++)
             {
-                if(relY < posY + qreal(PLEXERSIZE_Y/numOfInput) * (i+1))
+                if(relY < posY + 100.0/(numOfInput+1)*(i+1) + 20)
                 {
                     if (connectionsTo[i] != nullptr)
                         return false;
@@ -821,13 +876,17 @@ bool Decoder::addConnection(Connection *conn, ConnectionType type, QPointF point
                 }
             }
         }
+        else
+        {
+            return false;
+        }
         calculate();
     }
     else
     {
         for(int i=0;i < numOfOutput; i++)
         {
-            if(relY < posY + qreal(50) * (i+1))
+            if(relY < posY + 100.0/(numOfOutput+1)*(i+1) + 20)
             {
                 connectionsFrom.append(conn);
                 indexConnectionFrom.append(i);
@@ -909,7 +968,7 @@ void Decoder::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget
     painter->drawText(rectangle, Qt::AlignCenter, "DEC");
 
 
-    setRect(0, 0, PLEXERSIZE_X, PLEXERSIZE_Y);
+    setRect(0, 0, 100, 120);
 }
 
 /*********************************************************************************/
@@ -930,11 +989,11 @@ bool Encoder::addConnection(Connection *conn, ConnectionType type, QPointF point
 
     if (type == ConnectionType::EndItem)
     {
-        if (relX < posX + qreal(60))
+        if(relX < posX + qreal(10))
         {
             for(int i=0; i < numOfInput; i++)
             {
-                if(relY < posY + qreal(PLEXERSIZE_Y/numOfInput) * (i+1))
+                if(relY < posY + 100.0/(numOfInput+1)*(i+1) + 20)
                 {
                     if (connectionsTo[i] != nullptr)
                         return false;
@@ -943,13 +1002,17 @@ bool Encoder::addConnection(Connection *conn, ConnectionType type, QPointF point
                 }
             }
         }
+        else
+        {
+            return false;
+        }
         calculate();
     }
     else
     {
         for(int i=0;i < numOfOutput; i++)
         {
-            if(relY < posY + qreal(50) * (i+1))
+            if(relY < posY + 100.0/(numOfOutput+1)*(i+1) + 20)
             {
                 connectionsFrom.append(conn);
                 indexConnectionFrom.append(i);
@@ -1035,5 +1098,5 @@ void Encoder::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget
     const QRect rectangle = QRect(30, 50, 40, 20);
     painter->drawText(rectangle, Qt::AlignCenter, "ENC");
 
-    setRect(0, 0, PLEXERSIZE_X, PLEXERSIZE_Y);
+    setRect(0, 0, 100, 120);
 }

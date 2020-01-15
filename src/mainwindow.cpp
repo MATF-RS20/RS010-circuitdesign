@@ -87,7 +87,9 @@ void MainWindow::deleteItem(){
        }
        scene->removeItem(item);
        delete item;
-    }
+  }
+
+  update();
 }
 
 void MainWindow::itemInserted(LogicElement* item){

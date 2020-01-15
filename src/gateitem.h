@@ -92,12 +92,11 @@ public:
 
   QPointF getConnPosIn(Connection* conn) override;
   QPointF getConnPosOut(Connection *conn) override;
-  //void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
 
   QVector<Connection*> connectionsTo;
   QVector<Connection*> connectionsFrom;
 
-private:
+protected:
   int numOfInput;
 };
 
@@ -155,6 +154,9 @@ public:
 
   void calculate() override;
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
+
+  QPointF getConnPosIn(Connection*) override;
+  QPointF getConnPosOut(Connection*) override;
 };
 
 class Id : public InnerGate
@@ -164,6 +166,9 @@ public:
 
   void calculate() override;
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
+
+  QPointF getConnPosIn(Connection*) override;
+  QPointF getConnPosOut(Connection*) override;
 };
 
 /***************************************************************************************************/
@@ -176,11 +181,9 @@ public:
     void removeConnections() override;
 
     QPointF getConnPosIn(Connection* conn) override;
-    QPointF getConnPosOut(Connection* ) override;
+    QPointF getConnPosOut(Connection* conn) override;
 
 protected:
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
-
     QVector<Connection*> connectionsSelector;
     QVector<Connection*> connectionsTo;
     QVector<Connection*> connectionsFrom;
