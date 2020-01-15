@@ -18,7 +18,7 @@ QT_END_NAMESPACE
 class LogicElement : public QGraphicsRectItem
 {
 public:
-  enum ElementType {And, Or, Xor, Nand, Nor,Id, Not, In, Out, Multiplexer, Demultiplexer, Decoder, Encoder};
+  enum ElementType {And, Or, Xor, Nand, Nor, Id, Not, In, Out, Multiplexer, Demultiplexer, Decoder, Encoder};
   enum ConnectionType { StartItem, EndItem };
 
   LogicElement(ElementType type,  QGraphicsItem* parent = nullptr);
