@@ -11,18 +11,27 @@ Connection::Connection(LogicElement* startItem, LogicElement* endItem, QGraphics
 }
 
 void Connection::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *){
-  QPen myPen = pen();
-  myPen.setColor(myColor);
+   QPen myPen = pen();
+   QPainterPath path;
+
+  if(startItem()->getValue(this))
+      myPen.setColor(Qt::green);
+  else
+      myPen.setColor(Qt::red);
+
   painter->setPen(myPen);
-  painter->setBrush(myColor);
 
+  QPointF pointStart = mapFromItem(myStartItem, myStartItem->getConnPosOut(this));
+  QPointF pointEnd = mapFromItem(myEndItem, myEndItem->getConnPosIn(this));
 
-  QPointF pointStart = myStartItem->getConnPosOut(this);
-  QPointF pointEnd = myEndItem->getConnPosIn(this);
+  qreal breakX = pointStart.rx() + 1.0/3.0 * (pointEnd.rx() - pointStart.rx());
+  QPointF breakPoint(breakX, pointStart.ry());
+  QPointF afterBreakPoint(breakX, pointEnd.ry());
 
-  QLineF line(mapFromItem(myStartItem, pointStart),
-              mapFromItem(myEndItem, pointEnd));
-  setLine(line);
+  path.moveTo(pointStart);
+  path.lineTo(breakPoint);
+  path.lineTo(afterBreakPoint);
+  path.lineTo(pointEnd);
 
-  painter->drawLine(line);
+  painter->drawPath(path);
 }

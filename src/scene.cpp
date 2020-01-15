@@ -83,8 +83,6 @@ LogicElement* Scene::getNewElement(LogicElement::ElementType type){
       return new Decoder();
     case LogicElement::ElementType::Encoder:
       return new Encoder();
-    default:
-      return new Id();
   }
 }
 
@@ -98,6 +96,8 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     {
         QGraphicsScene::mouseMoveEvent(event);
     }
+
+    update();
 }
 
 void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
@@ -144,6 +144,7 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
   line = nullptr;
   QGraphicsScene::mouseReleaseEvent(event);
+  update();
 }
 
 
