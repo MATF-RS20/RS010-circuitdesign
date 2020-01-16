@@ -8,6 +8,10 @@ Scene::Scene(QObject* parent)
   myItemType = LogicElement::And;
   myMode = MoveItem;
   line = nullptr;
+
+  QTimer *timer = new QTimer(this);
+  connect(timer, SIGNAL(timeout()),this, SLOT(update()));
+  timer->start(10);
 }
 
 void Scene::setMode(Mode mode)
@@ -59,6 +63,8 @@ LogicElement* Scene::getNewElement(LogicElement::ElementType type){
   switch (type) {
     case LogicElement::ElementType::In:
       return new InputGate();
+    case LogicElement::ElementType::Clock:
+      return new ClockGate();
     case LogicElement::ElementType::Out:
       return new OutputGate();
     case LogicElement::ElementType::And:
@@ -97,7 +103,6 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
         QGraphicsScene::mouseMoveEvent(event);
     }
 
-    update();
 }
 
 void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
@@ -144,7 +149,6 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
   line = nullptr;
   QGraphicsScene::mouseReleaseEvent(event);
-  update();
 }
 
 

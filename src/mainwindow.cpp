@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->buttonGroupConnectMove, SIGNAL(buttonClicked(int)),
             this, SLOT(buttonGroupConnectMoveClicked(int)));
     connect(ui->trashButton, SIGNAL(clicked()), this, SLOT(deleteItem()));
+
 }
 
 MainWindow::~MainWindow()
@@ -38,6 +39,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::setUpButtonsIds(){
  ui->buttonGroup->setId(ui->andButton, LogicElement::And);
+ ui->buttonGroup->setId(ui->clockButton, LogicElement::Clock);
  ui->buttonGroup->setId(ui->orButton, LogicElement::Or);
  ui->buttonGroup->setId(ui->xorButton, LogicElement::Xor);
  ui->buttonGroup->setId(ui->nandButton, LogicElement::Nand);
@@ -89,7 +91,6 @@ void MainWindow::deleteItem(){
        delete item;
   }
 
-  update();
 }
 
 void MainWindow::itemInserted(LogicElement* item){

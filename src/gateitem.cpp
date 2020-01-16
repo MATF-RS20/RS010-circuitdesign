@@ -51,6 +51,8 @@ LogicElement::LogicElement(ElementType type, QGraphicsItem* parent)
       case Encoder:
         pixmap.load("../images/encoder.jpg");
         break;
+      case Clock:
+        pixmap.load("../images/encoder.jpg");
     }
 
 
@@ -79,8 +81,8 @@ QPointF LogicElement::getConnPosOut(Connection *)
 
 /***************************************************************************************************/
 
-InputGate::InputGate()
-  : LogicElement(LogicElement::ElementType::In)
+InputGate::InputGate(ElementType type)
+  : LogicElement(type)
 {}
 
 
@@ -130,6 +132,38 @@ void InputGate::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidg
         painter->setBrush(Qt::red);
     painter->drawRect(0, 0, INOUTSIZE, INOUTSIZE);
     setRect(0, 0, INOUTSIZE, INOUTSIZE);
+}
+
+/****************************************************************************/
+ClockGate::ClockGate()
+    : InputGate(LogicElement::ElementType::Clock), QObject()
+{
+    QTimer* timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, QOverload<>::of(&ClockGate::calculate));
+    timer->start(2000);
+}
+
+void ClockGate::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+{
+    painter->drawRect(0, 0, INOUTSIZE, INOUTSIZE);
+
+    QFont font = painter->font();
+    font.setPixelSize(12);
+    font.bold();
+    painter->setFont(font);
+
+    const QRect rectangle = QRect(0, 0, INOUTSIZE, INOUTSIZE);
+    painter->drawText(rectangle, Qt::AlignCenter, "clk");
+
+    setRect(0, 0, INOUTSIZE, INOUTSIZE);
+}
+
+void ClockGate::calculate()
+{
+  myValue = !myValue;
+
+  for(Connection* conn : connectionsFrom)
+    conn->endItem()->calculate();
 }
 
 /***************************************************************************************************/
