@@ -11,51 +11,6 @@
 LogicElement::LogicElement(ElementType type, QGraphicsItem* parent)
   : QGraphicsRectItem(parent), myElementType(type)
 {
-    switch (myElementType) {
-      case And:
-        pixmap.load("../images/and.png");
-        break;
-      case Or:
-        pixmap.load("../images/or.png");
-        break;
-      case Xor:
-        pixmap.load("../images/xor.png");
-        break;
-      case Nand:
-        pixmap.load("../images/nand.png");
-        break;
-      case Nor:
-        pixmap.load("../images/nor.png");
-        break;
-      case Not:
-        pixmap.load("../images/not.png");
-        break;
-      case Id:
-        pixmap.load("../images/id.png");
-        break;
-      case In:
-        pixmap.load("../images/in_false.png");
-        break;
-      case Out:
-        pixmap.load("../images/out_false.png");
-        break;
-      case Multiplexer:
-        pixmap.load("../images/multiplexer.png");
-        break;
-      case Demultiplexer:
-        pixmap.load("../images/demultiplexer.png");
-        break;
-      case Decoder:
-        pixmap.load("../images/decoder.jpg");
-        break;
-      case Encoder:
-        pixmap.load("../images/encoder.jpg");
-        break;
-      case Clock:
-        pixmap.load("../images/encoder.jpg");
-    }
-
-
     myValue = false;
     setFlag(QGraphicsItem::ItemIsSelectable,true);
     setFlag(QGraphicsItem::ItemIsMovable,true);
@@ -118,7 +73,6 @@ void InputGate::removeConnections()
 void InputGate::calculate()
 {
   myValue = !myValue;
-  myValue ? pixmap.load("../images/in_true.png") : pixmap.load("../images/in_false.png");
 
   for(Connection* conn : connectionsFrom)
     conn->endItem()->calculate();
@@ -203,7 +157,6 @@ void OutputGate::removeConnections()
 void OutputGate::calculate()
 {
   myValue = connection.front()->startItem()->getValue(connection.front());
-  myValue ? pixmap.load("../images/out_true.png") : pixmap.load("../images/out_false.png");
   this->update();
 }
 
@@ -1131,6 +1084,603 @@ void Encoder::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget
 
     const QRect rectangle = QRect(30, 50, 40, 20);
     painter->drawText(rectangle, Qt::AlignCenter, "ENC");
+
+    setRect(0, 0, 100, 120);
+}
+
+/***************************************************************************************************/
+
+FlipFlop::FlipFlop(ElementType type, int numOfInput)
+    : LogicElement(type), numOfInput(numOfInput)
+{
+    connectionsTo.fill(nullptr, numOfInput);
+    clock = nullptr;
+    numOfOutput = 2;
+    myValues.append(false);
+    myValues.append(true);
+}
+
+void FlipFlop::removeConnections()
+{
+    const auto connectionsToCopy = connectionsTo;
+    for (Connection* conn: connectionsToCopy)
+    {
+        if (conn != nullptr)
+        {
+            conn->startItem()->removeConnection(conn);
+
+            if(conn->scene() != nullptr)
+               conn->scene()->removeItem(conn);
+            delete conn;
+        }
+    }
+    connectionsTo.clear();
+
+    if (clock != nullptr)
+        clock->startItem()->removeConnection(clock);
+
+    const auto connectionsFromCopy = connectionsFrom;
+    for(Connection* conn: connectionsFromCopy)
+    {
+        conn->endItem()->removeConnection(conn);
+        if(conn->scene() != nullptr)
+            conn->scene()->removeItem(conn);
+        delete conn;
+    }
+    connectionsFrom.clear();
+}
+
+void FlipFlop::removeConnection(Connection *conn)
+{
+    if (conn->startItem() == this)
+    {
+        int idx = connectionsFrom.indexOf(conn);
+        if (idx >= 0)
+        {
+            indexConnectionFrom.removeAt(idx);
+            connectionsFrom.removeAt(idx);
+        }
+    }
+    else
+    {
+        int idx = connectionsTo.indexOf(conn);
+        if (idx >= 0)
+            connectionsTo[idx] = nullptr;
+        else if (conn == clock)
+            clock = nullptr;
+        calculate();
+    }
+}
+
+QPointF FlipFlop::getConnPosIn(Connection *conn)
+{
+    if (conn == connectionsTo[0])
+        return QPointF(0, 30);
+    else if (conn == clock)
+        return QPointF(0, 60);
+    else
+        return QPointF(0, 90);
+}
+
+QPointF FlipFlop::getConnPosOut(Connection *conn)
+{
+    if (conn == connectionsFrom[0])
+        return QPointF(100, 40);
+    else
+        return QPointF(100, 80);
+}
+
+bool FlipFlop::getValue(Connection *conn)
+{
+    int idx = connectionsFrom.indexOf(conn);
+    if (idx < 0)
+        return false;
+
+    idx = indexConnectionFrom[idx];
+    return myValues[idx];
+}
+
+JK::JK()
+    : FlipFlop(ElementType::JK)
+{}
+
+bool JK::addConnection(Connection *conn, ConnectionType type, QPointF point)
+{
+    QPointF position = this->pos();
+    qreal posX = position.rx();
+    qreal posY = position.ry();
+    qreal relX = point.rx();
+    qreal relY = point.ry();
+
+    if (type == ConnectionType::EndItem)
+    {
+        if(relX < posX + qreal(10))
+        {
+            if (relY > posY + 15 && relY < posY + 45)
+            {
+                if (connectionsTo[0] != nullptr)
+                    return false;
+                else
+                    connectionsTo[0] = conn;
+            }
+            else if (relY > posY + 45 && relY < posY + 75)
+            {
+                if (clock != nullptr)
+                    return false;
+                else
+                    clock = conn;
+            }
+            else if (relY > posY + 75 && relY < posY + 105)
+            {
+                if (connectionsTo[1] != nullptr)
+                    return false;
+                else
+                    connectionsTo[1] = conn;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+        calculate();
+    }
+    else
+    {
+        if(relX > posX + qreal(85))
+        {
+            if (relY > posY + 25 && relY < posY + 60)
+            {
+                connectionsFrom.append(conn);
+                indexConnectionFrom.append(0);
+            }
+            else if (relY > posY + 60 && relY < posY + 95)
+            {
+                connectionsFrom.append(conn);
+                indexConnectionFrom.append(1);
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+void JK::calculate()
+{
+    if (clock == nullptr || !clock->startItem()->getValue())
+        return;
+
+    if (connectionsTo[0] != nullptr && connectionsTo[0]->startItem()->getValue())
+    {
+        if (connectionsTo[1] != nullptr && connectionsTo[1]->startItem()->getValue())
+        {
+            myValues[0] = !myValues[0];
+            myValues[1] = !myValues[1];
+        }
+        else
+        {
+            myValues[0] = true;
+            myValues[1] = false;
+        }
+    }
+    else if (connectionsTo[1] != nullptr && connectionsTo[1]->startItem()->getValue())
+    {
+        myValues[0] = false;
+        myValues[1] = true;
+    }
+
+    for (Connection* conn: connectionsFrom)
+        conn->endItem()->calculate();
+}
+
+void JK::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+{
+    painter->drawRect(10, 10, 80, 100);
+
+    painter->drawLine(0, 30, 10, 30);
+    painter->drawLine(0, 90, 10, 90);
+    painter->drawLine(0, 60, 10, 60);
+
+    painter->drawLine(90, 40, 100, 40);
+    painter->drawLine(90, 80, 100, 80);
+
+    QFont font = painter->font();
+    font.setPixelSize(14);
+    font.bold();
+    painter->setFont(font);
+
+    const QRect rectangle1 = QRect(15, 22, 15, 15);
+    painter->drawText(rectangle1, Qt::AlignCenter, "J");
+
+    const QRect rectangle2 = QRect(15, 82, 15, 15);
+    painter->drawText(rectangle2, Qt::AlignCenter, "K");
+
+    const QRect rectangle3 = QRect(15, 52, 25, 15);
+    painter->drawText(rectangle3, Qt::AlignCenter, "clk");
+
+    const QRect rectangle4 = QRect(75, 32, 15, 15);
+    painter->drawText(rectangle4, Qt::AlignCenter, "Q");
+
+    const QRect rectangle5 = QRect(75, 72, 15, 15);
+    painter->drawText(rectangle5, Qt::AlignCenter, "!Q");
+
+    setRect(0, 0, 100, 120);
+}
+
+SR::SR()
+    : FlipFlop(ElementType::SR)
+{}
+
+bool SR::addConnection(Connection *conn, ConnectionType type, QPointF point)
+{
+    QPointF position = this->pos();
+    qreal posX = position.rx();
+    qreal posY = position.ry();
+    qreal relX = point.rx();
+    qreal relY = point.ry();
+
+    if (type == ConnectionType::EndItem)
+    {
+        if(relX < posX + qreal(10))
+        {
+            if (relY > posY + 15 && relY < posY + 45)
+            {
+                if (connectionsTo[0] != nullptr)
+                    return false;
+                else
+                    connectionsTo[0] = conn;
+            }
+            else if (relY > posY + 45 && relY < posY + 75)
+            {
+                if (clock != nullptr)
+                    return false;
+                else
+                    clock = conn;
+            }
+            else if (relY > posY + 75 && relY < posY + 105)
+            {
+                if (connectionsTo[1] != nullptr)
+                    return false;
+                else
+                    connectionsTo[1] = conn;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+        calculate();
+    }
+    else
+    {
+        if(relX > posX + qreal(85))
+        {
+            if (relY > posY + 25 && relY < posY + 60)
+            {
+                connectionsFrom.append(conn);
+                indexConnectionFrom.append(0);
+            }
+            else if (relY > posY + 60 && relY < posY + 95)
+            {
+                connectionsFrom.append(conn);
+                indexConnectionFrom.append(1);
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+void SR::calculate()
+{
+    if (clock == nullptr || !clock->startItem()->getValue())
+        return;
+
+    if (connectionsTo[0] != nullptr && connectionsTo[0]->startItem()->getValue())
+    {
+        if (connectionsTo[1] != nullptr && connectionsTo[1]->startItem()->getValue())
+        {
+            myValues[0] = true;
+            myValues[1] = true;
+        }
+        else
+        {
+            myValues[0] = true;
+            myValues[1] = false;
+        }
+    }
+    else if (connectionsTo[1] != nullptr && connectionsTo[1]->startItem()->getValue())
+    {
+        myValues[0] = false;
+        myValues[1] = true;
+    }
+
+    for (Connection* conn: connectionsFrom)
+        conn->endItem()->calculate();
+}
+
+void SR::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+{
+    painter->drawRect(10, 10, 80, 100);
+
+    painter->drawLine(0, 30, 10, 30);
+    painter->drawLine(0, 90, 10, 90);
+    painter->drawLine(0, 60, 10, 60);
+
+    painter->drawLine(90, 40, 100, 40);
+    painter->drawLine(90, 80, 100, 80);
+
+    QFont font = painter->font();
+    font.setPixelSize(14);
+    font.bold();
+    painter->setFont(font);
+
+    const QRect rectangle1 = QRect(15, 22, 15, 15);
+    painter->drawText(rectangle1, Qt::AlignCenter, "S");
+
+    const QRect rectangle2 = QRect(15, 82, 15, 15);
+    painter->drawText(rectangle2, Qt::AlignCenter, "R");
+
+    const QRect rectangle3 = QRect(15, 52, 25, 15);
+    painter->drawText(rectangle3, Qt::AlignCenter, "clk");
+
+    const QRect rectangle4 = QRect(75, 32, 15, 15);
+    painter->drawText(rectangle4, Qt::AlignCenter, "Q");
+
+    const QRect rectangle5 = QRect(75, 72, 15, 15);
+    painter->drawText(rectangle5, Qt::AlignCenter, "!Q");
+
+    setRect(0, 0, 100, 120);
+}
+
+D::D()
+    : FlipFlop(ElementType::D, 1)
+{}
+
+bool D::addConnection(Connection *conn, ConnectionType type, QPointF point)
+{
+    QPointF position = this->pos();
+    qreal posX = position.rx();
+    qreal posY = position.ry();
+    qreal relX = point.rx();
+    qreal relY = point.ry();
+
+    if (type == ConnectionType::EndItem)
+    {
+        if(relX < posX + qreal(10))
+        {
+            if (relY > posY + 15 && relY < posY + 45)
+            {
+                if (connectionsTo[0] != nullptr)
+                    return false;
+                else
+                    connectionsTo[0] = conn;
+            }
+            else if (relY > posY + 45 && relY < posY + 75)
+            {
+                if (clock != nullptr)
+                    return false;
+                else
+                    clock = conn;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+        calculate();
+    }
+    else
+    {
+        if(relX > posX + qreal(85))
+        {
+            if (relY > posY + 25 && relY < posY + 60)
+            {
+                connectionsFrom.append(conn);
+                indexConnectionFrom.append(0);
+            }
+            else if (relY > posY + 60 && relY < posY + 95)
+            {
+                connectionsFrom.append(conn);
+                indexConnectionFrom.append(1);
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+void D::calculate()
+{
+    if (clock == nullptr || !clock->startItem()->getValue())
+        return;
+
+    if (connectionsTo[0] != nullptr && connectionsTo[0]->startItem()->getValue())
+    {
+        myValues[0] = false;
+        myValues[1] = true;
+    }
+    else if (connectionsTo[0] != nullptr && connectionsTo[0]->startItem()->getValue())
+    {
+        myValues[0] = true;
+        myValues[1] = false;
+    }
+
+    for (Connection* conn: connectionsFrom)
+        conn->endItem()->calculate();
+}
+
+void D::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+{
+    painter->drawRect(10, 10, 80, 100);
+
+    painter->drawLine(0, 30, 10, 30);
+    painter->drawLine(0, 60, 10, 60);
+
+    painter->drawLine(90, 40, 100, 40);
+    painter->drawLine(90, 80, 100, 80);
+
+    QFont font = painter->font();
+    font.setPixelSize(14);
+    font.bold();
+    painter->setFont(font);
+
+    const QRect rectangle1 = QRect(15, 22, 15, 15);
+    painter->drawText(rectangle1, Qt::AlignCenter, "D");
+
+    const QRect rectangle3 = QRect(15, 52, 25, 15);
+    painter->drawText(rectangle3, Qt::AlignCenter, "clk");
+
+    const QRect rectangle4 = QRect(75, 32, 15, 15);
+    painter->drawText(rectangle4, Qt::AlignCenter, "Q");
+
+    const QRect rectangle5 = QRect(75, 72, 15, 15);
+    painter->drawText(rectangle5, Qt::AlignCenter, "!Q");
+
+    setRect(0, 0, 100, 120);
+}
+
+T::T()
+    : FlipFlop(ElementType::T, 1)
+{}
+
+bool T::addConnection(Connection *conn, ConnectionType type, QPointF point)
+{
+    QPointF position = this->pos();
+    qreal posX = position.rx();
+    qreal posY = position.ry();
+    qreal relX = point.rx();
+    qreal relY = point.ry();
+
+    if (type == ConnectionType::EndItem)
+    {
+        if(relX < posX + qreal(10))
+        {
+            if (relY > posY + 15 && relY < posY + 45)
+            {
+                if (connectionsTo[0] != nullptr)
+                    return false;
+                else
+                    connectionsTo[0] = conn;
+            }
+            else if (relY > posY + 45 && relY < posY + 75)
+            {
+                if (clock != nullptr)
+                    return false;
+                else
+                    clock = conn;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+        calculate();
+    }
+    else
+    {
+        if(relX > posX + qreal(85))
+        {
+            if (relY > posY + 25 && relY < posY + 60)
+            {
+                connectionsFrom.append(conn);
+                indexConnectionFrom.append(0);
+            }
+            else if (relY > posY + 60 && relY < posY + 95)
+            {
+                connectionsFrom.append(conn);
+                indexConnectionFrom.append(1);
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+void T::calculate()
+{
+    if (clock == nullptr || !clock->startItem()->getValue())
+        return;
+
+    if (connectionsTo[0] != nullptr && connectionsTo[0]->startItem()->getValue())
+    {
+        myValues[0] = !myValues[0];
+        myValues[1] = !myValues[1];
+    }
+
+    for (Connection* conn: connectionsFrom)
+        conn->endItem()->calculate();
+}
+
+void T::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+{
+    painter->drawRect(10, 10, 80, 100);
+
+    painter->drawLine(0, 30, 10, 30);
+    painter->drawLine(0, 60, 10, 60);
+
+    painter->drawLine(90, 40, 100, 40);
+    painter->drawLine(90, 80, 100, 80);
+
+    QFont font = painter->font();
+    font.setPixelSize(14);
+    font.bold();
+    painter->setFont(font);
+
+    const QRect rectangle1 = QRect(15, 22, 15, 15);
+    painter->drawText(rectangle1, Qt::AlignCenter, "T");
+
+    const QRect rectangle3 = QRect(15, 52, 25, 15);
+    painter->drawText(rectangle3, Qt::AlignCenter, "clk");
+
+    const QRect rectangle4 = QRect(75, 32, 15, 15);
+    painter->drawText(rectangle4, Qt::AlignCenter, "Q");
+
+    const QRect rectangle5 = QRect(75, 72, 15, 15);
+    painter->drawText(rectangle5, Qt::AlignCenter, "!Q");
 
     setRect(0, 0, 100, 120);
 }

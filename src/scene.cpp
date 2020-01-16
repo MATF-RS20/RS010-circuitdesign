@@ -89,6 +89,14 @@ LogicElement* Scene::getNewElement(LogicElement::ElementType type){
       return new Decoder();
     case LogicElement::ElementType::Encoder:
       return new Encoder();
+    case LogicElement::ElementType::JK:
+      return new JK();
+    case LogicElement::ElementType::SR:
+      return new SR();
+    case LogicElement::ElementType::D:
+      return new D();
+    case LogicElement::ElementType::T:
+      return new T();
   }
 }
 

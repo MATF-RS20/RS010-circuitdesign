@@ -52,6 +52,13 @@ void MainWindow::setUpButtonsIds(){
  ui->buttonGroup->setId(ui->demultiplexerButton, LogicElement::Demultiplexer);
  ui->buttonGroup->setId(ui->decoderButton, LogicElement::Decoder);
  ui->buttonGroup->setId(ui->encoderButton, LogicElement::Encoder);
+ ui->buttonGroup->setId(ui->JKButton, LogicElement::JK);
+ ui->buttonGroup->setId(ui->SRButton, LogicElement::SR);
+ ui->buttonGroup->setId(ui->DButton, LogicElement::D);
+ ui->buttonGroup->setId(ui->SRButton, LogicElement::T);
+
+
+
 
  ui->buttonGroupConnectMove->setId(ui->connectButton,Scene::Mode::InsertLine);
  ui->buttonGroupConnectMove->setId(ui->moveButton,Scene::Mode::MoveItem);

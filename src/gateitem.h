@@ -20,7 +20,7 @@ QT_END_NAMESPACE
 class LogicElement : public QGraphicsRectItem
 {
 public:
-  enum ElementType {And, Or, Xor, Nand, Nor, Id, Not, In, Out, Clock, Multiplexer, Demultiplexer, Decoder, Encoder};
+  enum ElementType {And, Or, Xor, Nand, Nor, Id, Not, In, Out, Clock, Multiplexer, Demultiplexer, Decoder, Encoder, JK, SR, D, T};
   enum ConnectionType { StartItem, EndItem };
 
   LogicElement(ElementType type,  QGraphicsItem* parent = nullptr);
@@ -36,11 +36,9 @@ public:
   virtual QPointF getConnPosOut(Connection* conn);
 
   ElementType elementType() const { return myElementType; }
-  QPixmap image() const { return pixmap; }
 
 protected:
   ElementType myElementType;
-  QPixmap pixmap;
   bool myValue;
 };
 
@@ -266,6 +264,79 @@ public:
 private:
     QVector<int> indexConnectionFrom;
     QVector<bool> myValues;
+};
+
+/***************************************************************************************************/
+
+class FlipFlop : public LogicElement
+{
+public:
+    FlipFlop(ElementType type, int numOfInput = 2);
+
+    void removeConnections() override;
+    void removeConnection(Connection* conn) override;
+
+    QPointF getConnPosIn(Connection* conn) override;
+    QPointF getConnPosOut(Connection* conn) override;
+
+    bool getValue(Connection *conn) override;
+
+protected:
+    QVector<Connection*> connectionsTo;
+    QVector<Connection*> connectionsFrom;
+    Connection* clock;
+    int numOfInput;
+    int numOfOutput;
+    QVector<int> indexConnectionFrom;
+    QVector<bool> myValues;
+};
+
+class JK : public FlipFlop
+{
+public:
+    JK();
+
+    bool addConnection(Connection *conn, ConnectionType type, QPointF point) override;
+
+    void calculate() override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
+
+};
+
+class SR : public FlipFlop
+{
+public:
+    SR();
+
+    bool addConnection(Connection *conn, ConnectionType type, QPointF point) override;
+
+    void calculate() override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
+
+};
+
+class D : public FlipFlop
+{
+public:
+    D();
+
+    bool addConnection(Connection *conn, ConnectionType type, QPointF point) override;
+
+    void calculate() override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
+
+};
+
+class T : public FlipFlop
+{
+public:
+    T();
+
+    bool addConnection(Connection *conn, ConnectionType type, QPointF point) override;
+
+    void calculate() override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
+
 };
 
 #endif // GATEITEM_H
