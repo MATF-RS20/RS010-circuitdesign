@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QAction>
+#include <QActionGroup>
 #include "gateitem.h"
 
 class Scene;
@@ -34,17 +36,19 @@ public:
     ~MainWindow();
 
 private slots:
-    void itemInserted(LogicElement *item);
+    void itemInserted();
     void deleteItem();
     void buttonGroupClicked(int id);
-    void buttonGroupConnectMoveClicked(int id);
+    void changeModMove();
+    void changeModConnect();
+    void setNumOfInputs();
 
 signals:
     void buttonClicked(int id);
 
 private:
-    void setUpButtonsIds();
-
+    void setUp();
+    QActionGroup * actionGroup;
     Ui::MainWindow *ui;
     Scene* scene;
 };

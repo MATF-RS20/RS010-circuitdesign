@@ -60,6 +60,8 @@ LogicElement::LogicElement(ElementType type, QGraphicsItem* parent)
     setFlag(QGraphicsItem::ItemIsSelectable,true);
     setFlag(QGraphicsItem::ItemIsMovable,true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges,true);
+
+    myPen = QPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
 }
 
 bool LogicElement::getValue(Connection*)
@@ -74,7 +76,7 @@ QPointF LogicElement::getConnPosIn(Connection *)
 
 QPointF LogicElement::getConnPosOut(Connection *)
 {
-    return QPointF(INOUTSIZE, INOUTSIZE/2);
+    return QPointF(INOUTSIZE/2, INOUTSIZE/2);
 }
 
 
@@ -303,7 +305,8 @@ void And::calculate()
 }
 
 void And::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
-{
+{  
+    painter->setPen(myPen);
     painter->drawLine(10,10,50,10);
     painter->drawLine(10,10,10,60);
     painter->drawLine(10,60,50,60);
@@ -335,6 +338,7 @@ void Or::calculate()
 
 void Or::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
+    painter->setPen(myPen);
     painter->drawArc(QRect(0,10,20,50), -90*16, 180*16);
     painter->drawLine(10, 10, 30, 10);
     painter->drawLine(10, 60, 30, 60);
@@ -370,6 +374,7 @@ void Xor::calculate()
 
 void Xor::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
+    painter->setPen(myPen);
     painter->drawArc(QRect(0,10,20,50), -90*16, 180*16);
     painter->drawArc(QRect(-5,10,20,50), -90*16, 180*16);
     painter->drawLine(10, 10, 30, 10);
@@ -404,6 +409,7 @@ void Nand::calculate()
 
 void Nand::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
+    painter->setPen(myPen);
     painter->drawLine(10,10,50,10);
     painter->drawLine(10,10,10,60);
     painter->drawLine(10,60,50,60);
@@ -438,6 +444,7 @@ void Nor::calculate()
 
 void Nor::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
+    painter->setPen(myPen);
     painter->drawArc(QRect(0,10,20,50), -90*16, 180*16);
     painter->drawLine(10, 10, 30, 10);
     painter->drawLine(10, 60, 30, 60);
@@ -475,6 +482,7 @@ void Not::calculate()
 
 void Not::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
+    painter->setPen(myPen);
     painter->drawLine(10, 10, 40, 25);
     painter->drawLine(10, 10, 10, 40);
     painter->drawLine(10, 40, 40, 25);
@@ -514,6 +522,7 @@ void Id::calculate()
 
 void Id::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
+    painter->setPen(myPen);
     painter->drawLine(10, 10, 40, 25);
     painter->drawLine(10, 10, 10, 40);
     painter->drawLine(10, 40, 40, 25);
@@ -590,7 +599,7 @@ QPointF Plexer::getConnPosIn(Connection *conn)
   int idx;
   if((idx = connectionsSelector.indexOf(conn)) >= 0)
   {
-      return QPointF(80.0/(numOfSelector + 1)*(idx + 1) + 10, 110);
+      return QPointF(80.0/(numOfSelector + 1)*(idx + 1) + 10, 120);
   }
   else
   {
@@ -706,6 +715,7 @@ void Multiplexer::calculate()
 }
 
 void Multiplexer::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *){
+    painter->setPen(myPen);
     painter->drawRect(10, 10, 80, 100);
 
     int i, x, y;
@@ -850,6 +860,7 @@ bool Demultiplexer::getValue(Connection *conn)
 
 void Demultiplexer::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
+    painter->setPen(myPen);
     painter->drawRect(10, 10, 80, 100);
 
     painter->drawLine(0, 60, 10, 60);
@@ -978,6 +989,7 @@ bool Decoder::getValue(Connection *conn)
 
 void Decoder::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
+    painter->setPen(myPen);
     painter->drawRect(10, 10, 80, 100);
 
     int i, y;
@@ -1109,6 +1121,7 @@ bool Encoder::getValue(Connection *conn)
 
 void Encoder::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
+    painter->setPen(myPen);
     painter->drawRect(10, 10, 80, 100);
 
     int i, y;

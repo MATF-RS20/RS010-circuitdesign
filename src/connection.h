@@ -5,7 +5,7 @@
 
 class LogicElement;
 
-class Connection : public QGraphicsLineItem
+class Connection : public QGraphicsLineItem, public QObject
 {
 public:
   Connection(LogicElement* startItem, LogicElement* endItem,

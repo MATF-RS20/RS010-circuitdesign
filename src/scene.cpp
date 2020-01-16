@@ -33,7 +33,7 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event){
         item = getNewElement(myItemType);
         addItem(item);
         item->setPos(event->scenePos());
-        emit itemInserted(item);
+        emit itemInserted();
         break;
     case InsertLine:
         line = new QGraphicsLineItem(QLineF(event->scenePos(),

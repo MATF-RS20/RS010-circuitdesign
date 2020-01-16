@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/">
+        <file>and.png</file>
+        <file>clock.png</file>
+        <file>connections.png</file>
+        <file>decoder.png</file>
+        <file>delete.png</file>
+        <file>demultiplexer.png</file>
+        <file>encoder.png</file>
+        <file>id.png</file>
+        <file>in_false.png</file>
+        <file>in_true.png</file>
+        <file>mouse.png</file>
+        <file>multiplexer.png</file>
+        <file>nand.png</file>
+        <file>nor.png</file>
+        <file>not.png</file>
+        <file>or.png</file>
+        <file>out_false.png</file>
+        <file>out_true.png</file>
+        <file>xor.png</file>
+    </qresource>
+</RCC>

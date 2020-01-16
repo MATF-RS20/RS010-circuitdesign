@@ -42,6 +42,7 @@ protected:
   ElementType myElementType;
   QPixmap pixmap;
   bool myValue;
+  QPen myPen;
 };
 
 /***************************************************************************************************/

@@ -8,15 +8,16 @@
         <file>images/and.png</file>
         <file>images/connections.png</file>
         <file>images/mouse.png</file>
-        <file>images/trash.png</file>
         <file>images/out_true.png</file>
         <file>images/out_false.png</file>
         <file>images/in_true.png</file>
         <file>images/in_false.png</file>
         <file>images/multiplexer.png</file>
         <file>images/demultiplexer.png</file>
-        <file>images/decoder.jpg</file>
-        <file>images/encoder.jpg</file>
         <file>images/id.png</file>
+        <file>images/delete.png</file>
+        <file>images/clock.png</file>
+        <file>images/decoder.png</file>
+        <file>images/encoder.png</file>
     </qresource>
 </RCC>

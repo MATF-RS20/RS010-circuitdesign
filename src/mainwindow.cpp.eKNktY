@@ -5,7 +5,6 @@
 #include "connection.h"
 #include <QPixmap>
 #include <QPainter>
-#include <QInputDialog>
 #include <iostream>
 
 
@@ -22,20 +21,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->graphicsView->setScene(scene);
     scene->setSceneRect(QRectF(0, 0, SCENESIZE_W, SCENESIZE_H));
 
-    setUp();
+    setUpButtonsIds();
     connect(ui->buttonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(buttonGroupClicked(int)));
-    connect(scene, SIGNAL(itemInserted()),
-            this, SLOT(itemInserted()));
-    connect(ui->actionDelete, SIGNAL(triggered()),
-            this, SLOT(deleteItem()));
-    connect(ui->actionMove, SIGNAL(triggered()),
-            this, SLOT(changeModMove()));
-    connect(ui->actionConnection, SIGNAL(triggered()),
-            this, SLOT(changeModConnect()));
+    connect(scene, SIGNAL(itemInserted(LogicElement*)),
+            this, SLOT(itemInserted(LogicElement*)));
 
-    connect(ui->actionInputs, SIGNAL(triggered()),
-            this, SLOT(setNumOfInputs()));
+    connect(ui->actionDelete, SIGNAL(triggered()), this, SLOT(deleteItem()));
+    connect(ui->actionMove, SIGNAL(triggered()), this, SLOT(changeModMove()));
+    connect(ui->actionConnection, SIGNAL(triggered()), this, SLOT(changeModConnect()));
 }
 
 MainWindow::~MainWindow()
@@ -52,15 +46,8 @@ void MainWindow::changeModConnect()
   scene->setMode(Scene::InsertLine);
 }
 
-void MainWindow::setNumOfInputs()
-{
-   bool ok;
-   int i = QInputDialog::getInt(this,"inputs","Enter number of inputs:",1,1,16,1,&ok);
-   if(ok)
-     std::cout << i << std::endl;
-}
 
-void MainWindow::setUp(){
+void MainWindow::setUpButtonsIds(){
  ui->buttonGroup->setId(ui->andButton, LogicElement::And);
  ui->buttonGroup->setId(ui->clockButton, LogicElement::Clock);
  ui->buttonGroup->setId(ui->orButton, LogicElement::Or);
@@ -75,18 +62,9 @@ void MainWindow::setUp(){
  ui->buttonGroup->setId(ui->demultiplexerButton, LogicElement::Demultiplexer);
  ui->buttonGroup->setId(ui->decoderButton, LogicElement::Decoder);
  ui->buttonGroup->setId(ui->encoderButton, LogicElement::Encoder);
-
- actionGroup = new QActionGroup(this);
- actionGroup->addAction(ui->actionDelete);
- actionGroup->addAction(ui->actionMove);
- actionGroup->addAction(ui->actionConnection);
- actionGroup->setExclusive(true);
-
 }
 
 void MainWindow::buttonGroupClicked(int id){
-  if(actionGroup->checkedAction())
-      actionGroup->checkedAction()->setChecked(false);
   scene->setElementType(LogicElement::ElementType(id));
   scene->setMode(Scene::InsertItem);
 }
@@ -115,14 +93,11 @@ void MainWindow::deleteItem(){
        delete item;
   }
 
-  ui->actionDelete->setChecked(false);
 }
 
-void MainWindow::itemInserted()
-{
-  ui->buttonGroup->setExclusive(false);
-  ui->buttonGroup->checkedButton()->setChecked(false);
-  ui->buttonGroup->setExclusive(true);
+void MainWindow::itemInserted(LogicElement* item){
+  // zasto ne radi prva linija, zasto se button nakon iscrtavanja ne unchekira ?
+  ui->buttonGroup->button(item->elementType())->setChecked(false);
   scene->setMode(Scene::MoveItem);
 }
 
