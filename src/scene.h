@@ -28,7 +28,7 @@ public slots:
   void setElementType(LogicElement::ElementType type);
 
 signals:
-  void itemInserted(LogicElement* item);
+  void itemInserted();
 
 protected:
   void mousePressEvent(QGraphicsSceneMouseEvent *event) override;

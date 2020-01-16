@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
     QByteArrayData data[10];
-    char stringdata0[121];
+    char stringdata0[118];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -36,16 +36,17 @@ QT_MOC_LITERAL(1, 11, 13), // "buttonClicked"
 QT_MOC_LITERAL(2, 25, 0), // ""
 QT_MOC_LITERAL(3, 26, 2), // "id"
 QT_MOC_LITERAL(4, 29, 12), // "itemInserted"
-QT_MOC_LITERAL(5, 42, 13), // "LogicElement*"
-QT_MOC_LITERAL(6, 56, 4), // "item"
-QT_MOC_LITERAL(7, 61, 10), // "deleteItem"
-QT_MOC_LITERAL(8, 72, 18), // "buttonGroupClicked"
-QT_MOC_LITERAL(9, 91, 29) // "buttonGroupConnectMoveClicked"
+QT_MOC_LITERAL(5, 42, 10), // "deleteItem"
+QT_MOC_LITERAL(6, 53, 18), // "buttonGroupClicked"
+QT_MOC_LITERAL(7, 72, 13), // "changeModMove"
+QT_MOC_LITERAL(8, 86, 16), // "changeModConnect"
+QT_MOC_LITERAL(9, 103, 14) // "setNumOfInputs"
 
     },
     "MainWindow\0buttonClicked\0\0id\0itemInserted\0"
-    "LogicElement*\0item\0deleteItem\0"
-    "buttonGroupClicked\0buttonGroupConnectMoveClicked"
+    "deleteItem\0buttonGroupClicked\0"
+    "changeModMove\0changeModConnect\0"
+    "setNumOfInputs"
 };
 #undef QT_MOC_LITERAL
 
@@ -55,7 +56,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       5,   14, // methods
+       7,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -63,22 +64,26 @@ static const uint qt_meta_data_MainWindow[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   39,    2, 0x06 /* Public */,
+       1,    1,   49,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       4,    1,   42,    2, 0x08 /* Private */,
-       7,    0,   45,    2, 0x08 /* Private */,
-       8,    1,   46,    2, 0x08 /* Private */,
-       9,    1,   49,    2, 0x08 /* Private */,
+       4,    0,   52,    2, 0x08 /* Private */,
+       5,    0,   53,    2, 0x08 /* Private */,
+       6,    1,   54,    2, 0x08 /* Private */,
+       7,    0,   57,    2, 0x08 /* Private */,
+       8,    0,   58,    2, 0x08 /* Private */,
+       9,    0,   59,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Int,    3,
 
  // slots: parameters
-    QMetaType::Void, 0x80000000 | 5,    6,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,    3,
-    QMetaType::Void, QMetaType::Int,    3,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -90,10 +95,12 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->buttonClicked((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 1: _t->itemInserted((*reinterpret_cast< LogicElement*(*)>(_a[1]))); break;
+        case 1: _t->itemInserted(); break;
         case 2: _t->deleteItem(); break;
         case 3: _t->buttonGroupClicked((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 4: _t->buttonGroupConnectMoveClicked((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 4: _t->changeModMove(); break;
+        case 5: _t->changeModConnect(); break;
+        case 6: _t->setNumOfInputs(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -133,13 +140,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 5)
+        if (_id < 7)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 5;
+        _id -= 7;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 5)
+        if (_id < 7)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 5;
+        _id -= 7;
     }
     return _id;
 }

@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Scene_t {
-    QByteArrayData data[11];
-    char stringdata0[103];
+    QByteArrayData data[9];
+    char stringdata0[84];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -34,19 +34,17 @@ static const qt_meta_stringdata_Scene_t qt_meta_stringdata_Scene = {
 QT_MOC_LITERAL(0, 0, 5), // "Scene"
 QT_MOC_LITERAL(1, 6, 12), // "itemInserted"
 QT_MOC_LITERAL(2, 19, 0), // ""
-QT_MOC_LITERAL(3, 20, 13), // "LogicElement*"
-QT_MOC_LITERAL(4, 34, 4), // "item"
-QT_MOC_LITERAL(5, 39, 7), // "setMode"
-QT_MOC_LITERAL(6, 47, 4), // "Mode"
-QT_MOC_LITERAL(7, 52, 4), // "mode"
-QT_MOC_LITERAL(8, 57, 14), // "setElementType"
-QT_MOC_LITERAL(9, 72, 25), // "LogicElement::ElementType"
-QT_MOC_LITERAL(10, 98, 4) // "type"
+QT_MOC_LITERAL(3, 20, 7), // "setMode"
+QT_MOC_LITERAL(4, 28, 4), // "Mode"
+QT_MOC_LITERAL(5, 33, 4), // "mode"
+QT_MOC_LITERAL(6, 38, 14), // "setElementType"
+QT_MOC_LITERAL(7, 53, 25), // "LogicElement::ElementType"
+QT_MOC_LITERAL(8, 79, 4) // "type"
 
     },
-    "Scene\0itemInserted\0\0LogicElement*\0"
-    "item\0setMode\0Mode\0mode\0setElementType\0"
-    "LogicElement::ElementType\0type"
+    "Scene\0itemInserted\0\0setMode\0Mode\0mode\0"
+    "setElementType\0LogicElement::ElementType\0"
+    "type"
 };
 #undef QT_MOC_LITERAL
 
@@ -64,18 +62,18 @@ static const uint qt_meta_data_Scene[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   29,    2, 0x06 /* Public */,
+       1,    0,   29,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       5,    1,   32,    2, 0x0a /* Public */,
-       8,    1,   35,    2, 0x0a /* Public */,
+       3,    1,   30,    2, 0x0a /* Public */,
+       6,    1,   33,    2, 0x0a /* Public */,
 
  // signals: parameters
-    QMetaType::Void, 0x80000000 | 3,    4,
+    QMetaType::Void,
 
  // slots: parameters
-    QMetaType::Void, 0x80000000 | 6,    7,
-    QMetaType::Void, 0x80000000 | 9,   10,
+    QMetaType::Void, 0x80000000 | 4,    5,
+    QMetaType::Void, 0x80000000 | 7,    8,
 
        0        // eod
 };
@@ -86,7 +84,7 @@ void Scene::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void 
         Scene *_t = static_cast<Scene *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->itemInserted((*reinterpret_cast< LogicElement*(*)>(_a[1]))); break;
+        case 0: _t->itemInserted(); break;
         case 1: _t->setMode((*reinterpret_cast< Mode(*)>(_a[1]))); break;
         case 2: _t->setElementType((*reinterpret_cast< LogicElement::ElementType(*)>(_a[1]))); break;
         default: ;
@@ -94,7 +92,7 @@ void Scene::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void 
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            typedef void (Scene::*_t)(LogicElement * );
+            typedef void (Scene::*_t)();
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Scene::itemInserted)) {
                 *result = 0;
                 return;
@@ -140,10 +138,9 @@ int Scene::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void Scene::itemInserted(LogicElement * _t1)
+void Scene::itemInserted()
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
-    QMetaObject::activate(this, &staticMetaObject, 0, _a);
+    QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

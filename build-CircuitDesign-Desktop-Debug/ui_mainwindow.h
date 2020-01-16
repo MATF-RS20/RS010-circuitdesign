@@ -20,7 +20,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
-#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QToolBar>
 #include <QtWidgets/QToolBox>
 #include <QtWidgets/QToolButton>
 #include <QtWidgets/QVBoxLayout>
@@ -32,18 +32,18 @@ class Ui_MainWindow
 {
 public:
     QAction *actionMove;
-    QAction *actionConnect;
+    QAction *actionConnection;
+    QAction *actionDelete;
+    QAction *actionInputs;
+    QAction *actionOutputs;
     QWidget *centralWidget;
-    QGridLayout *gridLayout;
+    QWidget *layoutWidget;
+    QVBoxLayout *verticalLayout_4;
     QGridLayout *gridLayout_2;
-    QHBoxLayout *horizontalLayout;
-    QToolButton *trashButton;
-    QToolButton *moveButton;
-    QToolButton *connectButton;
     QGraphicsView *graphicsView;
     QToolBox *LogicBox;
     QWidget *InOut;
-    QWidget *layoutWidget;
+    QWidget *layoutWidget1;
     QVBoxLayout *verticalLayout_2;
     QHBoxLayout *horizontalLayout_2;
     QToolButton *inButton;
@@ -55,7 +55,7 @@ public:
     QToolButton *clockButton;
     QLabel *labelClock;
     QWidget *Gates;
-    QWidget *layoutWidget1;
+    QWidget *layoutWidget2;
     QVBoxLayout *verticalLayout;
     QHBoxLayout *andGate;
     QToolButton *andButton;
@@ -79,7 +79,7 @@ public:
     QToolButton *notButton;
     QLabel *notLabel;
     QWidget *Plexers;
-    QWidget *layoutWidget2;
+    QWidget *layoutWidget3;
     QVBoxLayout *verticalLayout_3;
     QHBoxLayout *horizontalLayout_5;
     QToolButton *multiplexerButton;
@@ -96,22 +96,21 @@ public:
     QWidget *Arithmetic;
     QWidget *FlipFlop;
     QWidget *widget;
-    QVBoxLayout *verticalLayout_4;
-    QHBoxLayout *horizontalLayout_9;
+    QGridLayout *gridLayout;
+    QHBoxLayout *horizontalLayout;
     QToolButton *JKButton;
     QLabel *labelJK;
-    QHBoxLayout *horizontalLayout_10;
+    QHBoxLayout *horizontalLayout_9;
     QToolButton *SRButton;
     QLabel *labelSR;
-    QHBoxLayout *horizontalLayout_11;
+    QHBoxLayout *horizontalLayout_10;
     QToolButton *DButton;
     QLabel *labelD;
-    QHBoxLayout *horizontalLayout_12;
+    QHBoxLayout *horizontalLayout_11;
     QToolButton *TButton;
     QLabel *labelT;
     QMenuBar *menuBar;
-    QStatusBar *statusBar;
-    QButtonGroup *buttonGroupConnectMove;
+    QToolBar *toolBar;
     QButtonGroup *buttonGroup;
 
     void setupUi(QMainWindow *MainWindow)
@@ -132,58 +131,39 @@ public:
         QIcon icon;
         icon.addFile(QStringLiteral(":/images/mouse.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionMove->setIcon(icon);
-        actionConnect = new QAction(MainWindow);
-        actionConnect->setObjectName(QStringLiteral("actionConnect"));
-        actionConnect->setCheckable(true);
+        actionConnection = new QAction(MainWindow);
+        actionConnection->setObjectName(QStringLiteral("actionConnection"));
+        actionConnection->setCheckable(true);
         QIcon icon1;
         icon1.addFile(QStringLiteral(":/images/connections.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionConnect->setIcon(icon1);
+        actionConnection->setIcon(icon1);
+        actionDelete = new QAction(MainWindow);
+        actionDelete->setObjectName(QStringLiteral("actionDelete"));
+        actionDelete->setCheckable(true);
+        QIcon icon2;
+        icon2.addFile(QStringLiteral(":/images/delete.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionDelete->setIcon(icon2);
+        actionInputs = new QAction(MainWindow);
+        actionInputs->setObjectName(QStringLiteral("actionInputs"));
+        actionOutputs = new QAction(MainWindow);
+        actionOutputs->setObjectName(QStringLiteral("actionOutputs"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         sizePolicy.setHeightForWidth(centralWidget->sizePolicy().hasHeightForWidth());
         centralWidget->setSizePolicy(sizePolicy);
         centralWidget->setMinimumSize(QSize(700, 100));
-        gridLayout = new QGridLayout(centralWidget);
-        gridLayout->setSpacing(6);
-        gridLayout->setContentsMargins(11, 11, 11, 11);
-        gridLayout->setObjectName(QStringLiteral("gridLayout"));
+        layoutWidget = new QWidget(centralWidget);
+        layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
+        layoutWidget->setGeometry(QRect(9, 9, 681, 391));
+        verticalLayout_4 = new QVBoxLayout(layoutWidget);
+        verticalLayout_4->setSpacing(6);
+        verticalLayout_4->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_4->setObjectName(QStringLiteral("verticalLayout_4"));
+        verticalLayout_4->setContentsMargins(0, 0, 0, 0);
         gridLayout_2 = new QGridLayout();
         gridLayout_2->setSpacing(6);
         gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
-        horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setSpacing(6);
-        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        trashButton = new QToolButton(centralWidget);
-        trashButton->setObjectName(QStringLiteral("trashButton"));
-        QIcon icon2;
-        icon2.addFile(QStringLiteral(":/images/trash.png"), QSize(), QIcon::Normal, QIcon::Off);
-        trashButton->setIcon(icon2);
-        trashButton->setIconSize(QSize(20, 20));
-
-        horizontalLayout->addWidget(trashButton);
-
-        moveButton = new QToolButton(centralWidget);
-        buttonGroupConnectMove = new QButtonGroup(MainWindow);
-        buttonGroupConnectMove->setObjectName(QStringLiteral("buttonGroupConnectMove"));
-        buttonGroupConnectMove->addButton(moveButton);
-        moveButton->setObjectName(QStringLiteral("moveButton"));
-        moveButton->setIcon(icon);
-        moveButton->setCheckable(true);
-
-        horizontalLayout->addWidget(moveButton);
-
-        connectButton = new QToolButton(centralWidget);
-        buttonGroupConnectMove->addButton(connectButton);
-        connectButton->setObjectName(QStringLiteral("connectButton"));
-        connectButton->setIcon(icon1);
-        connectButton->setCheckable(true);
-
-        horizontalLayout->addWidget(connectButton);
-
-
-        gridLayout_2->addLayout(horizontalLayout, 0, 0, 1, 1);
-
-        graphicsView = new QGraphicsView(centralWidget);
+        graphicsView = new QGraphicsView(layoutWidget);
         graphicsView->setObjectName(QStringLiteral("graphicsView"));
         graphicsView->setEnabled(true);
         QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -194,25 +174,25 @@ public:
         graphicsView->setMouseTracking(false);
         graphicsView->setSceneRect(QRectF(0, 0, 0, 0));
 
-        gridLayout_2->addWidget(graphicsView, 1, 1, 1, 1);
+        gridLayout_2->addWidget(graphicsView, 0, 2, 1, 1);
 
-        LogicBox = new QToolBox(centralWidget);
+        LogicBox = new QToolBox(layoutWidget);
         LogicBox->setObjectName(QStringLiteral("LogicBox"));
         sizePolicy.setHeightForWidth(LogicBox->sizePolicy().hasHeightForWidth());
         LogicBox->setSizePolicy(sizePolicy);
         LogicBox->setMinimumSize(QSize(180, 0));
         LogicBox->setMaximumSize(QSize(180, 16777215));
-        LogicBox->setCursor(QCursor(Qt::ArrowCursor));
+        LogicBox->setCursor(QCursor(Qt::OpenHandCursor));
         LogicBox->setFrameShape(QFrame::NoFrame);
         LogicBox->setLineWidth(1);
         LogicBox->setMidLineWidth(0);
         InOut = new QWidget();
         InOut->setObjectName(QStringLiteral("InOut"));
-        InOut->setGeometry(QRect(0, 0, 180, 214));
-        layoutWidget = new QWidget(InOut);
-        layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 1, 103, 90));
-        verticalLayout_2 = new QVBoxLayout(layoutWidget);
+        InOut->setGeometry(QRect(0, 0, 180, 232));
+        layoutWidget1 = new QWidget(InOut);
+        layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
+        layoutWidget1->setGeometry(QRect(10, 1, 103, 124));
+        verticalLayout_2 = new QVBoxLayout(layoutWidget1);
         verticalLayout_2->setSpacing(6);
         verticalLayout_2->setContentsMargins(11, 11, 11, 11);
         verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
@@ -220,7 +200,7 @@ public:
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setSpacing(6);
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
-        inButton = new QToolButton(layoutWidget);
+        inButton = new QToolButton(layoutWidget1);
         buttonGroup = new QButtonGroup(MainWindow);
         buttonGroup->setObjectName(QStringLiteral("buttonGroup"));
         buttonGroup->setExclusive(true);
@@ -229,11 +209,12 @@ public:
         QIcon icon3;
         icon3.addFile(QStringLiteral(":/images/in_false.png"), QSize(), QIcon::Normal, QIcon::Off);
         inButton->setIcon(icon3);
+        inButton->setIconSize(QSize(20, 20));
         inButton->setCheckable(true);
 
         horizontalLayout_2->addWidget(inButton);
 
-        inLabel = new QLabel(layoutWidget);
+        inLabel = new QLabel(layoutWidget1);
         inLabel->setObjectName(QStringLiteral("inLabel"));
 
         horizontalLayout_2->addWidget(inLabel);
@@ -244,17 +225,18 @@ public:
         horizontalLayout_3 = new QHBoxLayout();
         horizontalLayout_3->setSpacing(6);
         horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
-        outButton = new QToolButton(layoutWidget);
+        outButton = new QToolButton(layoutWidget1);
         buttonGroup->addButton(outButton);
         outButton->setObjectName(QStringLiteral("outButton"));
         QIcon icon4;
         icon4.addFile(QStringLiteral(":/images/out_false.png"), QSize(), QIcon::Normal, QIcon::Off);
         outButton->setIcon(icon4);
+        outButton->setIconSize(QSize(20, 20));
         outButton->setCheckable(true);
 
         horizontalLayout_3->addWidget(outButton);
 
-        outLabel = new QLabel(layoutWidget);
+        outLabel = new QLabel(layoutWidget1);
         outLabel->setObjectName(QStringLiteral("outLabel"));
 
         horizontalLayout_3->addWidget(outLabel);
@@ -265,13 +247,19 @@ public:
         horizontalLayout_8 = new QHBoxLayout();
         horizontalLayout_8->setSpacing(6);
         horizontalLayout_8->setObjectName(QStringLiteral("horizontalLayout_8"));
-        clockButton = new QToolButton(layoutWidget);
+        clockButton = new QToolButton(layoutWidget1);
         buttonGroup->addButton(clockButton);
         clockButton->setObjectName(QStringLiteral("clockButton"));
+        QIcon icon5;
+        icon5.addFile(QStringLiteral(":/images/clock.png"), QSize(), QIcon::Normal, QIcon::Off);
+        clockButton->setIcon(icon5);
+        clockButton->setIconSize(QSize(20, 20));
+        clockButton->setCheckable(true);
+        clockButton->setAutoExclusive(false);
 
         horizontalLayout_8->addWidget(clockButton);
 
-        labelClock = new QLabel(layoutWidget);
+        labelClock = new QLabel(layoutWidget1);
         labelClock->setObjectName(QStringLiteral("labelClock"));
 
         horizontalLayout_8->addWidget(labelClock);
@@ -282,15 +270,15 @@ public:
         LogicBox->addItem(InOut, QStringLiteral("InOut"));
         Gates = new QWidget();
         Gates->setObjectName(QStringLiteral("Gates"));
-        Gates->setGeometry(QRect(0, 0, 180, 214));
+        Gates->setGeometry(QRect(0, 0, 180, 232));
         sizePolicy.setHeightForWidth(Gates->sizePolicy().hasHeightForWidth());
         Gates->setSizePolicy(sizePolicy);
-        layoutWidget1 = new QWidget(Gates);
-        layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
-        layoutWidget1->setGeometry(QRect(10, 0, 171, 238));
-        sizePolicy1.setHeightForWidth(layoutWidget1->sizePolicy().hasHeightForWidth());
-        layoutWidget1->setSizePolicy(sizePolicy1);
-        verticalLayout = new QVBoxLayout(layoutWidget1);
+        layoutWidget2 = new QWidget(Gates);
+        layoutWidget2->setObjectName(QStringLiteral("layoutWidget2"));
+        layoutWidget2->setGeometry(QRect(10, 0, 171, 241));
+        sizePolicy1.setHeightForWidth(layoutWidget2->sizePolicy().hasHeightForWidth());
+        layoutWidget2->setSizePolicy(sizePolicy1);
+        verticalLayout = new QVBoxLayout(layoutWidget2);
         verticalLayout->setSpacing(6);
         verticalLayout->setContentsMargins(11, 11, 11, 11);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
@@ -298,19 +286,19 @@ public:
         andGate = new QHBoxLayout();
         andGate->setSpacing(6);
         andGate->setObjectName(QStringLiteral("andGate"));
-        andButton = new QToolButton(layoutWidget1);
+        andButton = new QToolButton(layoutWidget2);
         buttonGroup->addButton(andButton);
         andButton->setObjectName(QStringLiteral("andButton"));
-        QIcon icon5;
-        icon5.addFile(QStringLiteral(":/images/and.png"), QSize(), QIcon::Normal, QIcon::Off);
-        andButton->setIcon(icon5);
+        QIcon icon6;
+        icon6.addFile(QStringLiteral(":/images/and.png"), QSize(), QIcon::Normal, QIcon::Off);
+        andButton->setIcon(icon6);
         andButton->setIconSize(QSize(20, 20));
         andButton->setCheckable(true);
         andButton->setAutoExclusive(false);
 
         andGate->addWidget(andButton);
 
-        andLabel = new QLabel(layoutWidget1);
+        andLabel = new QLabel(layoutWidget2);
         andLabel->setObjectName(QStringLiteral("andLabel"));
 
         andGate->addWidget(andLabel);
@@ -321,19 +309,19 @@ public:
         orGate = new QHBoxLayout();
         orGate->setSpacing(6);
         orGate->setObjectName(QStringLiteral("orGate"));
-        orButton = new QToolButton(layoutWidget1);
+        orButton = new QToolButton(layoutWidget2);
         buttonGroup->addButton(orButton);
         orButton->setObjectName(QStringLiteral("orButton"));
-        QIcon icon6;
-        icon6.addFile(QStringLiteral(":/images/or.png"), QSize(), QIcon::Normal, QIcon::Off);
-        orButton->setIcon(icon6);
+        QIcon icon7;
+        icon7.addFile(QStringLiteral(":/images/or.png"), QSize(), QIcon::Normal, QIcon::Off);
+        orButton->setIcon(icon7);
         orButton->setIconSize(QSize(20, 20));
         orButton->setCheckable(true);
         orButton->setAutoExclusive(false);
 
         orGate->addWidget(orButton);
 
-        orLabel = new QLabel(layoutWidget1);
+        orLabel = new QLabel(layoutWidget2);
         orLabel->setObjectName(QStringLiteral("orLabel"));
 
         orGate->addWidget(orLabel);
@@ -344,19 +332,19 @@ public:
         xorGate = new QHBoxLayout();
         xorGate->setSpacing(6);
         xorGate->setObjectName(QStringLiteral("xorGate"));
-        xorButton = new QToolButton(layoutWidget1);
+        xorButton = new QToolButton(layoutWidget2);
         buttonGroup->addButton(xorButton);
         xorButton->setObjectName(QStringLiteral("xorButton"));
-        QIcon icon7;
-        icon7.addFile(QStringLiteral(":/images/xor.png"), QSize(), QIcon::Normal, QIcon::Off);
-        xorButton->setIcon(icon7);
+        QIcon icon8;
+        icon8.addFile(QStringLiteral(":/images/xor.png"), QSize(), QIcon::Normal, QIcon::Off);
+        xorButton->setIcon(icon8);
         xorButton->setIconSize(QSize(20, 20));
         xorButton->setCheckable(true);
         xorButton->setAutoExclusive(false);
 
         xorGate->addWidget(xorButton);
 
-        xorLabel = new QLabel(layoutWidget1);
+        xorLabel = new QLabel(layoutWidget2);
         xorLabel->setObjectName(QStringLiteral("xorLabel"));
         sizePolicy1.setHeightForWidth(xorLabel->sizePolicy().hasHeightForWidth());
         xorLabel->setSizePolicy(sizePolicy1);
@@ -369,19 +357,19 @@ public:
         nandGate = new QHBoxLayout();
         nandGate->setSpacing(6);
         nandGate->setObjectName(QStringLiteral("nandGate"));
-        nandButton = new QToolButton(layoutWidget1);
+        nandButton = new QToolButton(layoutWidget2);
         buttonGroup->addButton(nandButton);
         nandButton->setObjectName(QStringLiteral("nandButton"));
-        QIcon icon8;
-        icon8.addFile(QStringLiteral(":/images/nand.png"), QSize(), QIcon::Normal, QIcon::Off);
-        nandButton->setIcon(icon8);
+        QIcon icon9;
+        icon9.addFile(QStringLiteral(":/images/nand.png"), QSize(), QIcon::Normal, QIcon::Off);
+        nandButton->setIcon(icon9);
         nandButton->setIconSize(QSize(20, 20));
         nandButton->setCheckable(true);
         nandButton->setAutoExclusive(false);
 
         nandGate->addWidget(nandButton);
 
-        nandLabel = new QLabel(layoutWidget1);
+        nandLabel = new QLabel(layoutWidget2);
         nandLabel->setObjectName(QStringLiteral("nandLabel"));
         sizePolicy1.setHeightForWidth(nandLabel->sizePolicy().hasHeightForWidth());
         nandLabel->setSizePolicy(sizePolicy1);
@@ -394,19 +382,19 @@ public:
         norGate = new QHBoxLayout();
         norGate->setSpacing(6);
         norGate->setObjectName(QStringLiteral("norGate"));
-        norButton = new QToolButton(layoutWidget1);
+        norButton = new QToolButton(layoutWidget2);
         buttonGroup->addButton(norButton);
         norButton->setObjectName(QStringLiteral("norButton"));
-        QIcon icon9;
-        icon9.addFile(QStringLiteral(":/images/nor.png"), QSize(), QIcon::Normal, QIcon::Off);
-        norButton->setIcon(icon9);
+        QIcon icon10;
+        icon10.addFile(QStringLiteral(":/images/nor.png"), QSize(), QIcon::Normal, QIcon::Off);
+        norButton->setIcon(icon10);
         norButton->setIconSize(QSize(20, 20));
         norButton->setCheckable(true);
         norButton->setAutoExclusive(false);
 
         norGate->addWidget(norButton);
 
-        norLabel = new QLabel(layoutWidget1);
+        norLabel = new QLabel(layoutWidget2);
         norLabel->setObjectName(QStringLiteral("norLabel"));
         sizePolicy1.setHeightForWidth(norLabel->sizePolicy().hasHeightForWidth());
         norLabel->setSizePolicy(sizePolicy1);
@@ -419,16 +407,18 @@ public:
         idGate = new QHBoxLayout();
         idGate->setSpacing(6);
         idGate->setObjectName(QStringLiteral("idGate"));
-        idButton = new QToolButton(layoutWidget1);
+        idButton = new QToolButton(layoutWidget2);
         buttonGroup->addButton(idButton);
         idButton->setObjectName(QStringLiteral("idButton"));
-        QIcon icon10;
-        icon10.addFile(QStringLiteral(":/images/id.png"), QSize(), QIcon::Normal, QIcon::Off);
-        idButton->setIcon(icon10);
+        QIcon icon11;
+        icon11.addFile(QStringLiteral(":/images/id.png"), QSize(), QIcon::Normal, QIcon::Off);
+        idButton->setIcon(icon11);
+        idButton->setIconSize(QSize(20, 20));
+        idButton->setCheckable(true);
 
         idGate->addWidget(idButton);
 
-        idLabel = new QLabel(layoutWidget1);
+        idLabel = new QLabel(layoutWidget2);
         idLabel->setObjectName(QStringLiteral("idLabel"));
 
         idGate->addWidget(idLabel);
@@ -439,19 +429,19 @@ public:
         notGate = new QHBoxLayout();
         notGate->setSpacing(6);
         notGate->setObjectName(QStringLiteral("notGate"));
-        notButton = new QToolButton(layoutWidget1);
+        notButton = new QToolButton(layoutWidget2);
         buttonGroup->addButton(notButton);
         notButton->setObjectName(QStringLiteral("notButton"));
         notButton->setAcceptDrops(false);
-        QIcon icon11;
-        icon11.addFile(QStringLiteral(":/images/not.png"), QSize(), QIcon::Normal, QIcon::Off);
-        notButton->setIcon(icon11);
+        QIcon icon12;
+        icon12.addFile(QStringLiteral(":/images/not.png"), QSize(), QIcon::Normal, QIcon::Off);
+        notButton->setIcon(icon12);
         notButton->setIconSize(QSize(20, 20));
         notButton->setCheckable(true);
 
         notGate->addWidget(notButton);
 
-        notLabel = new QLabel(layoutWidget1);
+        notLabel = new QLabel(layoutWidget2);
         notLabel->setObjectName(QStringLiteral("notLabel"));
         sizePolicy1.setHeightForWidth(notLabel->sizePolicy().hasHeightForWidth());
         notLabel->setSizePolicy(sizePolicy1);
@@ -464,11 +454,11 @@ public:
         LogicBox->addItem(Gates, QStringLiteral("Gates"));
         Plexers = new QWidget();
         Plexers->setObjectName(QStringLiteral("Plexers"));
-        Plexers->setGeometry(QRect(0, 0, 180, 214));
-        layoutWidget2 = new QWidget(Plexers);
-        layoutWidget2->setObjectName(QStringLiteral("layoutWidget2"));
-        layoutWidget2->setGeometry(QRect(10, 11, 136, 128));
-        verticalLayout_3 = new QVBoxLayout(layoutWidget2);
+        Plexers->setGeometry(QRect(0, 0, 180, 232));
+        layoutWidget3 = new QWidget(Plexers);
+        layoutWidget3->setObjectName(QStringLiteral("layoutWidget3"));
+        layoutWidget3->setGeometry(QRect(10, 11, 136, 136));
+        verticalLayout_3 = new QVBoxLayout(layoutWidget3);
         verticalLayout_3->setSpacing(6);
         verticalLayout_3->setContentsMargins(11, 11, 11, 11);
         verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
@@ -476,17 +466,18 @@ public:
         horizontalLayout_5 = new QHBoxLayout();
         horizontalLayout_5->setSpacing(6);
         horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
-        multiplexerButton = new QToolButton(layoutWidget2);
+        multiplexerButton = new QToolButton(layoutWidget3);
         buttonGroup->addButton(multiplexerButton);
         multiplexerButton->setObjectName(QStringLiteral("multiplexerButton"));
-        QIcon icon12;
-        icon12.addFile(QStringLiteral(":/images/multiplexer.png"), QSize(), QIcon::Normal, QIcon::Off);
-        multiplexerButton->setIcon(icon12);
+        QIcon icon13;
+        icon13.addFile(QStringLiteral(":/images/multiplexer.png"), QSize(), QIcon::Normal, QIcon::Off);
+        multiplexerButton->setIcon(icon13);
         multiplexerButton->setIconSize(QSize(20, 20));
+        multiplexerButton->setCheckable(true);
 
         horizontalLayout_5->addWidget(multiplexerButton);
 
-        labelMultiplexer = new QLabel(layoutWidget2);
+        labelMultiplexer = new QLabel(layoutWidget3);
         labelMultiplexer->setObjectName(QStringLiteral("labelMultiplexer"));
 
         horizontalLayout_5->addWidget(labelMultiplexer);
@@ -497,17 +488,18 @@ public:
         horizontalLayout_4 = new QHBoxLayout();
         horizontalLayout_4->setSpacing(6);
         horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
-        demultiplexerButton = new QToolButton(layoutWidget2);
+        demultiplexerButton = new QToolButton(layoutWidget3);
         buttonGroup->addButton(demultiplexerButton);
         demultiplexerButton->setObjectName(QStringLiteral("demultiplexerButton"));
-        QIcon icon13;
-        icon13.addFile(QStringLiteral(":/images/demultiplexer.png"), QSize(), QIcon::Normal, QIcon::Off);
-        demultiplexerButton->setIcon(icon13);
+        QIcon icon14;
+        icon14.addFile(QStringLiteral(":/images/demultiplexer.png"), QSize(), QIcon::Normal, QIcon::Off);
+        demultiplexerButton->setIcon(icon14);
         demultiplexerButton->setIconSize(QSize(20, 20));
+        demultiplexerButton->setCheckable(true);
 
         horizontalLayout_4->addWidget(demultiplexerButton);
 
-        labelDemultiplexer = new QLabel(layoutWidget2);
+        labelDemultiplexer = new QLabel(layoutWidget3);
         labelDemultiplexer->setObjectName(QStringLiteral("labelDemultiplexer"));
 
         horizontalLayout_4->addWidget(labelDemultiplexer);
@@ -518,16 +510,18 @@ public:
         horizontalLayout_6 = new QHBoxLayout();
         horizontalLayout_6->setSpacing(6);
         horizontalLayout_6->setObjectName(QStringLiteral("horizontalLayout_6"));
-        decoderButton = new QToolButton(layoutWidget2);
+        decoderButton = new QToolButton(layoutWidget3);
         buttonGroup->addButton(decoderButton);
         decoderButton->setObjectName(QStringLiteral("decoderButton"));
-        QIcon icon14;
-        icon14.addFile(QStringLiteral(":/images/decoder.jpg"), QSize(), QIcon::Normal, QIcon::Off);
-        decoderButton->setIcon(icon14);
+        QIcon icon15;
+        icon15.addFile(QStringLiteral(":/images/decoder.png"), QSize(), QIcon::Normal, QIcon::Off);
+        decoderButton->setIcon(icon15);
+        decoderButton->setIconSize(QSize(20, 20));
+        decoderButton->setCheckable(true);
 
         horizontalLayout_6->addWidget(decoderButton);
 
-        labelDecoder = new QLabel(layoutWidget2);
+        labelDecoder = new QLabel(layoutWidget3);
         labelDecoder->setObjectName(QStringLiteral("labelDecoder"));
 
         horizontalLayout_6->addWidget(labelDecoder);
@@ -538,16 +532,18 @@ public:
         horizontalLayout_7 = new QHBoxLayout();
         horizontalLayout_7->setSpacing(6);
         horizontalLayout_7->setObjectName(QStringLiteral("horizontalLayout_7"));
-        encoderButton = new QToolButton(layoutWidget2);
+        encoderButton = new QToolButton(layoutWidget3);
         buttonGroup->addButton(encoderButton);
         encoderButton->setObjectName(QStringLiteral("encoderButton"));
-        QIcon icon15;
-        icon15.addFile(QStringLiteral(":/images/encoder.jpg"), QSize(), QIcon::Normal, QIcon::Off);
-        encoderButton->setIcon(icon15);
+        QIcon icon16;
+        icon16.addFile(QStringLiteral(":/images/encoder.png"), QSize(), QIcon::Normal, QIcon::Off);
+        encoderButton->setIcon(icon16);
+        encoderButton->setIconSize(QSize(20, 20));
+        encoderButton->setCheckable(true);
 
         horizontalLayout_7->addWidget(encoderButton);
 
-        labelEncoder = new QLabel(layoutWidget2);
+        labelEncoder = new QLabel(layoutWidget3);
         labelEncoder->setObjectName(QStringLiteral("labelEncoder"));
 
         horizontalLayout_7->addWidget(labelEncoder);
@@ -558,93 +554,98 @@ public:
         LogicBox->addItem(Plexers, QStringLiteral("Plexers"));
         Arithmetic = new QWidget();
         Arithmetic->setObjectName(QStringLiteral("Arithmetic"));
-        Arithmetic->setGeometry(QRect(0, 0, 180, 214));
+        Arithmetic->setGeometry(QRect(0, 0, 180, 232));
         LogicBox->addItem(Arithmetic, QStringLiteral("Arithmetic"));
         FlipFlop = new QWidget();
         FlipFlop->setObjectName(QStringLiteral("FlipFlop"));
-        FlipFlop->setCursor(QCursor(Qt::OpenHandCursor));
         widget = new QWidget(FlipFlop);
         widget->setObjectName(QStringLiteral("widget"));
-        widget->setGeometry(QRect(10, 10, 55, 124));
-        verticalLayout_4 = new QVBoxLayout(widget);
-        verticalLayout_4->setSpacing(6);
-        verticalLayout_4->setContentsMargins(11, 11, 11, 11);
-        verticalLayout_4->setObjectName(QStringLiteral("verticalLayout_4"));
-        verticalLayout_4->setContentsMargins(0, 0, 0, 0);
-        horizontalLayout_9 = new QHBoxLayout();
-        horizontalLayout_9->setSpacing(6);
-        horizontalLayout_9->setObjectName(QStringLiteral("horizontalLayout_9"));
+        widget->setGeometry(QRect(10, 10, 101, 124));
+        gridLayout = new QGridLayout(widget);
+        gridLayout->setSpacing(6);
+        gridLayout->setContentsMargins(11, 11, 11, 11);
+        gridLayout->setObjectName(QStringLiteral("gridLayout"));
+        gridLayout->setContentsMargins(0, 0, 0, 0);
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setSpacing(6);
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         JKButton = new QToolButton(widget);
         buttonGroup->addButton(JKButton);
         JKButton->setObjectName(QStringLiteral("JKButton"));
+        JKButton->setIconSize(QSize(20, 20));
+        JKButton->setCheckable(true);
 
-        horizontalLayout_9->addWidget(JKButton);
+        horizontalLayout->addWidget(JKButton);
 
         labelJK = new QLabel(widget);
         labelJK->setObjectName(QStringLiteral("labelJK"));
 
-        horizontalLayout_9->addWidget(labelJK);
+        horizontalLayout->addWidget(labelJK);
 
 
-        verticalLayout_4->addLayout(horizontalLayout_9);
+        gridLayout->addLayout(horizontalLayout, 0, 0, 1, 1);
 
-        horizontalLayout_10 = new QHBoxLayout();
-        horizontalLayout_10->setSpacing(6);
-        horizontalLayout_10->setObjectName(QStringLiteral("horizontalLayout_10"));
+        horizontalLayout_9 = new QHBoxLayout();
+        horizontalLayout_9->setSpacing(6);
+        horizontalLayout_9->setObjectName(QStringLiteral("horizontalLayout_9"));
         SRButton = new QToolButton(widget);
         buttonGroup->addButton(SRButton);
         SRButton->setObjectName(QStringLiteral("SRButton"));
+        SRButton->setIconSize(QSize(20, 20));
+        SRButton->setCheckable(true);
 
-        horizontalLayout_10->addWidget(SRButton);
+        horizontalLayout_9->addWidget(SRButton);
 
         labelSR = new QLabel(widget);
         labelSR->setObjectName(QStringLiteral("labelSR"));
 
-        horizontalLayout_10->addWidget(labelSR);
+        horizontalLayout_9->addWidget(labelSR);
 
 
-        verticalLayout_4->addLayout(horizontalLayout_10);
+        gridLayout->addLayout(horizontalLayout_9, 1, 0, 1, 1);
 
-        horizontalLayout_11 = new QHBoxLayout();
-        horizontalLayout_11->setSpacing(6);
-        horizontalLayout_11->setObjectName(QStringLiteral("horizontalLayout_11"));
+        horizontalLayout_10 = new QHBoxLayout();
+        horizontalLayout_10->setSpacing(6);
+        horizontalLayout_10->setObjectName(QStringLiteral("horizontalLayout_10"));
         DButton = new QToolButton(widget);
         buttonGroup->addButton(DButton);
         DButton->setObjectName(QStringLiteral("DButton"));
+        DButton->setCheckable(true);
 
-        horizontalLayout_11->addWidget(DButton);
+        horizontalLayout_10->addWidget(DButton);
 
         labelD = new QLabel(widget);
         labelD->setObjectName(QStringLiteral("labelD"));
 
-        horizontalLayout_11->addWidget(labelD);
+        horizontalLayout_10->addWidget(labelD);
 
 
-        verticalLayout_4->addLayout(horizontalLayout_11);
+        gridLayout->addLayout(horizontalLayout_10, 2, 0, 1, 1);
 
-        horizontalLayout_12 = new QHBoxLayout();
-        horizontalLayout_12->setSpacing(6);
-        horizontalLayout_12->setObjectName(QStringLiteral("horizontalLayout_12"));
+        horizontalLayout_11 = new QHBoxLayout();
+        horizontalLayout_11->setSpacing(6);
+        horizontalLayout_11->setObjectName(QStringLiteral("horizontalLayout_11"));
         TButton = new QToolButton(widget);
         buttonGroup->addButton(TButton);
         TButton->setObjectName(QStringLiteral("TButton"));
+        TButton->setCheckable(true);
 
-        horizontalLayout_12->addWidget(TButton);
+        horizontalLayout_11->addWidget(TButton);
 
         labelT = new QLabel(widget);
         labelT->setObjectName(QStringLiteral("labelT"));
 
-        horizontalLayout_12->addWidget(labelT);
+        horizontalLayout_11->addWidget(labelT);
 
 
-        verticalLayout_4->addLayout(horizontalLayout_12);
+        gridLayout->addLayout(horizontalLayout_11, 3, 0, 1, 1);
 
-        LogicBox->addItem(FlipFlop, QStringLiteral("FlipFlop"));
+        LogicBox->addItem(FlipFlop, QStringLiteral("Flip Flop"));
 
-        gridLayout_2->addWidget(LogicBox, 1, 0, 1, 1);
+        gridLayout_2->addWidget(LogicBox, 0, 1, 1, 1);
 
 
-        gridLayout->addLayout(gridLayout_2, 1, 0, 1, 1);
+        verticalLayout_4->addLayout(gridLayout_2);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
@@ -653,9 +654,16 @@ public:
         sizePolicy.setHeightForWidth(menuBar->sizePolicy().hasHeightForWidth());
         menuBar->setSizePolicy(sizePolicy);
         MainWindow->setMenuBar(menuBar);
-        statusBar = new QStatusBar(MainWindow);
-        statusBar->setObjectName(QStringLiteral("statusBar"));
-        MainWindow->setStatusBar(statusBar);
+        toolBar = new QToolBar(MainWindow);
+        toolBar->setObjectName(QStringLiteral("toolBar"));
+        toolBar->setAllowedAreas(Qt::AllToolBarAreas);
+        toolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        MainWindow->addToolBar(Qt::TopToolBarArea, toolBar);
+
+        toolBar->addAction(actionMove);
+        toolBar->addAction(actionConnection);
+        toolBar->addAction(actionDelete);
+        toolBar->addAction(actionInputs);
 
         retranslateUi(MainWindow);
 
@@ -669,10 +677,10 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Circuit Designer", Q_NULLPTR));
         actionMove->setText(QApplication::translate("MainWindow", "Move", Q_NULLPTR));
-        actionConnect->setText(QApplication::translate("MainWindow", "Connect", Q_NULLPTR));
-        trashButton->setText(QApplication::translate("MainWindow", "...", Q_NULLPTR));
-        moveButton->setText(QApplication::translate("MainWindow", "...", Q_NULLPTR));
-        connectButton->setText(QApplication::translate("MainWindow", "...", Q_NULLPTR));
+        actionConnection->setText(QApplication::translate("MainWindow", "Connect", Q_NULLPTR));
+        actionDelete->setText(QApplication::translate("MainWindow", "Delete", Q_NULLPTR));
+        actionInputs->setText(QApplication::translate("MainWindow", "Inputs", Q_NULLPTR));
+        actionOutputs->setText(QApplication::translate("MainWindow", "Outputs", Q_NULLPTR));
         inButton->setText(QApplication::translate("MainWindow", "...", Q_NULLPTR));
         inLabel->setText(QApplication::translate("MainWindow", "In", Q_NULLPTR));
         outButton->setText(QApplication::translate("MainWindow", "...", Q_NULLPTR));
@@ -705,9 +713,6 @@ public:
         labelEncoder->setText(QApplication::translate("MainWindow", "Encoder", Q_NULLPTR));
         LogicBox->setItemText(LogicBox->indexOf(Plexers), QApplication::translate("MainWindow", "Plexers", Q_NULLPTR));
         LogicBox->setItemText(LogicBox->indexOf(Arithmetic), QApplication::translate("MainWindow", "Arithmetic", Q_NULLPTR));
-#ifndef QT_NO_ACCESSIBILITY
-        FlipFlop->setAccessibleName(QString());
-#endif // QT_NO_ACCESSIBILITY
         JKButton->setText(QApplication::translate("MainWindow", "...", Q_NULLPTR));
         labelJK->setText(QApplication::translate("MainWindow", "JK", Q_NULLPTR));
         SRButton->setText(QApplication::translate("MainWindow", "...", Q_NULLPTR));
@@ -716,7 +721,8 @@ public:
         labelD->setText(QApplication::translate("MainWindow", "D", Q_NULLPTR));
         TButton->setText(QApplication::translate("MainWindow", "...", Q_NULLPTR));
         labelT->setText(QApplication::translate("MainWindow", "T", Q_NULLPTR));
-        LogicBox->setItemText(LogicBox->indexOf(FlipFlop), QApplication::translate("MainWindow", "FlipFlop", Q_NULLPTR));
+        LogicBox->setItemText(LogicBox->indexOf(FlipFlop), QApplication::translate("MainWindow", "Flip Flop", Q_NULLPTR));
+        toolBar->setWindowTitle(QApplication::translate("MainWindow", "toolBar", Q_NULLPTR));
     } // retranslateUi
 
 };

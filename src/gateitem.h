@@ -40,6 +40,7 @@ public:
 protected:
   ElementType myElementType;
   bool myValue;
+  QPen myPen;
 };
 
 /***************************************************************************************************/

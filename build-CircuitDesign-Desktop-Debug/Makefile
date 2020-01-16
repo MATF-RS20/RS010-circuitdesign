@@ -369,15 +369,16 @@ qrc_images.cpp: ../images.qrc \
 		../images/in_false.png \
 		../images/not.png \
 		../images/out_true.png \
-		../images/encoder.jpg \
+		../images/delete.png \
 		../images/nand.png \
-		../images/decoder.jpg \
 		../images/or.png \
-		../images/trash.png \
+		../images/encoder.png \
 		../images/xor.png \
+		../images/decoder.png \
 		../images/demultiplexer.png \
 		../images/multiplexer.png \
 		../images/and.png \
+		../images/clock.png \
 		../images/connections.png
 	/usr/lib/qt5/bin/rcc -name images ../images.qrc -o qrc_images.cpp
 

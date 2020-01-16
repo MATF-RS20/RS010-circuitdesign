@@ -1,13 +1,22 @@
 #include "connection.h"
 #include "gateitem.h"
 #include <QPainter>
+#include <QPropertyAnimation>
 #include <QPen>
 
 Connection::Connection(LogicElement* startItem, LogicElement* endItem, QGraphicsItem* parent)
-  : QGraphicsLineItem(parent), myStartItem(startItem), myEndItem(endItem)
+  : QGraphicsLineItem(parent), QObject(), myStartItem(startItem), myEndItem(endItem)
 {
   setFlag(QGraphicsItem::ItemIsSelectable, true);
   setPen(QPen(myColor, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+
+  /*
+  QPropertyAnimation animation(this, "pos");
+  animation.setStartValue(0);
+  animation.setEndValue(5000);
+  animation.setDuration(5000);
+  animation.start();
+  */
 }
 
 void Connection::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *){
