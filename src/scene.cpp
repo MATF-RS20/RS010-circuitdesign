@@ -97,6 +97,10 @@ LogicElement* Scene::getNewElement(LogicElement::ElementType type){
       return new D();
     case LogicElement::ElementType::T:
       return new T();
+    case LogicElement::ElementType::Adder:
+      return new Adder();
+    case LogicElement::ElementType::Subtractor:
+      return new Subtractor();
   }
 }
 

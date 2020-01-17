@@ -6,7 +6,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsSceneContextMenuEvent>
 
-#define INOUTSIZE 25.0
+#define INOUTSIZE 15.0
 
 LogicElement::LogicElement(ElementType type, QGraphicsItem* parent)
   : QGraphicsRectItem(parent), myElementType(type)
@@ -16,7 +16,7 @@ LogicElement::LogicElement(ElementType type, QGraphicsItem* parent)
     setFlag(QGraphicsItem::ItemIsMovable,true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges,true);
 
-    myPen = QPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+    myPen = QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
 }
 
 bool LogicElement::getValue(Connection*)
@@ -232,13 +232,26 @@ void InnerGate::removeConnections()
 
 QPointF InnerGate::getConnPosIn(Connection* conn)
 {
-  int idx = connectionsTo.indexOf(conn);
-  return QPointF(0,50.0 / (numOfInput+1) * (idx+1) + 10);
+    if (elementType() == ElementType::Id || elementType() == ElementType::Not)
+        return QPointF(0, 7.5);
+    int idx = connectionsTo.indexOf(conn);
+    return QPointF(0,20.0 / (numOfInput+1) * (idx+1) + 5);
 }
 
 QPointF InnerGate::getConnPosOut(Connection*)
 {
-  return QPointF(75, 35);
+    ElementType type = elementType();
+    if (type == ElementType::Or || type == ElementType::Xor)
+      return QPointF(35, 15);
+    else if (type == ElementType::Nand)
+      return QPointF(32, 15);
+    else if (type == ElementType::Nor)
+      return QPointF(39, 15);
+    else if (type == ElementType::Id)
+      return QPointF(22, 7.5);
+    else if (type == ElementType::Not)
+      return QPointF(27, 7.5);
+    return QPointF(30, 15);
 }
 
 /**********************************************************************************************/
@@ -260,19 +273,19 @@ void And::calculate()
 void And::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {  
     painter->setPen(myPen);
-    painter->drawLine(10,10,50,10);
-    painter->drawLine(10,10,10,60);
-    painter->drawLine(10,60,50,60);
-    painter->drawArc(QRect(35,10,30,50), -90*16, 180*16);
+    painter->drawLine(5, 5, 20, 5);
+    painter->drawLine(5, 5, 5, 25);
+    painter->drawLine(5, 25, 20, 25);
+    painter->drawArc(QRect(15, 5, 10, 20), -90*16, 180*16);
 
     for (int i = 1; i <= numOfInput; i++)
     {
-        painter->drawLine(0, 50.0 / (numOfInput+1) * i + 10, 10, 50.0 / (numOfInput+1) * i + 10);
+        painter->drawLine(0, 20.0 / (numOfInput+1) * i + 5, 5, 20.0 / (numOfInput+1) * i + 5);
     }
 
-    painter->drawLine(65, 35, 75, 35);
+    painter->drawLine(25, 15, 30, 15);
 
-    setRect(0, 0, 75, 60);
+    setRect(0, 0, 30, 30);
 }
 
 Or::Or(int numOfInput)
@@ -292,21 +305,21 @@ void Or::calculate()
 void Or::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->setPen(myPen);
-    painter->drawArc(QRect(0,10,20,50), -90*16, 180*16);
-    painter->drawLine(10, 10, 30, 10);
-    painter->drawLine(10, 60, 30, 60);
+    painter->drawArc(QRect(0, 5, 10, 20), -90*16, 180*16);
+    painter->drawLine(5, 5, 10, 5);
+    painter->drawLine(5, 25, 10, 25);
 
-    painter->drawArc(QRect(-20,10,100,50), 0, 90*16);
-    painter->drawArc(QRect(-20,10,100,50), -90*16, 90*16);
+    painter->drawArc(QRect(-10, 5, 40, 20), 0, 90*16);
+    painter->drawArc(QRect(-10, 5, 40, 20), -90*16, 90*16);
 
     for (int i = 1; i <= numOfInput; i++)
     {
-        painter->drawLine(0, 50.0 / (numOfInput+1) * i + 10, 18, 50.0 / (numOfInput+1) * i + 10);
+        painter->drawLine(0, 20.0 / (numOfInput+1) * i + 5, 8, 20.0 / (numOfInput+1) * i + 5);
     }
 
-    painter->drawLine(79, 35, 89, 35);
+    painter->drawLine(30, 15, 35, 15);
 
-    setRect(0, 0, 91, 62);
+    setRect(0, 0, 35, 30);
 }
 
 Xor::Xor(int numOfInput)
@@ -328,22 +341,22 @@ void Xor::calculate()
 void Xor::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->setPen(myPen);
-    painter->drawArc(QRect(0,10,20,50), -90*16, 180*16);
-    painter->drawArc(QRect(-5,10,20,50), -90*16, 180*16);
-    painter->drawLine(10, 10, 30, 10);
-    painter->drawLine(10, 60, 30, 60);
+    painter->drawArc(QRect(-2, 5, 8, 20), -90*16, 180*16);
+    painter->drawArc(QRect(0, 5, 10, 20), -90*16, 180*16);
+    painter->drawLine(5, 5, 10, 5);
+    painter->drawLine(5, 25, 10, 25);
 
-    painter->drawArc(QRect(-20,10,100,50), 0, 90*16);
-    painter->drawArc(QRect(-20,10,100,50), -90*16, 90*16);
+    painter->drawArc(QRect(-10, 5, 40, 20), 0, 90*16);
+    painter->drawArc(QRect(-10, 5, 40, 20), -90*16, 90*16);
 
     for (int i = 1; i <= numOfInput; i++)
     {
-        painter->drawLine(0, 50.0 / (numOfInput+1) * i + 10, 13, 50.0 / (numOfInput+1) * i + 10);
+        painter->drawLine(-2, 20.0 / (numOfInput+1) * i + 5, 6, 20.0 / (numOfInput+1) * i + 5);
     }
 
-    painter->drawLine(79, 35, 89, 35);
+    painter->drawLine(30, 15, 35, 15);
 
-    setRect(0, 0, 91, 62);
+    setRect(-3, 0, 40, 30);
 }
 
 Nand::Nand(int numOfInput)
@@ -363,22 +376,22 @@ void Nand::calculate()
 void Nand::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->setPen(myPen);
-    painter->drawLine(10,10,50,10);
-    painter->drawLine(10,10,10,60);
-    painter->drawLine(10,60,50,60);
-    painter->drawArc(QRect(35,10,30,50), -90*16, 180*16);
-
-    QPointF center(69, 35);
-    painter->drawEllipse(center, 4, 4);
+    painter->drawLine(5, 5, 20, 5);
+    painter->drawLine(5, 5, 5, 25);
+    painter->drawLine(5, 25, 20, 25);
+    painter->drawArc(QRect(15, 5, 10, 20), -90*16, 180*16);
 
     for (int i = 1; i <= numOfInput; i++)
     {
-        painter->drawLine(0, 50.0 / (numOfInput+1) * i + 10, 10, 50.0 / (numOfInput+1) * i + 10);
+        painter->drawLine(0, 20.0 / (numOfInput+1) * i + 5, 5, 20.0 / (numOfInput+1) * i + 5);
     }
 
-    painter->drawLine(73, 35, 83, 35);
+    QPointF center = QPointF(27, 15);
+    painter->drawEllipse(center, 2, 2);
 
-    setRect(0, 0, 85, 62);
+    painter->drawLine(29, 15, 32, 15);
+
+    setRect(0, 0, 33, 30);
 }
 
 Nor::Nor(int numOfInput)
@@ -398,24 +411,24 @@ void Nor::calculate()
 void Nor::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->setPen(myPen);
-    painter->drawArc(QRect(0,10,20,50), -90*16, 180*16);
-    painter->drawLine(10, 10, 30, 10);
-    painter->drawLine(10, 60, 30, 60);
+    painter->drawArc(QRect(0, 5, 10, 20), -90*16, 180*16);
+    painter->drawLine(5, 5, 10, 5);
+    painter->drawLine(5, 25, 10, 25);
 
-    painter->drawArc(QRect(-20,10,100,50), 0, 90*16);
-    painter->drawArc(QRect(-20,10,100,50), -90*16, 90*16);
-
-    QPointF center(84, 35);
-    painter->drawEllipse(center, 4, 4);
+    painter->drawArc(QRect(-10, 5, 40, 20), 0, 90*16);
+    painter->drawArc(QRect(-10, 5, 40, 20), -90*16, 90*16);
 
     for (int i = 1; i <= numOfInput; i++)
     {
-        painter->drawLine(0, 50.0 / (numOfInput+1) * i + 10, 17, 50.0 / (numOfInput+1) * i + 10);
+        painter->drawLine(0, 20.0 / (numOfInput+1) * i + 5, 8, 20.0 / (numOfInput+1) * i + 5);
     }
 
-    painter->drawLine(88, 35, 98, 35);
+    QPointF center = QPointF(32, 15);
+    painter->drawEllipse(center, 2, 2);
 
-    setRect(0, 0, 100, 62);
+    painter->drawLine(34, 15, 39, 15);
+
+    setRect(0, 0, 40, 30);
 }
 
 Not::Not()
@@ -436,26 +449,16 @@ void Not::calculate()
 void Not::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->setPen(myPen);
-    painter->drawLine(10, 10, 40, 25);
-    painter->drawLine(10, 10, 10, 40);
-    painter->drawLine(10, 40, 40, 25);
+    painter->drawLine(3, 0, 18, 7.5);
+    painter->drawLine(3, 0, 3, 15);
+    painter->drawLine(3, 15, 18, 7.5);
 
-    painter->drawLine(0, 25, 10, 25);
-    QPointF center(44, 25);
-    painter->drawEllipse(center, 4, 4);
-    painter->drawLine(48, 25, 60, 25);
+    painter->drawLine(0, 7.5, 3, 7.5);
+    QPointF center(21, 7.5);
+    painter->drawEllipse(center, 2, 2);
+    painter->drawLine(24, 7.5, 27, 7.5);
 
-    setRect(0, 0, 60, 40);
-}
-
-QPointF Not::getConnPosIn(Connection*)
-{
-    return QPointF(0, 25);
-}
-
-QPointF Not::getConnPosOut(Connection*)
-{
-    return QPointF(60, 25);
+    setRect(0, 0, 27, 15);
 }
 
 Id::Id()
@@ -476,24 +479,14 @@ void Id::calculate()
 void Id::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->setPen(myPen);
-    painter->drawLine(10, 10, 40, 25);
-    painter->drawLine(10, 10, 10, 40);
-    painter->drawLine(10, 40, 40, 25);
+    painter->drawLine(3, 0, 18, 7.5);
+    painter->drawLine(3, 0, 3, 15);
+    painter->drawLine(3, 15, 18, 7.5);
 
-    painter->drawLine(0, 25, 10, 25);
-    painter->drawLine(40, 25, 50, 25);
+    painter->drawLine(0, 7.5, 3, 7.5);
+    painter->drawLine(19, 7.5, 22, 7.5);
 
-    setRect(0, 0, 50, 40);
-}
-
-QPointF Id::getConnPosIn(Connection*)
-{
-    return QPointF(0, 25);
-}
-
-QPointF Id::getConnPosOut(Connection*)
-{
-    return QPointF(50, 25);
+    setRect(0, 0, 22, 15);
 }
 
 /*********************************************************************************************/
@@ -568,6 +561,8 @@ QPointF Plexer::getConnPosOut(Connection * conn)
   {
      return QPointF(90, 100.0/(numOfOutput+1) * (idx+1) + 10);
   }
+
+  return QPointF(100, 60);
 }
 
 /******************************************************************************/
@@ -1703,4 +1698,350 @@ void T::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
     painter->drawText(rectangle5, Qt::AlignCenter, "!Q");
 
     setRect(0, 0, 100, 120);
+}
+
+/***************************************************************************************************/
+
+Arithmetic::Arithmetic(ElementType type, int numOfInput)
+    : LogicElement(type), numOfInput(numOfInput), numOfOutput(numOfInput)
+{
+    connectionRestIn = nullptr;
+    myValues.fill(false, numOfOutput);
+    cinValue = false;
+}
+
+void Arithmetic::removeConnections()
+{
+    const auto connectionsToCopy0 = connectionsTo0.values();
+    for (Connection* conn: connectionsToCopy0)
+    {
+        if (conn != nullptr)
+        {
+            conn->startItem()->removeConnection(conn);
+
+            if(conn->scene() != nullptr)
+               conn->scene()->removeItem(conn);
+            delete conn;
+        }
+    }
+    connectionsTo0.clear();
+
+    const auto connectionsToCopy1 = connectionsTo1.values();
+    for (Connection* conn: connectionsToCopy1)
+    {
+        if (conn != nullptr)
+        {
+            conn->startItem()->removeConnection(conn);
+
+            if(conn->scene() != nullptr)
+               conn->scene()->removeItem(conn);
+            delete conn;
+        }
+    }
+    connectionsTo1.clear();
+
+    if (connectionRestIn != nullptr)
+    {
+        connectionRestIn->startItem()->removeConnection(connectionRestIn);
+        delete connectionRestIn;
+    }
+
+    const auto connectionsFromCopy = connectionsFrom;
+    for(Connection* conn: connectionsFromCopy)
+    {
+        conn->endItem()->removeConnection(conn);
+        if(conn->scene() != nullptr)
+            conn->scene()->removeItem(conn);
+        delete conn;
+    }
+    connectionsFrom.clear();
+
+    const auto connectionsRestOutCopy = connectionsRestOut;
+    for(Connection* conn: connectionsRestOutCopy)
+    {
+        conn->endItem()->removeConnection(conn);
+        if(conn->scene() != nullptr)
+            conn->scene()->removeItem(conn);
+        delete conn;
+    }
+    connectionsRestOut.clear();
+}
+
+void Arithmetic::removeConnection(Connection *conn)
+{
+    if (conn->startItem() == this)
+    {
+        int idx = connectionsFrom.indexOf(conn);
+        if (idx >= 0)
+        {
+            indexConnectionFrom.removeAt(idx);
+            connectionsFrom.removeAt(idx);
+        }
+        else
+        {
+            connectionsRestOut.removeAll(conn);
+        }
+    }
+    else
+    {
+        if (connectionRestIn == conn)
+        {
+            connectionRestIn = nullptr;
+        }
+        else
+        {
+            int idx = connectionsTo0.key(conn, -1);
+            if (idx >= 0)
+            {
+                connectionsTo0.remove(idx);
+            }
+            else
+            {
+                idx = connectionsTo1.key(conn, -1);
+                connectionsTo1.remove(idx);
+            }
+        }
+        calculate();
+    }
+}
+
+bool Arithmetic::addConnection(Connection *conn, ConnectionType, QPointF point)
+{
+    QPointF position = this->pos();
+    qreal posX = position.rx();
+    qreal posY = position.ry();
+    qreal relX = point.rx();
+    qreal relY = point.ry();
+
+    if (conn->endItem() == this)
+    {
+        if(relX < posX + qreal(10))
+        {
+            for(int i=0; i < numOfInput; i++)
+            {
+                if(relY < posY + 100.0/(2*numOfInput+1)*(i+1) + 20)
+                {
+                    if (connectionsTo0.find(i) != connectionsTo0.end())
+                        return false;
+                    connectionsTo0[i] = conn;
+                    return true;
+                }
+            }
+            for(int i = numOfInput; i < 2*numOfInput; i++)
+            {
+                if(relY < posY + 100.0/(2*numOfInput+1)*(i+1) + 20)
+                {
+                    if (connectionsTo1.find(i) != connectionsTo1.end())
+                        return false;
+                    connectionsTo1[i-numOfInput] = conn;
+                    break;
+                }
+            }
+        }
+        else if (relX > posX + 40 && relX < posX + 60 && relY < posY + 20)
+        {
+            if (connectionRestIn != nullptr)
+                return false;
+            connectionRestIn = conn;
+        }
+        else
+            return false;
+        calculate();
+    }
+    else
+    {
+        if (relX > posX + 90)
+        {
+            for(int i=0; i < numOfOutput; i++)
+            {
+                if(relY < posY + 100.0/(numOfOutput+1)*(i+1) + 20)
+                {
+                    connectionsFrom.append(conn);
+                    indexConnectionFrom.append(i);
+                    break;
+                }
+            }
+        }
+        else if (relX > posX + 40 && relX < posX + 60 && relY > posY + 100)
+        {
+            connectionsRestOut.append(conn);
+        }
+        else
+            return false;
+    }
+
+    return true;
+}
+
+QPointF Arithmetic::getConnPosIn(Connection *conn)
+{
+    int idx;
+    if ((idx = connectionsTo0.key(conn, -1)) != -1)
+    {
+        return QPointF(0, 100.0/(2*numOfInput+1) * (idx+1) + 10);
+    }
+    else if ((idx = connectionsTo1.key(conn, -1)) != -1)
+    {
+        return QPointF(0, 100/(2*numOfInput+1) * (numOfInput + idx+1) + 10);
+    }
+    else
+    {
+        return QPointF(50, 0);
+    }
+}
+
+QPointF Arithmetic::getConnPosOut(Connection *conn)
+{
+    int idx;
+    if ((idx = connectionsFrom.indexOf(conn)) >= 0)
+    {
+        idx = indexConnectionFrom[idx];
+        return QPointF(100, 100/(numOfOutput+1)*(idx+1) + 10);
+    }
+    else
+    {
+        return QPointF(50, 120);
+    }
+}
+
+bool Arithmetic::getValue(Connection *conn)
+{
+    int idx = connectionsFrom.indexOf(conn);
+    if (idx >= 0)
+    {
+        idx = indexConnectionFrom[idx];
+        return myValues[idx];
+    }
+    else if ((idx = connectionsRestOut.indexOf(conn)) >= 0)
+    {
+        return cinValue;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void Arithmetic::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+{
+    painter->drawRect(10, 10, 80, 100);
+
+    int i;
+    for (i = 1; i <= 2*numOfInput; i++)
+    {
+        painter->drawLine(0, 100 / (2*numOfInput+1) * i + 10, 10, 100 / (2*numOfInput+1) * i + 10);
+    }
+
+    painter->drawLine(50, 0, 50, 10);
+    painter->drawLine(50, 110, 50, 120);
+
+    for (i = 1; i <= numOfOutput; i++)
+    {
+        painter->drawLine(90, 100 / (numOfOutput+1) * i + 10, 100, 100 / (numOfOutput+1) * i + 10);
+    }
+
+    QFont font = painter->font();
+    font.setPixelSize(10);
+    font.bold();
+    painter->setFont(font);
+
+    int y;
+    for (i = 0; i < numOfInput; i++)
+    {
+        y = 100 / (2*numOfInput+1) * (i+1) + 10;
+        const QRect rectangle = QRect(15, y - 5, 15, 10);
+        painter->drawText(rectangle, Qt::AlignCenter, QString("A").append(std::to_string(i)[0]));
+    }
+
+    int tmp = y;
+    for (i = 1; i <= numOfInput; i++)
+    {
+        y = 100 / (2*numOfInput+1) * i + tmp;
+        const QRect rectangle = QRect(15, y - 5, 15, 10);
+        painter->drawText(rectangle, Qt::AlignCenter, QString("B").append(std::to_string(i-1)[0]));
+    }
+
+    const QRect rectangle1 = QRect(40, 10, 20, 10);
+    painter->drawText(rectangle1, Qt::AlignCenter, "Cin");
+
+    const QRect rectangle2 = QRect(40, 100, 20, 10);
+    painter->drawText(rectangle2, Qt::AlignCenter, "Cout");
+
+    for (i = 1; i <= numOfOutput; i++)
+    {
+        y = 100 / (numOfOutput+1) * i + 10;
+        const QRect rectangle = QRect(75, y - 5, 15, 10);
+        painter->drawText(rectangle, Qt::AlignCenter, QString("S").append(std::to_string(i-1)[0]));
+    }
+
+    const QRect rectangle = QRect(30, 55, 40, 10);
+    switch(elementType())
+    {
+        case ElementType::Adder:
+            painter->drawText(rectangle, Qt::AlignCenter, "ADD");
+            break;
+        default:
+            painter->drawText(rectangle, Qt::AlignCenter, "SUB");
+            break;
+    }
+
+    setRect(0, 0, 100, 120);
+}
+
+Adder::Adder(int numOfInput)
+    : Arithmetic(ElementType::Adder, numOfInput)
+{}
+
+void Adder::calculate()
+{
+    cinValue = false;
+    if (connectionRestIn != nullptr && connectionRestIn->startItem()->getValue())
+        cinValue = true;
+
+    int tmp;
+    for (int i = 0; i < numOfOutput; i++)
+    {
+        tmp = 0;
+        tmp += cinValue ? 1 : 0;
+        tmp += (connectionsTo0.keys().indexOf(i) >= 0) && connectionsTo0[i]->startItem()->getValue() ? 1 : 0;
+        tmp += (connectionsTo1.keys().indexOf(i) >= 0) && connectionsTo1[i]->startItem()->getValue() ? 1 : 0;
+        cinValue = tmp > 1 ? true : false;
+        myValues[i] = (tmp % 2) == 1 ? true : false;
+    }
+
+    for (Connection* conn: connectionsFrom)
+        conn->endItem()->calculate();
+
+    for (Connection* conn: connectionsRestOut)
+        conn->endItem()->calculate();
+}
+
+Subtractor::Subtractor(int numOfInput)
+    : Arithmetic(ElementType::Subtractor, numOfInput)
+{}
+
+void Subtractor::calculate()
+{
+    cinValue = false;
+    if (connectionRestIn != nullptr && connectionRestIn->startItem()->getValue())
+        cinValue = true;
+
+    int tmp;
+    for (int i = 0; i < numOfOutput; i++)
+    {
+        bool a = (connectionsTo0.keys().indexOf(i) >= 0) && connectionsTo0[i]->startItem()->getValue();
+        bool b = (connectionsTo1.keys().indexOf(i) >= 0) && connectionsTo1[i]->startItem()->getValue();
+        tmp = 0;
+        tmp += cinValue ? 1 : 0;
+        tmp += a ? 1 : 0;
+        tmp += b ? 1 : 0;
+        cinValue = (a && tmp != 3) || tmp == 0 ? false : true;
+        myValues[i] = (tmp % 2) == 1 ? true : false;
+    }
+
+    for (Connection* conn: connectionsFrom)
+        conn->endItem()->calculate();
+
+    for (Connection* conn: connectionsRestOut)
+        conn->endItem()->calculate();
 }

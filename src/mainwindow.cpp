@@ -32,7 +32,6 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(changeModMove()));
     connect(ui->actionConnection, SIGNAL(triggered()),
             this, SLOT(changeModConnect()));
-
     connect(ui->actionInputs, SIGNAL(triggered()),
             this, SLOT(setNumOfInputs()));
 }
@@ -53,6 +52,7 @@ void MainWindow::changeModConnect()
 
 void MainWindow::setNumOfInputs()
 {
+
    bool ok;
    int i = QInputDialog::getInt(this,"inputs","Enter number of inputs:",1,1,16,1,&ok);
    if(ok)
@@ -78,7 +78,8 @@ void MainWindow::setUp(){
  ui->buttonGroup->setId(ui->SRButton, LogicElement::SR);
  ui->buttonGroup->setId(ui->DButton, LogicElement::D);
  ui->buttonGroup->setId(ui->TButton, LogicElement::T);
-
+ ui->buttonGroup->setId(ui->adderButton, LogicElement::Adder);
+ ui->buttonGroup->setId(ui->subtractorButton , LogicElement::Subtractor);
 
  actionGroup = new QActionGroup(this);
  actionGroup->addAction(ui->actionDelete);
@@ -129,5 +130,3 @@ void MainWindow::itemInserted()
   ui->buttonGroup->setExclusive(true);
   scene->setMode(Scene::MoveItem);
 }
-
-

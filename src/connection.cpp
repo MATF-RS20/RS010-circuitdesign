@@ -20,15 +20,13 @@ Connection::Connection(LogicElement* startItem, LogicElement* endItem, QGraphics
 }
 
 void Connection::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *){
-   QPen myPen = pen();
-   QPainterPath path;
 
+  QPainterPath path;
+  QPen myPen;
   if(startItem()->getValue(this))
       myPen.setColor(Qt::green);
   else
       myPen.setColor(Qt::red);
-
-  painter->setPen(myPen);
 
   QPointF pointStart = mapFromItem(myStartItem, myStartItem->getConnPosOut(this));
   QPointF pointEnd = mapFromItem(myEndItem, myEndItem->getConnPosIn(this));
@@ -39,22 +37,22 @@ void Connection::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWid
 
   if(abs(pointStart.rx() - pointEnd.rx()) >= abs(pointStart.ry() - pointEnd.ry()))
   {
-      breakCoord = pointStart.rx() + 1.0/3.0 * (pointEnd.rx() - pointStart.rx());
-      breakPoint = QPointF(breakCoord, pointStart.ry());
-      afterBreakPoint = QPointF(breakCoord, pointEnd.ry());
+       breakCoord = pointStart.rx() + 1.0/3.0 * (pointEnd.rx() - pointStart.rx());
+       breakPoint = QPointF(breakCoord, pointStart.ry());
+       afterBreakPoint = QPointF(breakCoord, pointEnd.ry());
   }
   else
   {
-      breakCoord = pointStart.ry() + 1.0/3.0 * (pointEnd.ry() - pointStart.ry());
-      breakPoint = QPointF(pointStart.rx(), breakCoord);
-      afterBreakPoint = QPointF(pointEnd.rx(), breakCoord);
+       breakCoord = pointStart.ry() + 1.0/3.0 * (pointEnd.ry() - pointStart.ry());
+       breakPoint = QPointF(pointStart.rx(), breakCoord);
+       afterBreakPoint = QPointF(pointEnd.rx(), breakCoord);
   }
 
+  painter->setPen(myPen);
   path.moveTo(pointStart);
   path.lineTo(breakPoint);
   path.lineTo(afterBreakPoint);
   path.lineTo(pointEnd);
 
   painter->drawPath(path);
-  update();
 }

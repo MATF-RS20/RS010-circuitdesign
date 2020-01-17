@@ -1,8 +1,10 @@
 #ifndef GATEITEM_H
 #define GATEITEM_H
 
+#include <string>
 #include <QGraphicsPixmapItem>
 #include <QVector>
+#include <QMap>
 #include <QPainter>
 #include <QTimer>
 #include <QWidget>
@@ -20,7 +22,8 @@ QT_END_NAMESPACE
 class LogicElement : public QGraphicsRectItem
 {
 public:
-  enum ElementType {And, Or, Xor, Nand, Nor, Id, Not, In, Out, Clock, Multiplexer, Demultiplexer, Decoder, Encoder, JK, SR, D, T};
+  enum ElementType {And, Or, Xor, Nand, Nor, Id, Not, In, Out, Clock, Multiplexer, Demultiplexer, Decoder, Encoder,
+                    JK, SR, D, T, Adder, Subtractor};
   enum ConnectionType { StartItem, EndItem };
 
   LogicElement(ElementType type,  QGraphicsItem* parent = nullptr);
@@ -123,7 +126,7 @@ public:
 class Or : public InnerGate
 {
 public:
-  Or(int numOfInput = 2);
+  Or(int numOfInput = 4);
 
   void calculate() override;
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
@@ -132,7 +135,7 @@ public:
 class Xor : public InnerGate
 {
 public:
-  Xor(int numOfInput = 2);
+  Xor(int numOfInput = 4);
 
   void calculate() override;
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
@@ -163,9 +166,6 @@ public:
 
   void calculate() override;
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
-
-  QPointF getConnPosIn(Connection*) override;
-  QPointF getConnPosOut(Connection*) override;
 };
 
 class Id : public InnerGate
@@ -175,9 +175,6 @@ public:
 
   void calculate() override;
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
-
-  QPointF getConnPosIn(Connection*) override;
-  QPointF getConnPosOut(Connection*) override;
 };
 
 /***************************************************************************************************/
@@ -338,6 +335,52 @@ public:
     void calculate() override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
 
+};
+
+/***************************************************************************************************/
+
+class Arithmetic : public LogicElement
+{
+public:
+    Arithmetic(ElementType type, int numOfIn);
+
+    void removeConnections() override;
+    void removeConnection(Connection* conn) override;
+    bool addConnection(Connection *conn, ConnectionType, QPointF point) override;
+
+    QPointF getConnPosIn(Connection* conn) override;
+    QPointF getConnPosOut(Connection* conn) override;
+
+    bool getValue(Connection *conn) override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
+
+protected:
+    QMap<int, Connection*> connectionsTo0;
+    QMap<int, Connection*> connectionsTo1;
+    Connection* connectionRestIn;
+    QVector<Connection*> connectionsFrom;
+    QVector<int> indexConnectionFrom;
+    QVector<Connection*> connectionsRestOut;
+    int numOfInput;
+    int numOfOutput;
+    QVector<int> myValues;
+    bool cinValue;
+};
+
+class Adder : public Arithmetic
+{
+public:
+    Adder(int numOfInput = 4);
+
+    void calculate() override;
+};
+
+class Subtractor : public Arithmetic
+{
+public:
+    Subtractor(int numOfInput = 4);
+
+    void calculate() override;
 };
 
 #endif // GATEITEM_H
