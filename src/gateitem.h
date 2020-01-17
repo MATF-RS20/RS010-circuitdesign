@@ -22,8 +22,8 @@ QT_END_NAMESPACE
 class LogicElement : public QGraphicsRectItem
 {
 public:
-  enum ElementType {And, Or, Xor, Nand, Nor, Id, Not, In, Out, Clock, Multiplexer, Demultiplexer, Decoder, Encoder,
-                    JK, SR, D, T, Adder, Subtractor};
+  enum ElementType {And, Or, Xor, Nand, Nor, Multiplexer, Demultiplexer, Decoder, Encoder,
+                    JK, SR, D, T, Adder, Subtractor, Id, Not, In, Out, Clock};
   enum ConnectionType { StartItem, EndItem };
 
   LogicElement(ElementType type,  QGraphicsItem* parent = nullptr);
@@ -203,7 +203,7 @@ protected:
 class Multiplexer : public Plexer
 {
 public:
-  Multiplexer(int numOfInput = 4, int numOfSelector = 2);
+  Multiplexer(int numOfSelector = 2);
 
   bool addConnection(Connection* conn, ConnectionType type, QPointF point) override;
   void removeConnection(Connection *conn) override;
@@ -216,7 +216,7 @@ public:
 class Demultiplexer : public Plexer
 {
 public:
-    Demultiplexer(int numOfOutput = 4, int numOfSelector = 2);
+    Demultiplexer(int numOfSelector = 2);
 
     bool addConnection(Connection* conn, ConnectionType type, QPointF point) override;
     void removeConnection(Connection *conn) override;

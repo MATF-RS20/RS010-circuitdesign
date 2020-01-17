@@ -19,6 +19,10 @@ void Scene::setMode(Mode mode)
   myMode = mode;
 }
 
+void Scene::setNumOfInputs(int num){
+  numOf = num;
+}
+
 void Scene::setElementType(LogicElement::ElementType type)
 {
   myItemType = type;
@@ -68,23 +72,23 @@ LogicElement* Scene::getNewElement(LogicElement::ElementType type){
     case LogicElement::ElementType::Out:
       return new OutputGate();
     case LogicElement::ElementType::And:
-      return new And();
+      return new And(numOf);
     case LogicElement::ElementType::Or:
-      return new Or();
+      return new Or(numOf);
     case LogicElement::ElementType::Xor:
-      return new Xor();
+      return new Xor(numOf);
     case LogicElement::ElementType::Nand:
-      return new Nand();
+      return new Nand(numOf);
     case LogicElement::ElementType::Nor:
-      return new Nor();
+      return new Nor(numOf);
     case LogicElement::ElementType::Not:
       return new Not();
     case LogicElement::ElementType::Multiplexer:
-      return new Multiplexer();
+      return new Multiplexer(numOf);
     case LogicElement::ElementType::Id:
       return new Id();
     case LogicElement::ElementType::Demultiplexer:
-      return new Demultiplexer();
+      return new Demultiplexer(numOf);
     case LogicElement::ElementType::Decoder:
       return new Decoder();
     case LogicElement::ElementType::Encoder:

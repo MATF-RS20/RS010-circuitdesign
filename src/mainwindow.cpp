@@ -34,6 +34,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(changeModConnect()));
     connect(ui->actionInputs, SIGNAL(triggered()),
             this, SLOT(setNumOfInputs()));
+
+    ui->actionInputs->setEnabled(false);
 }
 
 MainWindow::~MainWindow()
@@ -52,11 +54,17 @@ void MainWindow::changeModConnect()
 
 void MainWindow::setNumOfInputs()
 {
-
    bool ok;
-   int i = QInputDialog::getInt(this,"inputs","Enter number of inputs:",1,1,16,1,&ok);
-   if(ok)
-     std::cout << i << std::endl;
+   int numOf;
+   switch(dialogType){
+     case InserInput:
+       numOf = QInputDialog::getInt(this,"Input","Enter number of input:",1,1,8,1,&ok);
+       break;
+     case InsertSelector:
+       numOf = QInputDialog::getInt(this,"Selector","Enter number of selectors:",1,1,8,1,&ok);
+       break;
+   }
+   scene->setNumOfInputs(numOf);
 }
 
 void MainWindow::setUp(){
@@ -94,6 +102,17 @@ void MainWindow::buttonGroupClicked(int id){
       actionGroup->checkedAction()->setChecked(false);
   scene->setElementType(LogicElement::ElementType(id));
   scene->setMode(Scene::InsertItem);
+  if(id < LogicElement::Multiplexer){
+      ui->actionInputs->setEnabled(true);
+      dialogType = InserInput;
+  }
+  else if(id < LogicElement::Decoder){
+      ui->actionInputs->setEnabled(true);
+      dialogType = InsertSelector;
+  }
+  else{
+      ui->actionInputs->setEnabled(false);
+  }
 }
 
 
@@ -125,8 +144,10 @@ void MainWindow::deleteItem(){
 
 void MainWindow::itemInserted()
 {
+  ui->actionInputs->setEnabled(false);
   ui->buttonGroup->setExclusive(false);
   ui->buttonGroup->checkedButton()->setChecked(false);
   ui->buttonGroup->setExclusive(true);
   scene->setMode(Scene::MoveItem);
 }
+

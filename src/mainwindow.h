@@ -32,6 +32,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    enum DialogType {InserInput, InsertSelector};
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
@@ -51,6 +52,7 @@ private:
     QActionGroup * actionGroup;
     Ui::MainWindow *ui;
     Scene* scene;
+    DialogType dialogType;
 };
 
 #endif // MAINWINDOW_H

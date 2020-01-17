@@ -26,6 +26,7 @@ public:
 public slots:
   void setMode(Mode mode);
   void setElementType(LogicElement::ElementType type);
+  void setNumOfInputs(int num);
 
 signals:
   void itemInserted();
@@ -41,6 +42,7 @@ private:
   Mode myMode;
   QPointF startPoint;
   QGraphicsLineItem *line;
+  int numOf;
 };
 
 #endif // SCENE_H

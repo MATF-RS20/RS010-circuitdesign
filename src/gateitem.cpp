@@ -6,7 +6,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsSceneContextMenuEvent>
 
-#define INOUTSIZE 15.0
+#define INOUTSIZE 12.0
 
 LogicElement::LogicElement(ElementType type, QGraphicsItem* parent)
   : QGraphicsRectItem(parent), myElementType(type)
@@ -235,23 +235,23 @@ QPointF InnerGate::getConnPosIn(Connection* conn)
     if (elementType() == ElementType::Id || elementType() == ElementType::Not)
         return QPointF(0, 7.5);
     int idx = connectionsTo.indexOf(conn);
-    return QPointF(0,20.0 / (numOfInput+1) * (idx+1) + 5);
+    return QPointF(0,30.0 / (numOfInput+1) * (idx+1) + 5);
 }
 
 QPointF InnerGate::getConnPosOut(Connection*)
 {
     ElementType type = elementType();
     if (type == ElementType::Or || type == ElementType::Xor)
-      return QPointF(35, 15);
+      return QPointF(45, 20);
     else if (type == ElementType::Nand)
-      return QPointF(32, 15);
+      return QPointF(49, 20);
     else if (type == ElementType::Nor)
-      return QPointF(39, 15);
+      return QPointF(49, 20);
     else if (type == ElementType::Id)
-      return QPointF(22, 7.5);
+      return QPointF(30, 10);
     else if (type == ElementType::Not)
-      return QPointF(27, 7.5);
-    return QPointF(30, 15);
+      return QPointF(34, 10);
+    return QPointF(45, 20);
 }
 
 /**********************************************************************************************/
@@ -273,19 +273,19 @@ void And::calculate()
 void And::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {  
     painter->setPen(myPen);
-    painter->drawLine(5, 5, 20, 5);
-    painter->drawLine(5, 5, 5, 25);
-    painter->drawLine(5, 25, 20, 25);
-    painter->drawArc(QRect(15, 5, 10, 20), -90*16, 180*16);
+    painter->drawLine(5, 5, 30, 5);
+    painter->drawLine(5, 5, 5, 35);
+    painter->drawLine(5, 35, 30, 35);
+    painter->drawArc(QRect(20, 5, 20, 30), -90*16, 180*16);
 
     for (int i = 1; i <= numOfInput; i++)
     {
-        painter->drawLine(0, 20.0 / (numOfInput+1) * i + 5, 5, 20.0 / (numOfInput+1) * i + 5);
+        painter->drawLine(0, 30.0 / (numOfInput+1) * i + 5, 5, 30.0 / (numOfInput+1) * i + 5);
     }
 
-    painter->drawLine(25, 15, 30, 15);
+    painter->drawLine(40, 20, 45, 20);
 
-    setRect(0, 0, 30, 30);
+    setRect(0, 0, 40, 40);
 }
 
 Or::Or(int numOfInput)
@@ -305,21 +305,21 @@ void Or::calculate()
 void Or::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->setPen(myPen);
-    painter->drawArc(QRect(0, 5, 10, 20), -90*16, 180*16);
-    painter->drawLine(5, 5, 10, 5);
-    painter->drawLine(5, 25, 10, 25);
+    painter->drawArc(QRect(0, 5, 10, 30), -90*16, 180*16);
+    painter->drawLine(5, 5, 17, 5);
+    painter->drawLine(5, 35, 17, 35);
 
-    painter->drawArc(QRect(-10, 5, 40, 20), 0, 90*16);
-    painter->drawArc(QRect(-10, 5, 40, 20), -90*16, 90*16);
+    painter->drawArc(QRect(-5, 5, 45, 30), 0, 90*16);
+    painter->drawArc(QRect(-5, 5, 45, 30), -90*16, 90*16);
 
     for (int i = 1; i <= numOfInput; i++)
     {
-        painter->drawLine(0, 20.0 / (numOfInput+1) * i + 5, 8, 20.0 / (numOfInput+1) * i + 5);
+        painter->drawLine(0, 30.0 / (numOfInput+1) * i + 5, 8, 30.0 / (numOfInput+1) * i + 5);
     }
 
-    painter->drawLine(30, 15, 35, 15);
+    painter->drawLine(40, 20, 45, 20);
 
-    setRect(0, 0, 35, 30);
+    setRect(0, 0, 47, 30);
 }
 
 Xor::Xor(int numOfInput)
@@ -341,22 +341,22 @@ void Xor::calculate()
 void Xor::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->setPen(myPen);
-    painter->drawArc(QRect(-2, 5, 8, 20), -90*16, 180*16);
-    painter->drawArc(QRect(0, 5, 10, 20), -90*16, 180*16);
-    painter->drawLine(5, 5, 10, 5);
-    painter->drawLine(5, 25, 10, 25);
+    painter->drawArc(QRect(-2, 5, 8, 30), -90*16, 180*16);
+    painter->drawArc(QRect(0, 5, 10, 30), -90*16, 180*16);
+    painter->drawLine(5, 5, 17, 5);
+    painter->drawLine(5, 35, 17, 35);
 
-    painter->drawArc(QRect(-10, 5, 40, 20), 0, 90*16);
-    painter->drawArc(QRect(-10, 5, 40, 20), -90*16, 90*16);
+    painter->drawArc(QRect(-5, 5, 45, 30), 0, 90*16);
+    painter->drawArc(QRect(-5, 5, 45, 30), -90*16, 90*16);
 
     for (int i = 1; i <= numOfInput; i++)
     {
-        painter->drawLine(-2, 20.0 / (numOfInput+1) * i + 5, 6, 20.0 / (numOfInput+1) * i + 5);
+        painter->drawLine(-2, 30.0 / (numOfInput+1) * i + 5, 5, 30.0 / (numOfInput+1) * i + 5);
     }
 
-    painter->drawLine(30, 15, 35, 15);
+    painter->drawLine(40, 20, 45, 20);
 
-    setRect(-3, 0, 40, 30);
+    setRect(-2, 0, 49, 30);
 }
 
 Nand::Nand(int numOfInput)
@@ -376,22 +376,22 @@ void Nand::calculate()
 void Nand::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->setPen(myPen);
-    painter->drawLine(5, 5, 20, 5);
-    painter->drawLine(5, 5, 5, 25);
-    painter->drawLine(5, 25, 20, 25);
-    painter->drawArc(QRect(15, 5, 10, 20), -90*16, 180*16);
+    painter->drawLine(5, 5, 30, 5);
+    painter->drawLine(5, 5, 5, 35);
+    painter->drawLine(5, 35, 30, 35);
+    painter->drawArc(QRect(20, 5, 20, 30), -90*16, 180*16);
 
     for (int i = 1; i <= numOfInput; i++)
     {
-        painter->drawLine(0, 20.0 / (numOfInput+1) * i + 5, 5, 20.0 / (numOfInput+1) * i + 5);
+        painter->drawLine(0, 30.0 / (numOfInput+1) * i + 5, 5, 30.0 / (numOfInput+1) * i + 5);
     }
 
-    QPointF center = QPointF(27, 15);
+    QPointF center = QPointF(42, 20);
     painter->drawEllipse(center, 2, 2);
 
-    painter->drawLine(29, 15, 32, 15);
+    painter->drawLine(44, 20, 49, 20);
 
-    setRect(0, 0, 33, 30);
+    setRect(0, 0, 50, 40);
 }
 
 Nor::Nor(int numOfInput)
@@ -411,24 +411,24 @@ void Nor::calculate()
 void Nor::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->setPen(myPen);
-    painter->drawArc(QRect(0, 5, 10, 20), -90*16, 180*16);
-    painter->drawLine(5, 5, 10, 5);
-    painter->drawLine(5, 25, 10, 25);
+    painter->drawArc(QRect(0, 5, 10, 30), -90*16, 180*16);
+    painter->drawLine(5, 5, 17, 5);
+    painter->drawLine(5, 35, 17, 35);
 
-    painter->drawArc(QRect(-10, 5, 40, 20), 0, 90*16);
-    painter->drawArc(QRect(-10, 5, 40, 20), -90*16, 90*16);
+    painter->drawArc(QRect(-5, 5, 45, 30), 0, 90*16);
+    painter->drawArc(QRect(-5, 5, 45, 30), -90*16, 90*16);
 
     for (int i = 1; i <= numOfInput; i++)
     {
-        painter->drawLine(0, 20.0 / (numOfInput+1) * i + 5, 8, 20.0 / (numOfInput+1) * i + 5);
+        painter->drawLine(0, 30.0 / (numOfInput+1) * i + 5, 8, 30.0 / (numOfInput+1) * i + 5);
     }
 
-    QPointF center = QPointF(32, 15);
+    QPointF center = QPointF(42, 20);
     painter->drawEllipse(center, 2, 2);
 
-    painter->drawLine(34, 15, 39, 15);
+    painter->drawLine(44, 20, 49, 20);
 
-    setRect(0, 0, 40, 30);
+    setRect(0, 0, 49, 30);
 }
 
 Not::Not()
@@ -449,16 +449,18 @@ void Not::calculate()
 void Not::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->setPen(myPen);
-    painter->drawLine(3, 0, 18, 7.5);
-    painter->drawLine(3, 0, 3, 15);
-    painter->drawLine(3, 15, 18, 7.5);
+    painter->drawLine(5, 0, 25, 10);
+    painter->drawLine(5, 0, 5, 20);
+    painter->drawLine(5, 20, 25, 10);
 
-    painter->drawLine(0, 7.5, 3, 7.5);
-    QPointF center(21, 7.5);
+    painter->drawLine(0, 10, 5, 10);
+
+    QPointF center = QPointF(27, 10);
     painter->drawEllipse(center, 2, 2);
-    painter->drawLine(24, 7.5, 27, 7.5);
 
-    setRect(0, 0, 27, 15);
+    painter->drawLine(29, 10, 34, 10);
+
+    setRect(0, 0, 35, 20);
 }
 
 Id::Id()
@@ -479,14 +481,14 @@ void Id::calculate()
 void Id::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->setPen(myPen);
-    painter->drawLine(3, 0, 18, 7.5);
-    painter->drawLine(3, 0, 3, 15);
-    painter->drawLine(3, 15, 18, 7.5);
+    painter->drawLine(5, 0, 25, 10);
+    painter->drawLine(5, 0, 5, 20);
+    painter->drawLine(5, 20, 25, 10);
 
-    painter->drawLine(0, 7.5, 3, 7.5);
-    painter->drawLine(19, 7.5, 22, 7.5);
+    painter->drawLine(0, 10, 5, 10);
+    painter->drawLine(25, 10, 30, 10);
 
-    setRect(0, 0, 22, 15);
+    setRect(0, 0, 30, 20);
 }
 
 /*********************************************************************************************/
@@ -568,8 +570,8 @@ QPointF Plexer::getConnPosOut(Connection * conn)
 /******************************************************************************/
 
 
-Multiplexer::Multiplexer(int numOfInput, int numOfSelector)
-  : Plexer(LogicElement::Multiplexer, numOfInput, 1, numOfSelector)
+Multiplexer::Multiplexer(int numOfSelector)
+  : Plexer(LogicElement::Multiplexer, static_cast<int> (pow(2, numOfSelector)),1, numOfSelector)
 {}
 
 bool Multiplexer::addConnection(Connection *conn, ConnectionType type, QPointF point)
@@ -695,8 +697,8 @@ void Multiplexer::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWi
 
 /*********************************************************************************/
 
-Demultiplexer::Demultiplexer(int numOfOutput, int numOfSelector)
-    : Plexer(LogicElement::Demultiplexer, 1, numOfOutput, numOfSelector)
+Demultiplexer::Demultiplexer(int numOfSelector)
+    : Plexer(LogicElement::Demultiplexer, 1, static_cast<int> (pow(2, numOfSelector)), numOfSelector)
 {
     myValues.fill(false, numOfOutput);
 }
