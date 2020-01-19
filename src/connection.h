@@ -13,6 +13,7 @@ public:
 
   LogicElement* startItem() const { return myStartItem; }
   LogicElement* endItem() const { return myEndItem; }
+  QPainterPath shape() const override;
 
 protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
@@ -21,6 +22,12 @@ private:
   LogicElement* myStartItem;
   LogicElement* myEndItem;
   QColor myColor = Qt::green;
+
+  QPainterPath myPath;
+  QPointF breakPoint;
+  QPointF afterBreakPoint;
+  QPointF pointStart;
+  QPointF pointEnd;
 };
 
 #endif // CONNECTION_H

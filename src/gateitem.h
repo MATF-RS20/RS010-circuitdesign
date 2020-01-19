@@ -1,23 +1,11 @@
 #ifndef GATEITEM_H
 #define GATEITEM_H
 
-#include <string>
-#include <QGraphicsPixmapItem>
 #include <QVector>
-#include <QMap>
 #include <QPainter>
 #include <QTimer>
-#include <QWidget>
 #include <QGraphicsItemGroup>
-
-
-QT_BEGIN_NAMESPACE
-class Connection;
-class QPixmap;
-class QGraphicsSceneContextMenuEvent;
-class QMenu;
-class QRectF;
-QT_END_NAMESPACE
+#include "connection.h"
 
 class LogicElement : public QGraphicsRectItem
 {

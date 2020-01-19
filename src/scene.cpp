@@ -5,31 +5,32 @@
 Scene::Scene(QObject* parent)
   : QGraphicsScene(parent)
 {
-  myItemType = LogicElement::And;
-  myMode = MoveItem;
-  line = nullptr;
+    myItemType = LogicElement::And;
+    myMode = MoveItem;
+    line = nullptr;
 
-  QTimer *timer = new QTimer(this);
-  connect(timer, SIGNAL(timeout()),this, SLOT(update()));
-  timer->start(10);
+    QTimer *timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()),this, SLOT(update()));
+    timer->start(10);
 }
 
 void Scene::setMode(Mode mode)
 {
-  myMode = mode;
+    myMode = mode;
 }
 
-void Scene::setNumOfInputs(int num){
-  numOf = num;
+void Scene::setNumOfInputs(int num)
+{
+    numOf = num;
 }
 
 void Scene::setElementType(LogicElement::ElementType type)
 {
-  myItemType = type;
+    myItemType = type;
 }
 
-void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event){
-
+void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
   LogicElement* item;
   switch (myMode)
   {
@@ -61,51 +62,6 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event){
   }
 
   QGraphicsScene::mousePressEvent(event);
-}
-
-LogicElement* Scene::getNewElement(LogicElement::ElementType type){
-  switch (type) {
-    case LogicElement::ElementType::In:
-      return new InputGate();
-    case LogicElement::ElementType::Clock:
-      return new ClockGate();
-    case LogicElement::ElementType::Out:
-      return new OutputGate();
-    case LogicElement::ElementType::And:
-      return new And(numOf);
-    case LogicElement::ElementType::Or:
-      return new Or(numOf);
-    case LogicElement::ElementType::Xor:
-      return new Xor(numOf);
-    case LogicElement::ElementType::Nand:
-      return new Nand(numOf);
-    case LogicElement::ElementType::Nor:
-      return new Nor(numOf);
-    case LogicElement::ElementType::Not:
-      return new Not();
-    case LogicElement::ElementType::Multiplexer:
-      return new Multiplexer(numOf);
-    case LogicElement::ElementType::Id:
-      return new Id();
-    case LogicElement::ElementType::Demultiplexer:
-      return new Demultiplexer(numOf);
-    case LogicElement::ElementType::Decoder:
-      return new Decoder();
-    case LogicElement::ElementType::Encoder:
-      return new Encoder();
-    case LogicElement::ElementType::JK:
-      return new JK();
-    case LogicElement::ElementType::SR:
-      return new SR();
-    case LogicElement::ElementType::D:
-      return new D();
-    case LogicElement::ElementType::T:
-      return new T();
-    case LogicElement::ElementType::Adder:
-      return new Adder();
-    case LogicElement::ElementType::Subtractor:
-      return new Subtractor();
-  }
 }
 
 
@@ -168,5 +124,49 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 }
 
 
+LogicElement* Scene::getNewElement(LogicElement::ElementType type){
+  switch (type) {
+    case LogicElement::ElementType::In:
+      return new InputGate();
+    case LogicElement::ElementType::Clock:
+      return new ClockGate();
+    case LogicElement::ElementType::Out:
+      return new OutputGate();
+    case LogicElement::ElementType::And:
+      return new And(numOf);
+    case LogicElement::ElementType::Or:
+      return new Or(numOf);
+    case LogicElement::ElementType::Xor:
+      return new Xor(numOf);
+    case LogicElement::ElementType::Nand:
+      return new Nand(numOf);
+    case LogicElement::ElementType::Nor:
+      return new Nor(numOf);
+    case LogicElement::ElementType::Not:
+      return new Not();
+    case LogicElement::ElementType::Multiplexer:
+      return new Multiplexer(numOf);
+    case LogicElement::ElementType::Id:
+      return new Id();
+    case LogicElement::ElementType::Demultiplexer:
+      return new Demultiplexer(numOf);
+    case LogicElement::ElementType::Decoder:
+      return new Decoder();
+    case LogicElement::ElementType::Encoder:
+      return new Encoder();
+    case LogicElement::ElementType::JK:
+      return new JK();
+    case LogicElement::ElementType::SR:
+      return new SR();
+    case LogicElement::ElementType::D:
+      return new D();
+    case LogicElement::ElementType::T:
+      return new T();
+    case LogicElement::ElementType::Adder:
+      return new Adder();
+    case LogicElement::ElementType::Subtractor:
+      return new Subtractor();
+  }
+}
 
 

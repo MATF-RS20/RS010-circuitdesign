@@ -4,15 +4,7 @@
 #include "gateitem.h"
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
-
-QT_BEGIN_NAMESPACE
-class QMenu;
-class QPointF;
-class QGraphicsLineItem;
-class QFont;
-class QGraphicsTextItem;
-class QColor;
-QT_END_NAMESPACE
+#include  <QWheelEvent>
 
 class Scene : public QGraphicsScene
 {

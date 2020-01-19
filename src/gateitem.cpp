@@ -35,7 +35,6 @@ QPointF LogicElement::getConnPosOut(Connection *)
 }
 
 
-
 /***************************************************************************************************/
 
 InputGate::InputGate(ElementType type)

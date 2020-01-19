@@ -5,23 +5,7 @@
 #include <QAction>
 #include <QActionGroup>
 #include "gateitem.h"
-
-class Scene;
-
-QT_BEGIN_NAMESPACE
-class QAction;
-class QToolBox;
-class QSpinBox;
-class QComboBox;
-class QFontComboBox;
-class QButtonGroup;
-class QLineEdit;
-class QGraphicsTextItem;
-class QFont;
-class QToolButton;
-class QAbstractButton;
-class QGraphicsView;
-QT_END_NAMESPACE
+#include "scene.h"
 
 namespace Ui {
 class MainWindow;
@@ -33,7 +17,7 @@ class MainWindow : public QMainWindow
 
 public:
     enum DialogType {InserInput, InsertSelector};
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
 private slots:
@@ -43,6 +27,12 @@ private slots:
     void changeModMove();
     void changeModConnect();
     void setNumOfInputs();
+
+
+/*
+protected Q_SLOTS:
+    void wheelEvent(QWheelEvent *event);
+*/
 
 signals:
     void buttonClicked(int id);

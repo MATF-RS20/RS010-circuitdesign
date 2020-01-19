@@ -19,39 +19,32 @@ Connection::Connection(LogicElement* startItem, LogicElement* endItem, QGraphics
   */
 }
 
-void Connection::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *){
-
+void Connection::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+{
   QPainterPath path;
+
   QPen myPen;
   if(startItem()->getValue(this))
       myPen.setColor(Qt::green);
   else
       myPen.setColor(Qt::red);
 
-  QPointF pointStart = mapFromItem(myStartItem, myStartItem->getConnPosOut(this));
-  QPointF pointEnd = mapFromItem(myEndItem, myEndItem->getConnPosIn(this));
+  pointStart = mapFromItem(myStartItem, myStartItem->getConnPosOut(this));
+  pointEnd = mapFromItem(myEndItem, myEndItem->getConnPosIn(this));
 
   qreal breakCoord;
-  QPointF breakPoint;
-  QPointF afterBreakPoint;
 
   if(abs(pointStart.rx() - pointEnd.rx()) >= abs(pointStart.ry() - pointEnd.ry()))
   {
        breakCoord = pointStart.rx() + 1.0/3.0 * (pointEnd.rx() - pointStart.rx());
        breakPoint = QPointF(breakCoord, pointStart.ry());
        afterBreakPoint = QPointF(breakCoord, pointEnd.ry());
-       setLine(pointStart.rx(), pointStart.ry(), breakCoord, pointStart.ry());
-       setLine(breakCoord, pointStart.ry(), breakCoord, pointEnd.ry());
-       setLine(breakCoord, pointEnd.ry(), pointEnd.rx(), pointEnd.ry());
   }
   else
   {
        breakCoord = pointStart.ry() + 1.0/3.0 * (pointEnd.ry() - pointStart.ry());
        breakPoint = QPointF(pointStart.rx(), breakCoord);
        afterBreakPoint = QPointF(pointEnd.rx(), breakCoord);
-       setLine(pointStart.rx(), pointStart.ry(), pointStart.rx(), breakCoord);
-       setLine(pointStart.rx(), breakCoord, pointEnd.rx(), breakCoord);
-       setLine(pointEnd.rx(), breakCoord, pointEnd.rx(), pointEnd.ry());
   }
 
   painter->setPen(myPen);
@@ -61,4 +54,12 @@ void Connection::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWid
   path.lineTo(pointEnd);
 
   painter->drawPath(path);
+  this->myPath = path;
 }
+
+
+QPainterPath Connection::shape() const
+{
+  return this->myPath;
+}
+
