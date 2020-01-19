@@ -42,7 +42,7 @@ private:
   Mode myMode;
   QPointF startPoint;
   QGraphicsLineItem *line;
-  int numOf;
+  int numOf = 2;
 };
 
 #endif // SCENE_H

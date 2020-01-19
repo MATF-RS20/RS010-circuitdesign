@@ -40,12 +40,18 @@ void Connection::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWid
        breakCoord = pointStart.rx() + 1.0/3.0 * (pointEnd.rx() - pointStart.rx());
        breakPoint = QPointF(breakCoord, pointStart.ry());
        afterBreakPoint = QPointF(breakCoord, pointEnd.ry());
+       setLine(pointStart.rx(), pointStart.ry(), breakCoord, pointStart.ry());
+       setLine(breakCoord, pointStart.ry(), breakCoord, pointEnd.ry());
+       setLine(breakCoord, pointEnd.ry(), pointEnd.rx(), pointEnd.ry());
   }
   else
   {
        breakCoord = pointStart.ry() + 1.0/3.0 * (pointEnd.ry() - pointStart.ry());
        breakPoint = QPointF(pointStart.rx(), breakCoord);
        afterBreakPoint = QPointF(pointEnd.rx(), breakCoord);
+       setLine(pointStart.rx(), pointStart.ry(), pointStart.rx(), breakCoord);
+       setLine(pointStart.rx(), breakCoord, pointEnd.rx(), breakCoord);
+       setLine(pointEnd.rx(), breakCoord, pointEnd.rx(), pointEnd.ry());
   }
 
   painter->setPen(myPen);
