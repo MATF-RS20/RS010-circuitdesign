@@ -56,15 +56,18 @@ void MainWindow::changeModConnect()
 void MainWindow::setNumOfInputs()
 {
    bool ok;
-   int numOf = 2;
+   int numOf;
    switch(dialogType){
      case InserInput:
        numOf = QInputDialog::getInt(this,"Input","Enter number of input:",1,1,8,1,&ok);
        break;
      case InsertSelector:
-       numOf = QInputDialog::getInt(this,"Selector","Enter number of selectors:",1,1,8,1,&ok);
+       numOf = QInputDialog::getInt(this,"Selector","Enter number of selectors:",1,1,5,1,&ok);
        break;
+     case InsertArithmetic:
+       numOf = QInputDialog::getInt(this,"Arithmetic","Enter size of number:",1,1,6,1,&ok);
    }
+
    scene->setNumOfInputs(numOf);
 }
 
@@ -109,6 +112,11 @@ void MainWindow::buttonGroupClicked(int id)
   {
       ui->actionInputs->setEnabled(true);
       dialogType = InserInput;
+  }
+  else if(id < LogicElement::Adder)
+  {
+      ui->actionInputs->setEnabled(true);
+      dialogType = InsertArithmetic;
   }
   else if(id < LogicElement::Decoder)
   {

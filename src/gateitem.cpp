@@ -1,10 +1,4 @@
 #include "gateitem.h"
-#include <iostream>
-#include <cmath>
-#include "connection.h"
-
-#include <QGraphicsScene>
-#include <QGraphicsSceneContextMenuEvent>
 
 #define INOUTSIZE 12.0
 
@@ -241,7 +235,7 @@ void InnerGate::removeConnections()
 QPointF InnerGate::getConnPosIn(Connection* conn)
 {
     if (elementType() == ElementType::Id || elementType() == ElementType::Not)
-        return QPointF(0, 7.5);
+        return QPointF(0, 10);
     int idx = connectionsTo.indexOf(conn);
     return QPointF(0,30.0 / (numOfInput+1) * (idx+1) + 5);
 }

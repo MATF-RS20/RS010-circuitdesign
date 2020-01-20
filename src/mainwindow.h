@@ -16,7 +16,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    enum DialogType {InserInput, InsertSelector};
+    enum DialogType {InserInput, InsertSelector, InsertArithmetic};
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 

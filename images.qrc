@@ -19,5 +19,11 @@
         <file>images/clock.png</file>
         <file>images/decoder.png</file>
         <file>images/encoder.png</file>
+        <file>images/D.png</file>
+        <file>images/JK.png</file>
+        <file>images/minus.png</file>
+        <file>images/plus.png</file>
+        <file>images/SR.png</file>
+        <file>images/T.png</file>
     </qresource>
 </RCC>

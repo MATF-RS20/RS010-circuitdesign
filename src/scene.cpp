@@ -183,9 +183,9 @@ LogicElement* Scene::getNewElement(LogicElement::ElementType type){
     case LogicElement::ElementType::T:
       return new T();
     case LogicElement::ElementType::Adder:
-      return new Adder();
+      return new Adder(numOf);
     case LogicElement::ElementType::Subtractor:
-      return new Subtractor();
+      return new Subtractor(numOf);
   }
 }
 

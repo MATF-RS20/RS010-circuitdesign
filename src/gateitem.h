@@ -4,29 +4,33 @@
 #include <QVector>
 #include <QPainter>
 #include <QTimer>
+#include <QMap>
 #include <QGraphicsItemGroup>
+#include <iostream>
+#include <cmath>
+#include <QGraphicsScene>
+#include <QGraphicsSceneContextMenuEvent>
 #include "connection.h"
 
 class LogicElement : public QGraphicsRectItem
 {
 public:
-  enum ElementType {And, Or, Xor, Nand, Nor, Multiplexer, Demultiplexer, Decoder, Encoder,
-                    JK, SR, D, T, Adder, Subtractor, Id, Not, In, Out, Clock};
+  enum ElementType {And, Or, Xor, Nand, Nor, Multiplexer, Demultiplexer,Adder, Subtractor, Decoder, Encoder,
+                    JK, SR, D, T, Id, Not, In, Out, Clock};
 
   LogicElement(ElementType type,  QGraphicsItem* parent = nullptr);
 
-  virtual void calculate() = 0;
-  virtual bool getValue(Connection* conn = nullptr);
-
-  virtual void removeConnections() = 0;
-  virtual void removeConnection(Connection* conn) = 0;
   virtual bool addConnection(Connection* conn, QPointF point = QPointF(0,0)) = 0;
+  virtual void removeConnection(Connection* conn) = 0;
+  virtual void removeConnections() = 0;
 
   virtual QPointF getConnPosIn(Connection* conn);
   virtual QPointF getConnPosOut(Connection* conn);
 
-  ElementType elementType() const { return myElementType; }
+  virtual void calculate() = 0;
+  virtual bool getValue(Connection* conn = nullptr);
 
+  ElementType elementType() const { return myElementType; }
 protected:
   ElementType myElementType;
   bool myValue;
