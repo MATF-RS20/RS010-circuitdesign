@@ -24,10 +24,6 @@ private:
   QColor myColor = Qt::green;
 
   QPainterPath myPath;
-  QPointF breakPoint;
-  QPointF afterBreakPoint;
-  QPointF pointStart;
-  QPointF pointEnd;
 };
 
 #endif // CONNECTION_H

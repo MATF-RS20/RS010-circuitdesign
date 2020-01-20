@@ -103,18 +103,38 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             LogicElement *endItem = qgraphicsitem_cast<LogicElement *>(endItems.first());
 
             Connection *conn = new Connection(startItem,endItem);
-            bool success1 = startItem->addConnection(conn, LogicElement::StartItem, positionStart);
-            bool success2 = endItem->addConnection(conn, LogicElement::EndItem, positionEnd);
+            /* bool success1 = startItem->addConnection(conn, positionStart);
+            bool success2 = endItem->addConnection(conn, positionEnd);
 
             if(!(success1 && success2))
             {
                 startItem->removeConnection(conn);
                 endItem->removeConnection(conn);
+
                 delete conn;
             }
             else
             {
                addItem(conn);
+            }
+            */
+
+
+            if(startItem->addConnection(conn,positionStart))
+            {
+              if(endItem->addConnection(conn, positionEnd))
+              {
+                addItem(conn);
+              }
+              else
+              {
+                  delete conn;
+                  startItem->removeConnection(conn);
+              }
+            }
+            else
+            {
+                delete conn;
             }
         }
       }

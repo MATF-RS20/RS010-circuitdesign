@@ -29,8 +29,11 @@ void Connection::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWid
   else
       myPen.setColor(Qt::red);
 
-  pointStart = mapFromItem(myStartItem, myStartItem->getConnPosOut(this));
-  pointEnd = mapFromItem(myEndItem, myEndItem->getConnPosIn(this));
+  QPointF breakPoint;
+  QPointF afterBreakPoint;
+
+  QPointF pointStart = mapFromItem(myStartItem, myStartItem->getConnPosOut(this));
+  QPointF pointEnd = mapFromItem(myEndItem, myEndItem->getConnPosIn(this));
 
   qreal breakCoord;
 
@@ -42,7 +45,7 @@ void Connection::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWid
   }
   else
   {
-       breakCoord = pointStart.ry() + 1.0/3.0 * (pointEnd.ry() - pointStart.ry());
+       breakCoord = pointStart.ry() + 0.2 * (pointEnd.ry() - pointStart.ry());
        breakPoint = QPointF(pointStart.rx(), breakCoord);
        afterBreakPoint = QPointF(pointEnd.rx(), breakCoord);
   }

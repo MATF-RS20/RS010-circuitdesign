@@ -12,7 +12,6 @@ class LogicElement : public QGraphicsRectItem
 public:
   enum ElementType {And, Or, Xor, Nand, Nor, Multiplexer, Demultiplexer, Decoder, Encoder,
                     JK, SR, D, T, Adder, Subtractor, Id, Not, In, Out, Clock};
-  enum ConnectionType { StartItem, EndItem };
 
   LogicElement(ElementType type,  QGraphicsItem* parent = nullptr);
 
@@ -21,7 +20,7 @@ public:
 
   virtual void removeConnections() = 0;
   virtual void removeConnection(Connection* conn) = 0;
-  virtual bool addConnection(Connection* conn, ConnectionType type, QPointF point = QPointF(0,0)) = 0;
+  virtual bool addConnection(Connection* conn, QPointF point = QPointF(0,0)) = 0;
 
   virtual QPointF getConnPosIn(Connection* conn);
   virtual QPointF getConnPosOut(Connection* conn);
@@ -43,7 +42,7 @@ public:
 
   void removeConnections() override;
   void removeConnection(Connection *conn) override;
-  bool addConnection(Connection* conn, ConnectionType type, QPointF) override;
+  bool addConnection(Connection* conn, QPointF) override;
 
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
   void calculate() override;
@@ -72,7 +71,7 @@ public:
 
   void removeConnections() override;
   void removeConnection(Connection *conn) override;
-  bool addConnection(Connection* conn, ConnectionType type, QPointF) override;
+  bool addConnection(Connection* conn, QPointF) override;
 
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
 private:
@@ -88,7 +87,7 @@ public:
 
   void removeConnections() override;
   void removeConnection(Connection *conn) override;
-  bool addConnection(Connection* conn, ConnectionType type, QPointF) override;
+  bool addConnection(Connection* conn, QPointF) override;
 
   QPointF getConnPosIn(Connection* conn) override;
   QPointF getConnPosOut(Connection *conn) override;
@@ -193,7 +192,7 @@ class Multiplexer : public Plexer
 public:
   Multiplexer(int numOfSelector = 2);
 
-  bool addConnection(Connection* conn, ConnectionType type, QPointF point) override;
+  bool addConnection(Connection* conn, QPointF point) override;
   void removeConnection(Connection *conn) override;
 
   void calculate() override;
@@ -206,7 +205,7 @@ class Demultiplexer : public Plexer
 public:
     Demultiplexer(int numOfSelector = 2);
 
-    bool addConnection(Connection* conn, ConnectionType type, QPointF point) override;
+    bool addConnection(Connection* conn, QPointF point) override;
     void removeConnection(Connection *conn) override;
 
     bool getValue(Connection *conn) override;
@@ -223,7 +222,7 @@ class Decoder : public Plexer
 public:
     Decoder(int numOfInput = 2, int numOfOutput = 4);
 
-    bool addConnection(Connection *conn, ConnectionType type, QPointF point) override;
+    bool addConnection(Connection *conn, QPointF point) override;
     void removeConnection(Connection *conn) override;
 
     bool getValue(Connection *conn) override;
@@ -240,7 +239,7 @@ class Encoder : public Plexer
 public:
     Encoder(int numOfInput = 4, int numOfOutput = 2);
 
-    bool addConnection(Connection *conn, ConnectionType type, QPointF point) override;
+    bool addConnection(Connection *conn, QPointF point) override;
     void removeConnection(Connection *conn) override;
 
     bool getValue(Connection *conn) override;
@@ -282,7 +281,7 @@ class JK : public FlipFlop
 public:
     JK();
 
-    bool addConnection(Connection *conn, ConnectionType type, QPointF point) override;
+    bool addConnection(Connection *conn, QPointF point) override;
 
     void calculate() override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
@@ -294,7 +293,7 @@ class SR : public FlipFlop
 public:
     SR();
 
-    bool addConnection(Connection *conn, ConnectionType type, QPointF point) override;
+    bool addConnection(Connection *conn, QPointF point) override;
 
     void calculate() override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
@@ -306,7 +305,7 @@ class D : public FlipFlop
 public:
     D();
 
-    bool addConnection(Connection *conn, ConnectionType type, QPointF point) override;
+    bool addConnection(Connection *conn, QPointF point) override;
 
     void calculate() override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
@@ -318,7 +317,7 @@ class T : public FlipFlop
 public:
     T();
 
-    bool addConnection(Connection *conn, ConnectionType type, QPointF point) override;
+    bool addConnection(Connection *conn, QPointF point) override;
 
     void calculate() override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
@@ -334,7 +333,7 @@ public:
 
     void removeConnections() override;
     void removeConnection(Connection* conn) override;
-    bool addConnection(Connection *conn, ConnectionType, QPointF point) override;
+    bool addConnection(Connection *conn, QPointF point) override;
 
     QPointF getConnPosIn(Connection* conn) override;
     QPointF getConnPosOut(Connection* conn) override;

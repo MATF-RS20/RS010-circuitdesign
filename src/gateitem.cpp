@@ -42,9 +42,9 @@ InputGate::InputGate(ElementType type)
 {}
 
 
-bool InputGate::addConnection(Connection *conn, ConnectionType type, QPointF)
+bool InputGate::addConnection(Connection *conn, QPointF)
 {
-  if(type == ConnectionType::EndItem)
+  if(this == conn->endItem())
      return false;
 
   connectionsFrom.append(conn);
@@ -64,9 +64,7 @@ void InputGate::removeConnections()
     conn->endItem()->removeConnection(conn);
     this->removeConnection(conn);
 
-    if(conn->scene() != nullptr){
-        conn->scene()->removeItem(conn);  
-    }
+    conn->scene()->removeItem(conn);
     delete conn;
   }
 }
@@ -127,9 +125,9 @@ OutputGate::OutputGate()
  : LogicElement(LogicElement::ElementType::Out)
 {}
 
-bool OutputGate::addConnection(Connection* conn,ConnectionType type, QPointF)
+bool OutputGate::addConnection(Connection* conn, QPointF)
 {
-  if(connection.size() != 0 || type == ConnectionType::StartItem)
+  if(connection.size() != 0 ||this == conn->startItem())
       return false;
 
   connection.append(conn);
@@ -149,8 +147,8 @@ void OutputGate::removeConnections()
     Connection* conn = connection.first();
     conn->startItem()->removeConnection(conn);
     this->removeConnection(conn);
-    if(conn->scene() != nullptr)
-      scene()->removeItem(conn);
+
+    scene()->removeItem(conn);
     delete conn;
   }
 }
@@ -178,11 +176,22 @@ InnerGate::InnerGate(ElementType type, int numOfInput)
 {}
 
 
-bool InnerGate::addConnection(Connection *conn, ConnectionType type, QPointF)
+bool InnerGate::addConnection(Connection *conn, QPointF)
 {
-    if(type == ConnectionType::StartItem){
+    if(this == conn->startItem())
+    {
+        for(Connection* c: connectionsFrom)
+          if(c->endItem() == conn->endItem())
+              return false;
+
         connectionsFrom.append(conn);
-    } else {
+    }
+    else
+    {
+        for(Connection* c: connectionsFrom)
+          if(c->endItem() == conn->startItem())
+              return false;
+
         if (connectionsTo.size() >= numOfInput)
             return false;
         connectionsTo.append(conn);
@@ -213,8 +222,8 @@ void InnerGate::removeConnections()
   {
     conn->startItem()->removeConnection(conn);
     this->removeConnection(conn);
-    if(conn->scene() != nullptr)
-         conn->scene()->removeItem(conn);
+
+    conn->scene()->removeItem(conn);
     delete conn;
   }
 
@@ -223,8 +232,8 @@ void InnerGate::removeConnections()
   {
       this->removeConnection(conn);
       conn->endItem()->removeConnection(conn);
-      if(conn->scene() != nullptr)
-            conn->scene()->removeItem(conn);
+
+      conn->scene()->removeItem(conn);
       delete conn;
   }
 }
@@ -507,9 +516,7 @@ void Plexer::removeConnections()
         if (conn != nullptr)
         {
             conn->startItem()->removeConnection(conn);
-
-            if(conn->scene() != nullptr)
-               conn->scene()->removeItem(conn);
+            conn->scene()->removeItem(conn);
             delete conn;
         }
     }
@@ -521,9 +528,7 @@ void Plexer::removeConnections()
         if (conn != nullptr)
         {
             conn->startItem()->removeConnection(conn);
-
-            if(conn->scene() != nullptr)
-               conn->scene()->removeItem(conn);
+            conn->scene()->removeItem(conn);
             delete conn;
         }
     }
@@ -533,8 +538,7 @@ void Plexer::removeConnections()
     for(Connection* conn: connectionsFromCopy)
     {
         conn->endItem()->removeConnection(conn);
-        if(conn->scene() != nullptr)
-            conn->scene()->removeItem(conn);
+        conn->scene()->removeItem(conn);
         delete conn;
     }
     connectionsFrom.clear();
@@ -573,9 +577,9 @@ Multiplexer::Multiplexer(int numOfSelector)
   : Plexer(LogicElement::Multiplexer, static_cast<int> (pow(2, numOfSelector)),1, numOfSelector)
 {}
 
-bool Multiplexer::addConnection(Connection *conn, ConnectionType type, QPointF point)
+bool Multiplexer::addConnection(Connection *conn, QPointF point)
 {
-    if(type == ConnectionType::EndItem)
+    if(this == conn->endItem())
     {
         QPointF position = this->pos();
         qreal posX = position.rx();
@@ -702,7 +706,7 @@ Demultiplexer::Demultiplexer(int numOfSelector)
     myValues.fill(false, numOfOutput);
 }
 
-bool Demultiplexer::addConnection(Connection *conn, ConnectionType type, QPointF point)
+bool Demultiplexer::addConnection(Connection *conn, QPointF point)
 {
     QPointF position = this->pos();
     qreal posX = position.rx();
@@ -710,7 +714,7 @@ bool Demultiplexer::addConnection(Connection *conn, ConnectionType type, QPointF
     qreal relX = point.rx();
     qreal relY = point.ry();
 
-    if (type == ConnectionType::EndItem)
+    if (this == conn->endItem())
     {
         if (relX < posX + qreal(10) && relY > posY + 40 && relY < posY + 80)
         {
@@ -847,7 +851,7 @@ Decoder::Decoder(int numOfInput, int numOfOutput)
     myValues.fill(false, numOfOutput);
 }
 
-bool Decoder::addConnection(Connection *conn, ConnectionType type, QPointF point)
+bool Decoder::addConnection(Connection *conn, QPointF point)
 {
     QPointF position = this->pos();
     qreal posX = position.rx();
@@ -855,7 +859,7 @@ bool Decoder::addConnection(Connection *conn, ConnectionType type, QPointF point
     qreal relX = point.rx();
     qreal relY = point.ry();
 
-    if (type == ConnectionType::EndItem)
+    if (this == conn->endItem())
     {
         if(relX < posX + qreal(10))
         {
@@ -974,7 +978,7 @@ Encoder::Encoder(int numOfInput, int numOfOutput)
     myValues.fill(false, numOfOutput);
 }
 
-bool Encoder::addConnection(Connection *conn, ConnectionType type, QPointF point)
+bool Encoder::addConnection(Connection *conn, QPointF point)
 {
     QPointF position = this->pos();
     qreal posX = position.rx();
@@ -982,7 +986,7 @@ bool Encoder::addConnection(Connection *conn, ConnectionType type, QPointF point
     qreal relX = point.rx();
     qreal relY = point.ry();
 
-    if (type == ConnectionType::EndItem)
+    if (this == conn->endItem())
     {
         if(relX < posX + qreal(10))
         {
@@ -1117,9 +1121,7 @@ void FlipFlop::removeConnections()
         if (conn != nullptr)
         {
             conn->startItem()->removeConnection(conn);
-
-            if(conn->scene() != nullptr)
-               conn->scene()->removeItem(conn);
+            conn->scene()->removeItem(conn);
             delete conn;
         }
     }
@@ -1196,7 +1198,7 @@ JK::JK()
     : FlipFlop(ElementType::JK)
 {}
 
-bool JK::addConnection(Connection *conn, ConnectionType type, QPointF point)
+bool JK::addConnection(Connection *conn, QPointF point)
 {
     QPointF position = this->pos();
     qreal posX = position.rx();
@@ -1204,7 +1206,7 @@ bool JK::addConnection(Connection *conn, ConnectionType type, QPointF point)
     qreal relX = point.rx();
     qreal relY = point.ry();
 
-    if (type == ConnectionType::EndItem)
+    if (this == conn->endItem())
     {
         if(relX < posX + qreal(10))
         {
@@ -1334,7 +1336,7 @@ SR::SR()
     : FlipFlop(ElementType::SR)
 {}
 
-bool SR::addConnection(Connection *conn, ConnectionType type, QPointF point)
+bool SR::addConnection(Connection *conn, QPointF point)
 {
     QPointF position = this->pos();
     qreal posX = position.rx();
@@ -1342,7 +1344,7 @@ bool SR::addConnection(Connection *conn, ConnectionType type, QPointF point)
     qreal relX = point.rx();
     qreal relY = point.ry();
 
-    if (type == ConnectionType::EndItem)
+    if (this == conn->endItem())
     {
         if(relX < posX + qreal(10))
         {
@@ -1472,7 +1474,7 @@ D::D()
     : FlipFlop(ElementType::D, 1)
 {}
 
-bool D::addConnection(Connection *conn, ConnectionType type, QPointF point)
+bool D::addConnection(Connection *conn, QPointF point)
 {
     QPointF position = this->pos();
     qreal posX = position.rx();
@@ -1480,7 +1482,7 @@ bool D::addConnection(Connection *conn, ConnectionType type, QPointF point)
     qreal relX = point.rx();
     qreal relY = point.ry();
 
-    if (type == ConnectionType::EndItem)
+    if (this == conn->endItem())
     {
         if(relX < posX + qreal(10))
         {
@@ -1591,7 +1593,7 @@ T::T()
     : FlipFlop(ElementType::T, 1)
 {}
 
-bool T::addConnection(Connection *conn, ConnectionType type, QPointF point)
+bool T::addConnection(Connection *conn, QPointF point)
 {
     QPointF position = this->pos();
     qreal posX = position.rx();
@@ -1599,7 +1601,7 @@ bool T::addConnection(Connection *conn, ConnectionType type, QPointF point)
     qreal relX = point.rx();
     qreal relY = point.ry();
 
-    if (type == ConnectionType::EndItem)
+    if (this == conn->endItem())
     {
         if(relX < posX + qreal(10))
         {
@@ -1719,9 +1721,7 @@ void Arithmetic::removeConnections()
         if (conn != nullptr)
         {
             conn->startItem()->removeConnection(conn);
-
-            if(conn->scene() != nullptr)
-               conn->scene()->removeItem(conn);
+            conn->scene()->removeItem(conn);
             delete conn;
         }
     }
@@ -1806,7 +1806,7 @@ void Arithmetic::removeConnection(Connection *conn)
     }
 }
 
-bool Arithmetic::addConnection(Connection *conn, ConnectionType, QPointF point)
+bool Arithmetic::addConnection(Connection *conn,  QPointF point)
 {
     QPointF position = this->pos();
     qreal posX = position.rx();
